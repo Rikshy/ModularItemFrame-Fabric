@@ -106,7 +106,7 @@ public class TankModule extends ModuleBase {
     @Override
     public void tick( World world, BlockPos pos) {
         if (!world.isClient && mode != EnumMode.NONE && ConfigValues.TankTransferRate > 0) {
-            if (world.getGameTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
+            if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
 
             BlockEntity neighbor = blockEntity.getAttachedTile();
             if (neighbor != null) {
