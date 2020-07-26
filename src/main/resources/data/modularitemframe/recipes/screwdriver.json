@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "item": "modularitemframe:screwdriver"
+  },
+  "pattern": [
+    "  I",
+    "CI ",
+    "SC "
+  ],
+  "key": {
+    "S": {
+      "tag": "forge:rods/wooden"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "C": {
+      "item": "modularitemframe:canvas"
+    }
+  }
+}

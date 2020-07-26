@@ -1,0 +1,7 @@
+{
+	"parent": "item/generated",
+	"variants": {
+		"0":     {"textures": {"layer0": "modularitemframe:item/module_t1_io"} },
+		"1":     {"textures": {"layer0": "modularitemframe:item/module_t1_craft"} }
+	}
+}

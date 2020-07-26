@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "item": "modularitemframe:module_t2_dispense"
+  },
+  "pattern": [
+    "ICI",
+    "O#O",
+    "ICI"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:dispenser"
+    },
+    "C": {
+      "item": "modularitemframe:canvas"
+    },
+    "O": {
+      "item": "modularitemframe:module_t1_io"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    }
+  }
+}

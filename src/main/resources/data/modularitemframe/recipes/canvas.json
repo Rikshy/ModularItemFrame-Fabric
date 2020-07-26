@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "item": "modularitemframe:canvas",
+    "count": 4
+  },
+  "pattern": [
+    "SSS",
+    "###",
+    "SSS"
+  ],
+  "key": {
+    "#": {
+      "tag": "forge:leather"
+    },
+    "S": {
+      "tag": "forge:rods/wooden"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "item": "modularitemframe:module_t3_tele"
+  },
+  "pattern": [
+    "OCO",
+    "E#E",
+    "OCO"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:wither_skeleton_skull"
+    },
+    "E": {
+      "item": "minecraft:ender_eye"
+    },
+    "C": {
+      "item": "modularitemframe:canvas"
+    },
+    "O": {
+      "tag": "forge:obsidian"
+    }
+  }
+}

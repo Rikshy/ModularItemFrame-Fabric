@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "item": "modularitemframe:module_t3_itemtele"
+  },
+  "pattern": [
+    "OCO",
+    "V#D",
+    "OCO"
+  ],
+  "key": {
+    "#": {
+      "tag": "forge:chests/ender"
+    },
+    "V": {
+      "item": "modularitemframe:module_t2_vacuum"
+    },
+    "D": {
+      "item": "modularitemframe:module_t2_dispense"
+    },
+    "C": {
+      "item": "modularitemframe:canvas"
+    },
+    "O": {
+      "tag": "forge:obsidian"
+    }
+  }
+}

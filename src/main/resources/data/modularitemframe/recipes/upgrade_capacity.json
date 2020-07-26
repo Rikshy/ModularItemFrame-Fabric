@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "item": "modularitemframe:upgrade_capacity",
+    "count": 2
+  },
+  "pattern": [
+    "C#C"
+  ],
+  "key": {
+    "#": {
+      "item": "modularitemframe:modular_frame"
+    },
+    "C": {
+      "tag": "forge:chests/wooden"
+    }
+  }
+}

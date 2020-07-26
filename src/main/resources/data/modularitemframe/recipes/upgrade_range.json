@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "item": "modularitemframe:upgrade_range",
+    "count": 2
+  },
+  "pattern": [
+    "B#B"
+  ],
+  "key": {
+    "#": {
+      "item": "modularitemframe:modular_frame"
+    },
+    "B": {
+      "item": "minecraft:bow"
+    }
+  }
+}

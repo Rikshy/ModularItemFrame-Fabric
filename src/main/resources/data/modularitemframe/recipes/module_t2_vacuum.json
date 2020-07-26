@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "item": "modularitemframe:module_t2_vacuum"
+  },
+  "pattern": [
+    "ICI",
+    "A A",
+    "ICI"
+  ],
+  "key": {
+    "A": {
+      "item": "modularitemframe:module_t1_io"
+    },
+    "C": {
+      "item": "modularitemframe:module_t1_item"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    }
+  }
+}

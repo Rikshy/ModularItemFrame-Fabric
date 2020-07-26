@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "item": "modularitemframe:upgrade_speed",
+    "count": 2
+  },
+  "pattern": [
+    "S#S"
+  ],
+  "key": {
+    "#": {
+      "item": "modularitemframe:modular_frame"
+    },
+    "S": {
+      "item": "minecraft:sugar"
+    }
+  }
+}

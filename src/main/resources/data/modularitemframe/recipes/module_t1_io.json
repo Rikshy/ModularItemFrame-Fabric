@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "item": "modularitemframe:module_t1_io"
+  },
+  "pattern": [
+    "SCS",
+    "C C",
+    "SCS"
+  ],
+  "key": {
+    "S": {
+      "tag": "forge:stone"
+    },
+    "C": {
+      "item": "modularitemframe:canvas"
+    }
+  }
+}

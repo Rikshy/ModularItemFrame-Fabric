@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "item": "modularitemframe:module_t1_item"
+  },
+  "pattern": [
+    "S S",
+    " C ",
+    "S S"
+  ],
+  "key": {
+    "C": {
+      "item": "modularitemframe:canvas"
+    },
+    "S": {
+      "tag": "forge:rods/wooden"
+    }
+  }
+}

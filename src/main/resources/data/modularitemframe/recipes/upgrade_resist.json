@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "item": "modularitemframe:upgrade_resist"
+  },
+  "pattern": [
+    "O#O"
+  ],
+  "key": {
+    "#": {
+      "item": "modularitemframe:modular_frame"
+    },
+    "O": {
+      "tag": "forge:obsidian"
+    }
+  }
+}

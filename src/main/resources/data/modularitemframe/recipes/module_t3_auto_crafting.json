@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "item": "modularitemframe:module_t3_auto_crafting"
+  },
+  "pattern": [
+    "OCO",
+    "D#D",
+    "OCO"
+  ],
+  "key": {
+    "#": {
+      "item": "modularitemframe:module_t2_craft_plus"
+    },
+    "C": {
+      "item": "modularitemframe:canvas"
+    },
+    "D": {
+      "item": "modularitemframe:module_t2_dispense"
+    },
+    "O": {
+      "tag": "forge:obsidian"
+    }
+  }
+}

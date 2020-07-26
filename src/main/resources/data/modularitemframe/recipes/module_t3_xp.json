@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "item": "modularitemframe:module_t3_xp"
+  },
+  "pattern": [
+    "OCO",
+    "V#T",
+    "OCO"
+  ],
+  "key": {
+    "#": {
+      "tag": "forge:gems/emerald"
+    },
+    "V": {
+      "item": "modularitemframe:module_t2_vacuum"
+    },
+    "T": {
+      "item": "modularitemframe:module_t1_tank"
+    },
+    "C": {
+      "item": "modularitemframe:canvas"
+    },
+    "O": {
+      "tag": "forge:obsidian"
+    }
+  }
+}

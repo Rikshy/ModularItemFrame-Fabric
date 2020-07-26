@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "item": "modularitemframe:module_t1_tank"
+  },
+  "pattern": [
+    " C ",
+    "C#C",
+    " C "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:bucket"
+    },
+    "C": {
+      "item": "modularitemframe:canvas"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "item": "modularitemframe:module_t2_use"
+  },
+  "pattern": [
+    "ICI",
+    "A#A",
+    "ICI"
+  ],
+  "key": {
+    "#": {
+      "item": "modularitemframe:module_t1_item"
+    },
+    "A": {
+      "item": "modularitemframe:module_t1_io"
+    },
+    "C": {
+      "item": "modularitemframe:canvas"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    }
+  }
+}
