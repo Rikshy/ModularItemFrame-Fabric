@@ -76,6 +76,7 @@ public abstract class ModuleBase {
      *
      * @return the name of the module :O
      */
+    @Environment(EnvType.CLIENT)
     public abstract String getModuleName();
 
     public boolean reloadModel = false;

@@ -8,6 +8,7 @@ import dev.shyrik.modularitemframe.api.UpgradeItem;
 import dev.shyrik.modularitemframe.api.util.InventoryHelper;
 import dev.shyrik.modularitemframe.api.util.ItemHelper;
 import dev.shyrik.modularitemframe.common.module.EmptyModule;
+import dev.shyrik.modularitemframe.common.upgrade.*;
 import dev.shyrik.modularitemframe.init.Registrar;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.BlockState;
@@ -75,21 +76,21 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         markDirty();
     }
 
-//    public int getSpeedUpCount() {
-//        return countUpgradeOfType(UpgradeSpeed.class);
-//    }
-//
-//    public int getRangeUpCount() {
-//        return countUpgradeOfType(UpgradeRange.class);
-//    }
-//
-//    public int getCapacityUpCount() {
-//        return countUpgradeOfType(UpgradeCapacity.class);
-//    }
-//
-//    public boolean isBlastResist() {
-//        return countUpgradeOfType(UpgradeBlastResist.class) >= 1;
-//    }
+    public int getSpeedUpCount() {
+        return countUpgradeOfType(SpeedUpgrade.class);
+    }
+
+    public int getRangeUpCount() {
+        return countUpgradeOfType(RangeUpgrade.class);
+    }
+
+    public int getCapacityUpCount() {
+        return countUpgradeOfType(CapacityUpgrade.class);
+    }
+
+    public boolean isBlastResist() {
+        return countUpgradeOfType(BlaseResistUpgrade.class) >= 1;
+    }
 
     public int countUpgradeOfType(Class<? extends UpgradeBase> clsUp) {
         int count = 0;
