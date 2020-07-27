@@ -60,11 +60,11 @@ public class FluidDispenserModule extends ModuleBase {
         BlockEntity neighbor = blockEntity.getAttachedTile();
         if (neighbor == null) return;
 
-        IFluidHandler handler = neighbor.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing.getOpposite()).orElse(null);
-        if (handler == null) return;
+        //IFluidHandler handler = neighbor.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing.getOpposite()).orElse(null);
+        //if (handler == null) return;
 
-        if (FluidUtil.tryPlaceFluid(null, world, Hand.MAIN_HAND, pos.offset(facing.getOpposite()), handler, handler.drain(BUCKET_VOLUME, IFluidHandler.FluidAction.SIMULATE)))
-            handler.drain(BUCKET_VOLUME, IFluidHandler.FluidAction.SIMULATE);
+        //if (FluidUtil.tryPlaceFluid(null, world, Hand.MAIN_HAND, pos.offset(facing.getOpposite()), handler, handler.drain(BUCKET_VOLUME, IFluidHandler.FluidAction.SIMULATE)))
+        //    handler.drain(BUCKET_VOLUME, IFluidHandler.FluidAction.SIMULATE);
     }
 
 }

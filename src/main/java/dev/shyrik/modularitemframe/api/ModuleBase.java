@@ -8,7 +8,6 @@ import dev.shyrik.modularitemframe.init.Registrar;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.model.BakedModel;
@@ -101,7 +100,7 @@ public abstract class ModuleBase {
                 if (mat.getTextureId().toString().contains("default_inner"))
                     return MinecraftClient.getInstance().getBakedModelManager().method_24153(mat.getAtlasId()).getSprite(innerTexture());
                 return MinecraftClient.getInstance().getBakedModelManager().method_24153(mat.getAtlasId()).getSprite(mat.getTextureId());
-            }, ModelRotation.X0_Y0, RegistryHelper.getBlockId(Registrar.MODULARFRAME));
+            }, ModelRotation.X0_Y0, RegistryHelper.getId(Registrar.MODULARFRAME));
 
             reloadModel = false;
         }
@@ -147,7 +146,7 @@ public abstract class ModuleBase {
     /**
      * in case your module has a gui
      */
-    public NamedScreenHandlerFactory getContainer(BlockState state, World world, BlockPos pos) {
+    public NamedScreenHandlerFactory getScreenHandler(BlockState state, World world, BlockPos pos) {
         return null;
     }
 

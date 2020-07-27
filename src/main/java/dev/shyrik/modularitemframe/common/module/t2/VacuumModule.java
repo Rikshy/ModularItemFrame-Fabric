@@ -3,10 +3,10 @@ package dev.shyrik.modularitemframe.common.module.t2;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.InventoryHelper;
+import dev.shyrik.modularitemframe.api.util.RegistryHelper;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.network.NetworkHandler;
 import dev.shyrik.modularitemframe.common.network.packet.SpawnParticlesPacket;
-import dev.shyrik.modularitemframe.init.ModularItemFrameConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -92,7 +92,7 @@ public class VacuumModule extends ModuleBase {
 
         Inventory handler = (Inventory) blockEntity.getAttachedInventory();
         if (handler != null) {
-            List<ItemEntity> entities = world.getEntities(ItemEntity.class, getVacuumBB(pos));
+            List<ItemEntity> entities = world.getEntities(ItemEntity.class, getVacuumBB(pos), itemEntity -> true);
             for (ItemEntity entity : entities) {
                 ItemStack entityStack = entity.getStack();
                 if (!entity.isAlive() || entityStack.isEmpty() || InventoryHelper.getFittingSlot(handler, entityStack) < 0)
@@ -101,7 +101,7 @@ public class VacuumModule extends ModuleBase {
                 ItemStack remain = InventoryHelper.giveStack(handler, entityStack);
                 if (remain.isEmpty()) entity.remove();
                 else entity.setStack(remain);
-                NetworkHandler.sendAround(new SpawnParticlesPacket(ParticleTypes.EXPLOSION.getRegistryName(), entity.getPos(), 1), entity.world, entity.getPos(), 32);
+                NetworkHandler.sendAround(entity.world, entity.getBlockPos(), 32, new SpawnParticlesPacket(RegistryHelper.getId(ParticleTypes.EXPLOSION), entity.getBlockPos(), 1));
                 break;
             }
         }

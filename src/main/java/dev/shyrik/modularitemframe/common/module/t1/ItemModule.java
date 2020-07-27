@@ -58,7 +58,7 @@ public class ItemModule extends ModuleBase {
     @Override
     @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
-        FrameItemRenderer.renderOnFrame(displayItem, blockEntity.blockFacing(), rotation, 0.1F, TransformType.FIXED, matrixStack, buffer, combinedLight, combinedOverlay);
+        //FrameItemRenderer.renderOnFrame(displayItem, blockEntity.blockFacing(), rotation, 0.1F, TransformType.FIXED, matrixStack, buffer, combinedLight, combinedOverlay);
     }
 
     public void screw(World world, BlockPos pos, PlayerEntity playerIn, ItemStack driver) {

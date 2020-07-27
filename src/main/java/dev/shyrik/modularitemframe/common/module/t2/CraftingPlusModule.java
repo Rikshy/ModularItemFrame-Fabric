@@ -1,8 +1,8 @@
 package dev.shyrik.modularitemframe.common.module.t2;
 
 import dev.shyrik.modularitemframe.ModularItemFrame;
-import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
+import dev.shyrik.modularitemframe.common.module.t1.CraftingModule;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -20,7 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-public class CraftingPlusModule extends ModuleBase {
+public class CraftingPlusModule extends CraftingModule {
     public static final Identifier LOC = new Identifier(ModularItemFrame.MOD_ID, "module_t2_craft_plus");
     public static final Identifier BG_LOC = new Identifier(ModularItemFrame.MOD_ID, "block/module_t2_craft_plus");
     private static final String NBT_MODE = "cpmode";
@@ -59,7 +59,7 @@ public class CraftingPlusModule extends ModuleBase {
                 playerIn.sendMessage(new TranslatableText(mode.getName()), false);
                 blockEntity.markDirty();
             } else {
-                playerIn.openContainer(getContainer(blockEntity.getCachedState(), world, pos));
+                //playerIn.openContainer(getContainer(blockEntity.getCachedState(), world, pos));
                 blockEntity.markDirty();
             }
         }
@@ -75,8 +75,8 @@ public class CraftingPlusModule extends ModuleBase {
         Inventory neighborInventory = (Inventory)blockEntity.getAttachedInventory();
 
         if (neighborInventory != null) {
-            if (mode == EnumMode.NO_PLAYER) return neighborInventory;
-            else return new CombinedInvWrapper(neighborInventory, playerInventory);
+            //if (mode == EnumMode.NO_PLAYER) return neighborInventory;
+            //else return new CombinedInvWrapper(neighborInventory, playerInventory);
         }
         return playerInventory;
     }

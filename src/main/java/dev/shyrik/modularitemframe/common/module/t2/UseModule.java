@@ -45,7 +45,7 @@ public class UseModule extends ModuleBase {
     private boolean rightClick = false;
     private int rotation = 0;
     private ItemStack displayItem = ItemStack.EMPTY;
-    private WeakReference<FakePlayerHelper.UsefulFakePlayer> player;
+    //private WeakReference<FakePlayerHelper.UsefulFakePlayer> player;
 
     @Override
     public Identifier getId() {
@@ -64,21 +64,21 @@ public class UseModule extends ModuleBase {
         switch (facing) {
             case DOWN:
             case NORTH:
-                FrameItemRenderer.renderOnFrame(displayItem, Direction.WEST, rotation, 0.5F, TransformType.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
+                //FrameItemRenderer.renderOnFrame(displayItem, Direction.WEST, rotation, 0.5F, TransformType.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
                 break;
             case UP:
             case SOUTH:
-                FrameItemRenderer.renderOnFrame(displayItem, Direction.EAST, rotation, 0.5F, TransformType.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
+                //FrameItemRenderer.renderOnFrame(displayItem, Direction.EAST, rotation, 0.5F, TransformType.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
                 break;
             case WEST:
-                matrixStack.rotate(new Quaternion(0, 90.0F, 0.0F, true));
+                matrixStack.multiply(new Quaternion(0, 90.0F, 0.0F, true));
                 matrixStack.translate(-1, 0 ,0);
-                FrameItemRenderer.renderOnFrame(displayItem, Direction.WEST, rotation, 0.5F, TransformType.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
+                //FrameItemRenderer.renderOnFrame(displayItem, Direction.WEST, rotation, 0.5F, TransformType.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
                 break;
             case EAST:
-                matrixStack.rotate(new Quaternion(0, 90.0F, 0.0F, true));
+                matrixStack.multiply(new Quaternion(0, 90.0F, 0.0F, true));
                 matrixStack.translate(-1, 0 ,0);
-                FrameItemRenderer.renderOnFrame(displayItem, Direction.EAST, rotation, 0.5F, TransformType.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
+                //FrameItemRenderer.renderOnFrame(displayItem, Direction.EAST, rotation, 0.5F, TransformType.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
                 break;
         }
     }
@@ -119,8 +119,8 @@ public class UseModule extends ModuleBase {
             } else {
                 rightClick = !rightClick;
             }
-            String mode = isSneaking ? I18n.format("modularitemframe.mode.sn") + " + " : "";
-            mode += rightClick ? I18n.format("modularitemframe.mode.rc") : I18n.format("modularitemframe.mode.lc");
+            String mode = isSneaking ? I18n.translate("modularitemframe.mode.sn") + " + " : "";
+            mode += rightClick ? I18n.translate("modularitemframe.mode.rc") : I18n.translate("modularitemframe.mode.lc");
 
             playerIn.sendMessage(new TranslatableText("modularitemframe.message.mode_change", mode), false);
             blockEntity.markDirty();
@@ -146,16 +146,16 @@ public class UseModule extends ModuleBase {
     }
 
     private void hitIt(World world, BlockPos pos) {
-        if (player == null) player = new WeakReference<>(FakePlayerHelper.getPlayer(world, DEFAULT_CLICKER));
+        //if (player == null) player = new WeakReference<>(FakePlayerHelper.getPlayer(world, DEFAULT_CLICKER));
 
         Direction facing = blockEntity.blockFacing();
-        FakePlayerHelper.setupFakePlayerForUse(getPlayer(), pos, facing, displayItem, isSneaking);
+        //FakePlayerHelper.setupFakePlayerForUse(getPlayer(), pos, facing, displayItem, isSneaking);
         ItemStack result;
-        if (rightClick)
-            result = FakePlayerHelper.rightClickInDirection(getPlayer(), world, pos.offset(facing), facing, world.getBlockState(pos), 2 + blockEntity.getRangeUpCount());
-        else
-            result = FakePlayerHelper.leftClickInDirection(getPlayer(), world, pos.offset(facing), facing, world.getBlockState(pos), 2 + blockEntity.getRangeUpCount());
-        FakePlayerHelper.cleanupFakePlayerFromUse(player.get(), result, displayItem, this);
+//        if (rightClick)
+//            result = FakePlayerHelper.rightClickInDirection(getPlayer(), world, pos.offset(facing), facing, world.getBlockState(pos), 2 + blockEntity.getRangeUpCount());
+//        else
+//            result = FakePlayerHelper.leftClickInDirection(getPlayer(), world, pos.offset(facing), facing, world.getBlockState(pos), 2 + blockEntity.getRangeUpCount());
+//        FakePlayerHelper.cleanupFakePlayerFromUse(player.get(), result, displayItem, this);
     }
 
     private ItemStack getNextStack() {
@@ -170,14 +170,14 @@ public class UseModule extends ModuleBase {
         return ItemStack.EMPTY;
     }
 
-    FakePlayerHelper.UsefulFakePlayer getPlayer() {
-        return player.get();
-    }
+    //FakePlayerHelper.UsefulFakePlayer getPlayer() {
+    //    return player.get();
+    //}
 
     @Override
     public CompoundTag toTag() {
         CompoundTag cmp = super.toTag();
-        cmp.put(NBT_DISPLAY, displayItem.toTag());
+        cmp.put(NBT_DISPLAY, displayItem.toTag(new CompoundTag()));
         cmp.putBoolean(NBT_SNEAK, isSneaking);
         cmp.putBoolean(NBT_RIGHT, rightClick);
         cmp.putInt(NBT_ROTATION, rotation);

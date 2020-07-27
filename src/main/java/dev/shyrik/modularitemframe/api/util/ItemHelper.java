@@ -1,5 +1,6 @@
 package dev.shyrik.modularitemframe.api.util;
 
+import dev.shyrik.modularitemframe.mixin.IngredientGetMatchingStacks;
 import dev.shyrik.modularitemframe.mixin.IngredientMixin;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,8 +29,8 @@ public class ItemHelper {
         return false;
     }
 
-    public static DefaultedList<IngredientMixin> getIngredients(Recipe recipe) {
-        return (DefaultedList<IngredientMixin>)recipe.getPreviewInputs();
+    public static DefaultedList<IngredientGetMatchingStacks> getIngredients(Recipe recipe) {
+        return (DefaultedList<IngredientGetMatchingStacks>)recipe.getPreviewInputs();
     }
 
     public static boolean simpleAreItemsEqual(ItemStack stack, ItemStack stack2) {

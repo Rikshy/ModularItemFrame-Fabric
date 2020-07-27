@@ -4,6 +4,7 @@ import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.InventoryHelper;
 import dev.shyrik.modularitemframe.api.util.ItemHelper;
+import dev.shyrik.modularitemframe.api.util.RegistryHelper;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
 import dev.shyrik.modularitemframe.common.network.NetworkHandler;
 import dev.shyrik.modularitemframe.common.network.packet.PlaySoundPacket;
@@ -35,40 +36,40 @@ public class NullifyModule extends ModuleBase {
 
     private ItemStack lastStack = ItemStack.EMPTY;
 
-    private final FluidStack lavaStack;
-    private final TextureAtlasSprite still;
-    private final TextureAtlasSprite flowing;
+    //private final FluidStack lavaStack;
+    //private final TextureAtlasSprite still;
+    //private final TextureAtlasSprite flowing;
 
     @Override
     @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
         switch (blockEntity.blockFacing()) {
             case UP:
-                FrameFluidRenderer.renderFluidCuboid(lavaStack, matrixStack, buffer, combinedLight, 0.3f, 0.07f, 0.3f, 0.7f, 0.07f, 0.7f);
+                //FrameFluidRenderer.renderFluidCuboid(lavaStack, matrixStack, buffer, combinedLight, 0.3f, 0.07f, 0.3f, 0.7f, 0.07f, 0.7f);
                 break;
             case DOWN:
-                FrameFluidRenderer.renderFluidCuboid(lavaStack, matrixStack, buffer, combinedLight, 0.3f, 0.93f, 0.3f, 0.7f, 0.93f, 0.7f);
+                //FrameFluidRenderer.renderFluidCuboid(lavaStack, matrixStack, buffer, combinedLight, 0.3f, 0.93f, 0.3f, 0.7f, 0.93f, 0.7f);
                 break;
             case NORTH:
-                FrameFluidRenderer.renderFluidCuboid(lavaStack, matrixStack, buffer, combinedLight, 0.3f, 0.3f, 0.93f, 0.7f, 0.7f, 0.93f);
+                //FrameFluidRenderer.renderFluidCuboid(lavaStack, matrixStack, buffer, combinedLight, 0.3f, 0.3f, 0.93f, 0.7f, 0.7f, 0.93f);
                 break;
             case EAST:
-                FrameFluidRenderer.renderFluidCuboid(lavaStack, matrixStack, buffer, combinedLight, 0.07f, 0.3f, 0.3f, 0.07f, 0.7f, 0.7f);
+               //FrameFluidRenderer.renderFluidCuboid(lavaStack, matrixStack, buffer, combinedLight, 0.07f, 0.3f, 0.3f, 0.07f, 0.7f, 0.7f);
                 break;
             case WEST:
-                FrameFluidRenderer.renderFluidCuboid(lavaStack, matrixStack, buffer, combinedLight, 0.93f, 0.3f, 0.3f, 0.93f, 0.7f, 0.7f);
+                //FrameFluidRenderer.renderFluidCuboid(lavaStack, matrixStack, buffer, combinedLight, 0.93f, 0.3f, 0.3f, 0.93f, 0.7f, 0.7f);
                 break;
             case SOUTH:
-                FrameFluidRenderer.renderFluidCuboid(lavaStack, matrixStack, buffer, combinedLight, 0.3f, 0.3f, 0.07f, 0.7f, 0.7f, 0.07f);
+                //FrameFluidRenderer.renderFluidCuboid(lavaStack, matrixStack, buffer, combinedLight, 0.3f, 0.3f, 0.07f, 0.7f, 0.7f, 0.07f);
                 break;
         }
     }
 
     public NullifyModule() {
         super();
-        lavaStack = new FluidStack(Fluids.LAVA, 1000);
-        still = RandomUtils.getSprite(Fluids.LAVA.getAttributes().getStillTexture());//Minecraft.getInstance().getModelManager().getAtlasTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).getSprite(lava.getAttributes().getStillTexture());
-        flowing = RandomUtils.getSprite(Fluids.LAVA.getAttributes().getFlowingTexture());// ModelBakery.LOCATION_LAVA_FLOW.getSprite();
+        //lavaStack = new FluidStack(Fluids.LAVA, 1000);
+        //still = RandomUtils.getSprite(Fluids.LAVA.getAttributes().getStillTexture());//Minecraft.getInstance().getModelManager().getAtlasTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).getSprite(lava.getAttributes().getStillTexture());
+        //flowing = RandomUtils.getSprite(Fluids.LAVA.getAttributes().getFlowingTexture());// ModelBakery.LOCATION_LAVA_FLOW.getSprite();
     }
 
     @Override
@@ -89,8 +90,8 @@ public class NullifyModule extends ModuleBase {
     }
 
     @Override
-    public ActionResult onUse(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, BlockHitResult hit) {
-        if (!worldIn.isClient) {
+    public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, BlockHitResult hit) {
+        if (!world.isClient) {
             ItemStack held = playerIn.getStackInHand(hand);
             if (!playerIn.isSneaking() && !held.isEmpty()) {
                 if (ItemHelper.simpleAreStacksEqual(held, lastStack)) {
@@ -101,11 +102,11 @@ public class NullifyModule extends ModuleBase {
                     lastStack = held.copy();
                 }
                 held.setCount(0);
-                NetworkHandler.sendAround(new PlaySoundPacket(pos, SoundEvents.BLOCK_LAVA_EXTINGUISH.getId(), SoundCategory.BLOCKS.getName(), 0.4F, 0.7F), worldIn, blockEntity.getPos(), 32);
+                NetworkHandler.sendAround(world, blockEntity.getPos(), 32, new PlaySoundPacket(pos, RegistryHelper.getId(SoundEvents.BLOCK_LAVA_EXTINGUISH), SoundCategory.BLOCKS.getName(), 0.4F, 0.7F));
             } else if (playerIn.isSneaking() && held.isEmpty() && !lastStack.isEmpty()) {
                 playerIn.setStackInHand(hand, lastStack);
                 lastStack = ItemStack.EMPTY;
-                NetworkHandler.sendAround(new PlaySoundPacket(pos, SoundEvents.ENTITY_ENDER_PEARL_THROW.getId(), SoundCategory.BLOCKS.getName(), 0.4F, 0.7F), worldIn, blockEntity.getPos(), 32);
+                NetworkHandler.sendAround(world, blockEntity.getPos(), 32, new PlaySoundPacket(pos, RegistryHelper.getId(SoundEvents.ENTITY_ENDER_PEARL_THROW), SoundCategory.BLOCKS.getName(), 0.4F, 0.7F));
             }
         }
         return ActionResult.SUCCESS;
@@ -114,7 +115,7 @@ public class NullifyModule extends ModuleBase {
     @Override
     public CompoundTag toTag() {
         CompoundTag compound = super.toTag();
-        compound.put(NBT_LASTSTACK, lastStack.toTag(new CompoundTag));
+        compound.put(NBT_LASTSTACK, lastStack.toTag(new CompoundTag()));
         return compound;
     }
 

@@ -123,14 +123,14 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
                 result = ActionResult.SUCCESS;
             } else if (handItem.getItem() instanceof ModuleItem && blockEntity.acceptsModule()) {
                 if (!world.isClient) {
-                    blockEntity.setModule(RegistryHelper.getItemId(handItem));
+                    blockEntity.setModule(RegistryHelper.getId(handItem));
                     if (!player.isCreative()) player.getActiveItem().decrement(1);
                     blockEntity.markDirty();
                 }
                 result = ActionResult.SUCCESS;
             } else if (handItem.getItem() instanceof UpgradeItem && blockEntity.acceptsUpgrade()) {
                 if (!world.isClient) {
-                    if (blockEntity.tryAddUpgrade(RegistryHelper.getItemId(handItem))) {
+                    if (blockEntity.tryAddUpgrade(RegistryHelper.getId(handItem))) {
                         if (!player.isCreative()) player.getStackInHand(hand).decrement(1);
                         blockEntity.markDirty();
                     }
@@ -162,7 +162,7 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
 
     @SuppressWarnings("deprecation")
     public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World worldIn, BlockPos pos) {
-        return getBE(worldIn, pos).module.getContainer(state, worldIn, pos);
+        return getBE(worldIn, pos).module.getScreenHandler(state, worldIn, pos);
     }
 
 //    public static void onPlayerInteracted(PlayerInteractEvent.RightClickBlock event) {

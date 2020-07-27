@@ -16,6 +16,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -57,7 +58,7 @@ public class StorageModule extends ModuleBase {
     @Override
     @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
-        FrameItemRenderer.renderOnFrame(lastStack, blockEntity.blockFacing(), 0, 0.1F, TransformType.FIXED, matrixStack, buffer, combinedLight, combinedOverlay);
+        //FrameItemRenderer.renderOnFrame(lastStack, blockEntity.blockFacing(), 0, 0.1F, TransformType.FIXED, matrixStack, buffer, combinedLight, combinedOverlay);
     }
 
     @Override
@@ -134,7 +135,7 @@ public class StorageModule extends ModuleBase {
     @Override
     public void fromTag(CompoundTag cmp) {
         super.fromTag(cmp);
-        if (cmp.contains(NBT_INVENTORY)) inventory.readTags(cmp.getCompound(NBT_INVENTORY));
+        if (cmp.contains(NBT_INVENTORY)) inventory.readTags(cmp.getList(NBT_INVENTORY, (byte)0));
         if (cmp.contains(NBT_LAST)) lastClick = cmp.getLong(NBT_LAST);
         if (cmp.contains(NBT_LASTSTACK)) lastStack = ItemStack.fromTag(cmp.getCompound(NBT_LASTSTACK));
     }

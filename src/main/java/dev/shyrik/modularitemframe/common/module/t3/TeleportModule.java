@@ -9,11 +9,13 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -54,50 +56,50 @@ public class TeleportModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks,  IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
+    public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
         BlockPos pos = blockEntity.getPos();
-        FrameEnderRenderer.render(matrixStack, buffer, pos, renderer.getDispatcher().renderInfo.getProjectedView(), info -> {
-            float x = pos.getX(), y = pos.getY(), z = pos.getZ();
-            switch (blockEntity.blockFacing()) {
-                case DOWN:
-                    info.buffer.pos(info.matrix,x + 0.85f, y + 0.08f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                    info.buffer.pos(info.matrix,x + 0.85f, y + 0.08f, z + 0.14f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                    info.buffer.pos(info.matrix,x + 0.14f, y + 0.08f, z + 0.14f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                    info.buffer.pos(info.matrix,x + 0.14f, y + 0.08f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                    break;
-                case UP:
-                    info.buffer.pos(info.matrix,x + 0.85f, y + 0.92f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                    info.buffer.pos(info.matrix,x + 0.85f, y + 0.92f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                    info.buffer.pos(info.matrix,x + 0.16f, y + 0.92f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                    info.buffer.pos(info.matrix,x + 0.16f, y + 0.92f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                    break;
-                case NORTH:
-                    info.buffer.pos(info.matrix,x + 0.85f, y + 0.85f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                    info.buffer.pos(info.matrix,x + 0.14f, y + 0.85f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                    info.buffer.pos(info.matrix,x + 0.14f, y + 0.14f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                    info.buffer.pos(info.matrix,x + 0.85f, y + 0.14f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                    break;
-                case SOUTH:
-                    info.buffer.pos(info.matrix,x + 0.14f, y + 0.85f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                    info.buffer.pos(info.matrix,x + 0.85f, y + 0.85f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                    info.buffer.pos(info.matrix,x + 0.85f, y + 0.14f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                    info.buffer.pos(info.matrix,x + 0.14f, y + 0.14f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                    break;
-                case WEST:
-                    info.buffer.pos(info.matrix,x + 0.08f, y + 0.85f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                    info.buffer.pos(info.matrix,x + 0.08f, y + 0.85f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                    info.buffer.pos(info.matrix,x + 0.08f, y + 0.16f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                    info.buffer.pos(info.matrix,x + 0.08f, y + 0.16f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                    break;
-                case EAST:
-                    info.buffer.pos(info.matrix,x + 0.92f, y + 0.85f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                    info.buffer.pos(info.matrix,x + 0.92f, y + 0.85f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                    info.buffer.pos(info.matrix,x + 0.92f, y + 0.16f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                    info.buffer.pos(info.matrix,x + 0.92f, y + 0.16f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                    break;
-            }
-            return true;
-        });
+//        FrameEnderRenderer.render(matrixStack, buffer, pos, renderer.getDispatcher().renderInfo.getProjectedView(), info -> {
+//            float x = pos.getX(), y = pos.getY(), z = pos.getZ();
+//            switch (blockEntity.blockFacing()) {
+//                case DOWN:
+//                    info.buffer.pos(info.matrix,x + 0.85f, y + 0.08f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                    info.buffer.pos(info.matrix,x + 0.85f, y + 0.08f, z + 0.14f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                    info.buffer.pos(info.matrix,x + 0.14f, y + 0.08f, z + 0.14f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                    info.buffer.pos(info.matrix,x + 0.14f, y + 0.08f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                    break;
+//                case UP:
+//                    info.buffer.pos(info.matrix,x + 0.85f, y + 0.92f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                    info.buffer.pos(info.matrix,x + 0.85f, y + 0.92f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                    info.buffer.pos(info.matrix,x + 0.16f, y + 0.92f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                    info.buffer.pos(info.matrix,x + 0.16f, y + 0.92f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                    break;
+//                case NORTH:
+//                    info.buffer.pos(info.matrix,x + 0.85f, y + 0.85f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                    info.buffer.pos(info.matrix,x + 0.14f, y + 0.85f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                    info.buffer.pos(info.matrix,x + 0.14f, y + 0.14f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                    info.buffer.pos(info.matrix,x + 0.85f, y + 0.14f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                    break;
+//                case SOUTH:
+//                    info.buffer.pos(info.matrix,x + 0.14f, y + 0.85f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                    info.buffer.pos(info.matrix,x + 0.85f, y + 0.85f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                    info.buffer.pos(info.matrix,x + 0.85f, y + 0.14f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                    info.buffer.pos(info.matrix,x + 0.14f, y + 0.14f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                    break;
+//                case WEST:
+//                    info.buffer.pos(info.matrix,x + 0.08f, y + 0.85f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                    info.buffer.pos(info.matrix,x + 0.08f, y + 0.85f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                    info.buffer.pos(info.matrix,x + 0.08f, y + 0.16f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                    info.buffer.pos(info.matrix,x + 0.08f, y + 0.16f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                    break;
+//                case EAST:
+//                    info.buffer.pos(info.matrix,x + 0.92f, y + 0.85f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                    info.buffer.pos(info.matrix,x + 0.92f, y + 0.85f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                    info.buffer.pos(info.matrix,x + 0.92f, y + 0.16f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                    info.buffer.pos(info.matrix,x + 0.92f, y + 0.16f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                    break;
+//            }
+//            return true;
+//        });
     }
 
     @Override
@@ -113,7 +115,7 @@ public class TeleportModule extends ModuleBase {
 
     @Override
     public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
-        if (player instanceof FakePlayer) return ActionResult.FAIL;
+        //if (player instanceof FakePlayer) return ActionResult.FAIL;
 
         if (!world.isClient) {
             if (hasValidConnection(world, player)) {
@@ -122,8 +124,8 @@ public class TeleportModule extends ModuleBase {
                     target = linkedLoc.offset(Direction.DOWN);
                 else target = linkedLoc;
 
-                if (player.isBeingRidden()) { // kp ob es das so gibt wie das hier gemeint ist beim neuen player
-                    player.removePassengers();
+                if (player.hasPassengers()) { // kp ob es das so gibt wie das hier gemeint ist beim neuen player
+                    player.removeAllPassengers();
                 }
 
                 player.stopRiding();
@@ -144,7 +146,7 @@ public class TeleportModule extends ModuleBase {
             if (nbt == null) nbt = new CompoundTag();
             nbt.putLong(NBT_LINK, blockEntity.getPos().asLong());
             driver.setTag(nbt);
-            playerIn.sendMessage(new TranslationTextComponent("modularitemframe.message.loc_saved"));
+            playerIn.sendMessage(new TranslatableText("modularitemframe.message.loc_saved"), false);
         } else {
             if (nbt != null && nbt.contains(NBT_LINK)) {
                 BlockPos tmp = BlockPos.fromLong(nbt.getLong(NBT_LINK));
@@ -152,13 +154,13 @@ public class TeleportModule extends ModuleBase {
                 BlockEntity targetTile = blockEntity.getWorld().getBlockEntity(tmp);
                 int countRange = blockEntity.getRangeUpCount();
                 if (!(targetTile instanceof ModularFrameEntity) || !((((ModularFrameEntity) targetTile).module instanceof TeleportModule)))
-                    playerIn.sendMessage(new TranslationTextComponent("modularitemframe.message.invalid_target"));
-                else if (!blockEntity.getPos().withinDistance(tmp, ModularItemFrame.getConfig().BaseTeleportRange + (countRange * 10))) {
-                    playerIn.sendMessage(new TranslationTextComponent("modularitemframe.message.too_far", ModularItemFrame.getConfig().BaseTeleportRange + (countRange * 10)));
+                    playerIn.sendMessage(new TranslatableText("modularitemframe.message.invalid_target"), true);
+                else if (!blockEntity.getPos().isWithinDistance(tmp, ModularItemFrame.getConfig().BaseTeleportRange + (countRange * 10))) {
+                    playerIn.sendMessage(new TranslatableText("modularitemframe.message.too_far", ModularItemFrame.getConfig().BaseTeleportRange + (countRange * 10)), true);
                 } else {
                     linkedLoc = tmp;
                     ((TeleportModule) ((ModularFrameEntity) targetTile).module).linkedLoc = blockEntity.getPos();
-                    playerIn.sendMessage(new TranslationTextComponent("modularitemframe.message.link_established"));
+                    playerIn.sendMessage(new TranslatableText("modularitemframe.message.link_established"), false);
                     nbt.remove(NBT_LINK);
                     driver.setTag(nbt);
                 }
@@ -174,18 +176,18 @@ public class TeleportModule extends ModuleBase {
 
     private boolean hasValidConnection( World world, PlayerEntity player) {
         if (linkedLoc == null) {
-            if (player != null) player.sendMessage(new TranslationTextComponent("modularitemframe.message.no_target"));
+            if (player != null) player.sendMessage(new TranslatableText("modularitemframe.message.no_target"), false);
             return false;
         }
         BlockEntity targetTile = world.getBlockEntity(linkedLoc);
         if (!(targetTile instanceof ModularFrameEntity) || !(((ModularFrameEntity) targetTile).module instanceof TeleportModule)) {
             if (player != null)
-                player.sendMessage(new TranslationTextComponent("modularitemframe.message.invalid_target"));
+                player.sendMessage(new TranslatableText("modularitemframe.message.invalid_target"), false);
             return false;
         }
         if (!isTargetLocationValid(world)) {
             if (player != null)
-                player.sendMessage(new TranslationTextComponent("modularitemframe.message.location_blocked"));
+                player.sendMessage(new TranslatableText("modularitemframe.message.location_blocked"), false);
             return false;
         }
         return true;
@@ -213,7 +215,7 @@ public class TeleportModule extends ModuleBase {
     @Override
     public void fromTag(CompoundTag nbt) {
         super.fromTag(nbt);
-        if (nbt.hasUniqueId(NBT_LINKX)) // was ist das für eine Prüfung gewesen? ob eine ID drin ist die unique ist oder ob genau diese id drin ist oder was anderes?
+        if (nbt.contains(NBT_LINKX))
             linkedLoc = new BlockPos(nbt.getInt(NBT_LINKX), nbt.getInt(NBT_LINKY), nbt.getInt(NBT_LINKZ));
     }
 }

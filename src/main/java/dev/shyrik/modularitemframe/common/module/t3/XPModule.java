@@ -68,7 +68,7 @@ public class XPModule extends ModuleBase {
 
     @Override
     public ActionResult onUse(World worldIn,  BlockPos pos,  BlockState state,  PlayerEntity playerIn,  Hand hand,  Direction facing, BlockHitResult hit) {
-        if (playerIn instanceof FakePlayer) return ActionResult.FAIL;
+        //if (playerIn instanceof FakePlayer) return ActionResult.FAIL;
 
         if (!worldIn.isClient) {
             if (playerIn.isSneaking()) drainPlayerXpToReachPlayerLevel(playerIn, 0);
@@ -79,7 +79,7 @@ public class XPModule extends ModuleBase {
     }
 
     private void drainPlayerXpToReachPlayerLevel( PlayerEntity player, int level) {
-        int targetXP = Exper.getExperienceForLevel(level);
+        int targetXP = ExperienceHelper.getExperienceForLevel(level);
         int drainXP = ExperienceHelper.getPlayerXP(player) - targetXP;
         if (drainXP <= 0) {
             return;
@@ -124,7 +124,7 @@ public class XPModule extends ModuleBase {
         if (experience >= MAX_XP) return;
         if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
 
-        List<ExperienceOrbEntity> entities = world.getEntities(ExperienceOrbEntity.class, getVacuumBB(pos));
+        List<ExperienceOrbEntity> entities = world.getEntities(ExperienceOrbEntity.class, getVacuumBB(pos), experienceOrbEntity -> true);
         for (ExperienceOrbEntity entity : entities) {
             if (!entity.isAlive()) continue;
 

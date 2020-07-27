@@ -3,6 +3,7 @@ package dev.shyrik.modularitemframe.common.module.t3;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.ItemHelper;
+import dev.shyrik.modularitemframe.api.util.RegistryHelper;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.block.ModularFrameEntity;
@@ -80,48 +81,48 @@ public class ItemTeleporterModule extends ModuleBase {
         BlockPos pos = blockEntity.getPos();
 
         if(direction == EnumMode.NONE) {
-            FrameEnderRenderer.render(matrixStack, buffer, pos, renderer.getDispatcher().renderInfo.getProjectedView(), info -> {
-                float x = pos.getX(), y = pos.getY(), z = pos.getZ();
-                switch (blockEntity.blockFacing()) {
-                    case DOWN:
-                        info.buffer.pos(info.matrix, x + 0.7f, y + 0.08f, z + 0.7f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                        info.buffer.pos(info.matrix, x + 0.7f, y + 0.08f, z + 0.3f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                        info.buffer.pos(info.matrix, x + 0.3f, y + 0.08f, z + 0.3f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                        info.buffer.pos(info.matrix, x + 0.3f, y + 0.08f, z + 0.7f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                        break;
-                    case UP:
-                        info.buffer.pos(info.matrix, x + 0.7f, y + 0.92f, z + 0.3f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                        info.buffer.pos(info.matrix, x + 0.7f, y + 0.92f, z + 0.7f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                        info.buffer.pos(info.matrix, x + 0.3f, y + 0.92f, z + 0.7f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                        info.buffer.pos(info.matrix, x + 0.3f, y + 0.92f, z + 0.3f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                        break;
-                    case NORTH:
-                        info.buffer.pos(info.matrix, x + 0.7f, y + 0.7f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                        info.buffer.pos(info.matrix, x + 0.3f, y + 0.7f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                        info.buffer.pos(info.matrix, x + 0.3f, y + 0.3f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                        info.buffer.pos(info.matrix, x + 0.7f, y + 0.3f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                        break;
-                    case SOUTH:
-                        info.buffer.pos(info.matrix, x + 0.3f, y + 0.7f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                        info.buffer.pos(info.matrix, x + 0.7f, y + 0.7f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                        info.buffer.pos(info.matrix, x + 0.7f, y + 0.3f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                        info.buffer.pos(info.matrix, x + 0.3f, y + 0.3f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                        break;
-                    case WEST:
-                        info.buffer.pos(info.matrix, x + 0.08f, y + 0.7f, z + 0.3f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                        info.buffer.pos(info.matrix, x + 0.08f, y + 0.7f, z + 0.7f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                        info.buffer.pos(info.matrix, x + 0.08f, y + 0.3f, z + 0.7f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                        info.buffer.pos(info.matrix, x + 0.08f, y + 0.3f, z + 0.3f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                        break;
-                    case EAST:
-                        info.buffer.pos(info.matrix, x + 0.92f, y + 0.7f, z + 0.7f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                        info.buffer.pos(info.matrix, x + 0.92f, y + 0.7f, z + 0.3f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                        info.buffer.pos(info.matrix, x + 0.92f, y + 0.3f, z + 0.3f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                        info.buffer.pos(info.matrix, x + 0.92f, y + 0.3f, z + 0.7f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-                        break;
-                }
-                return true;
-            });
+//            FrameEnderRenderer.render(matrixStack, buffer, pos, renderer.getDispatcher().renderInfo.getProjectedView(), info -> {
+//                float x = pos.getX(), y = pos.getY(), z = pos.getZ();
+//                switch (blockEntity.blockFacing()) {
+//                    case DOWN:
+//                        info.buffer.pos(info.matrix, x + 0.7f, y + 0.08f, z + 0.7f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                        info.buffer.pos(info.matrix, x + 0.7f, y + 0.08f, z + 0.3f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                        info.buffer.pos(info.matrix, x + 0.3f, y + 0.08f, z + 0.3f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                        info.buffer.pos(info.matrix, x + 0.3f, y + 0.08f, z + 0.7f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                        break;
+//                    case UP:
+//                        info.buffer.pos(info.matrix, x + 0.7f, y + 0.92f, z + 0.3f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                        info.buffer.pos(info.matrix, x + 0.7f, y + 0.92f, z + 0.7f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                        info.buffer.pos(info.matrix, x + 0.3f, y + 0.92f, z + 0.7f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                        info.buffer.pos(info.matrix, x + 0.3f, y + 0.92f, z + 0.3f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                        break;
+//                    case NORTH:
+//                        info.buffer.pos(info.matrix, x + 0.7f, y + 0.7f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                        info.buffer.pos(info.matrix, x + 0.3f, y + 0.7f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                        info.buffer.pos(info.matrix, x + 0.3f, y + 0.3f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                        info.buffer.pos(info.matrix, x + 0.7f, y + 0.3f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                        break;
+//                    case SOUTH:
+//                        info.buffer.pos(info.matrix, x + 0.3f, y + 0.7f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                        info.buffer.pos(info.matrix, x + 0.7f, y + 0.7f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                        info.buffer.pos(info.matrix, x + 0.7f, y + 0.3f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                        info.buffer.pos(info.matrix, x + 0.3f, y + 0.3f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                        break;
+//                    case WEST:
+//                        info.buffer.pos(info.matrix, x + 0.08f, y + 0.7f, z + 0.3f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                        info.buffer.pos(info.matrix, x + 0.08f, y + 0.7f, z + 0.7f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                        info.buffer.pos(info.matrix, x + 0.08f, y + 0.3f, z + 0.7f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                        info.buffer.pos(info.matrix, x + 0.08f, y + 0.3f, z + 0.3f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                        break;
+//                    case EAST:
+//                        info.buffer.pos(info.matrix, x + 0.92f, y + 0.7f, z + 0.7f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                        info.buffer.pos(info.matrix, x + 0.92f, y + 0.7f, z + 0.3f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                        info.buffer.pos(info.matrix, x + 0.92f, y + 0.3f, z + 0.3f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                        info.buffer.pos(info.matrix, x + 0.92f, y + 0.3f, z + 0.7f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
+//                        break;
+//                }
+//                return true;
+//            });
         }
     }
 
@@ -212,14 +213,14 @@ public class ItemTeleporterModule extends ModuleBase {
         if (!hasValidConnection(world)) return;
         if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
 
-        List<ItemEntity> entities = world.getEntities(ItemEntity.class, getVacuumBB(pos));
+        List<ItemEntity> entities = world.getEntities(ItemEntity.class, getVacuumBB(pos), itemEntity -> true);
         for (ItemEntity entity : entities) {
             ItemStack entityStack = entity.getStack();
             if (!entity.isAlive() || entityStack.isEmpty()) continue;
 
             ItemHelper.ejectStack(world, linkedLoc, world.getBlockState(linkedLoc).get(ModularFrameBlock.FACING), entityStack);
             entity.remove();
-            NetworkHandler.sendAround(new SpawnParticlesPacket(ParticleTypes.EXPLOSION.getRegistryName(), entity.getPos(), 1), world, entity.getPos(), 32);
+            NetworkHandler.sendAround(world, blockEntity.getPos(), 32, new SpawnParticlesPacket(RegistryHelper.getId(ParticleTypes.EXPLOSION), entity.getBlockPos(), 1));
             break;
         }
     }
@@ -237,7 +238,7 @@ public class ItemTeleporterModule extends ModuleBase {
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) {
+    public void fromTag(CompoundTag nbt) {
         super.fromTag(nbt);
         if (nbt.contains(NBT_LINKX))
             linkedLoc = new BlockPos(nbt.getInt(NBT_LINKX), nbt.getInt(NBT_LINKY), nbt.getInt(NBT_LINKZ));

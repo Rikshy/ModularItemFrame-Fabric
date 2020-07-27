@@ -1,12 +1,13 @@
 package dev.shyrik.modularitemframe.common.module.t3;
 
 import dev.shyrik.modularitemframe.ModularItemFrame;
-import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.InventoryHelper;
 import dev.shyrik.modularitemframe.api.util.ItemHelper;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
+import dev.shyrik.modularitemframe.common.module.t2.CraftingPlusModule;
 import dev.shyrik.modularitemframe.common.network.NetworkHandler;
 import dev.shyrik.modularitemframe.common.network.packet.PlaySoundPacket;
+import dev.shyrik.modularitemframe.mixin.IngredientGetMatchingStacks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -25,7 +26,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-public class AutoCraftingModule extends ModuleBase {
+public class AutoCraftingModule extends CraftingPlusModule {
 
     public static final Identifier LOC = new Identifier(ModularItemFrame.MOD_ID, "module_t3_auto_crafting");
     public static final Identifier BG_LOC = new Identifier(ModularItemFrame.MOD_ID, "block/module_t3_auto_crafting");
@@ -56,7 +57,7 @@ public class AutoCraftingModule extends ModuleBase {
     @Override
     public void screw(World world, BlockPos pos, PlayerEntity playerIn, ItemStack driver) {
         if (!world.isClient) {
-            playerIn.openContainer(getContainer(blockEntity.getCachedState(), world, pos));
+            //playerIn.openContainer(getContainer(blockEntity.getCachedState(), world, pos));
             blockEntity.markDirty();
         }
     }
@@ -81,17 +82,17 @@ public class AutoCraftingModule extends ModuleBase {
     private void autoCraft(Inventory inventory, World world, BlockPos pos) {
         if (recipe == null) reloadRecipe();
 
-        if (recipe == null || recipe.getRecipeOutput().isEmpty() || !InventoryHelper.canCraft(inventory, ItemHelper.getIngredients(recipe)))
+        if (recipe == null || recipe.getOutput().isEmpty() || !InventoryHelper.canCraft(inventory, ItemHelper.getIngredients(recipe)))
             return;
 
-        ItemHelper.ejectStack(world, pos, blockEntity.blockFacing(), recipe.getRecipeOutput().copy());
+        ItemHelper.ejectStack(world, pos, blockEntity.blockFacing(), recipe.getOutput().copy());
 
-        for (Ingredient ingredient : ItemHelper.getIngredients(recipe)) {
-            if (ingredient.getMatchingStacksClient().length > 0) {
-                InventoryHelper.removeFromInventory(inventory, ingredient.getMatchingStacksClient());
+        for (IngredientGetMatchingStacks ingredient : ItemHelper.getIngredients(recipe)) {
+            if (ingredient.getMatchingStacks().length > 0) {
+                InventoryHelper.removeFromInventory(inventory, ingredient.getMatchingStacks());
             }
         }
 
-        NetworkHandler.sendAround(new PlaySoundPacket(pos, SoundEvents.BLOCK_LADDER_STEP.getId(), SoundCategory.BLOCKS.getName(), 0.3F, 0.7F), world, blockEntity.getPos(), 32);
+        NetworkHandler.sendAround(world, blockEntity.getPos(), 32, new PlaySoundPacket(pos, SoundEvents.BLOCK_LADDER_STEP.getId(), SoundCategory.BLOCKS.getName(), 0.3F, 0.7F));
     }
 }
