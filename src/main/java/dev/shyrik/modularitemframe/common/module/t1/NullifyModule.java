@@ -10,6 +10,7 @@ import dev.shyrik.modularitemframe.common.network.packet.PlaySoundPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
@@ -40,7 +41,7 @@ public class NullifyModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
+    public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
         switch (blockEntity.blockFacing()) {
             case UP:
                 FrameFluidRenderer.renderFluidCuboid(lavaStack, matrixStack, buffer, combinedLight, 0.3f, 0.07f, 0.3f, 0.7f, 0.07f, 0.7f);

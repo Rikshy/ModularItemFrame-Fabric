@@ -10,12 +10,14 @@ import dev.shyrik.modularitemframe.client.FrameRenderer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -57,7 +59,7 @@ public class UseModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public void specialRendering(FrameRenderer tesr,  MatrixStack matrixStack, float partialTicks,  IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
+    public void specialRendering(FrameRenderer tesr, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
         Direction facing = blockEntity.blockFacing();
         switch (facing) {
             case DOWN:
@@ -93,7 +95,7 @@ public class UseModule extends ModuleBase {
     }
 
     @Override
-    public ActionResult onBlockActivated(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, BlockHitResult hit) {
+    public ActionResult onUse(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, BlockHitResult hit) {
         if (!worldIn.isClient) {
             ItemStack held = playerIn.getStackInHand(hand);
             if (held.isEmpty()) {
@@ -120,7 +122,7 @@ public class UseModule extends ModuleBase {
             String mode = isSneaking ? I18n.format("modularitemframe.mode.sn") + " + " : "";
             mode += rightClick ? I18n.format("modularitemframe.mode.rc") : I18n.format("modularitemframe.mode.lc");
 
-            playerIn.sendMessage(new TranslationTextComponent("modularitemframe.message.mode_change", mode));
+            playerIn.sendMessage(new TranslatableText("modularitemframe.message.mode_change", mode), false);
             blockEntity.markDirty();
         }
     }
