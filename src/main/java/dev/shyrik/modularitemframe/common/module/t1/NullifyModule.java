@@ -5,6 +5,8 @@ import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.InventoryHelper;
 import dev.shyrik.modularitemframe.api.util.ItemHelper;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
+import dev.shyrik.modularitemframe.common.network.NetworkHandler;
+import dev.shyrik.modularitemframe.common.network.packet.PlaySoundPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -98,11 +100,11 @@ public class NullifyModule extends ModuleBase {
                     lastStack = held.copy();
                 }
                 held.setCount(0);
-                NetworkHandler.sendAround(new PlaySoundPacket(pos, SoundEvents.BLOCK_LAVA_EXTINGUISH.getName(), SoundCategory.BLOCKS.getName(), 0.4F, 0.7F), worldIn, blockEntity.getPos(), 32);
+                NetworkHandler.sendAround(new PlaySoundPacket(pos, SoundEvents.BLOCK_LAVA_EXTINGUISH.getId(), SoundCategory.BLOCKS.getName(), 0.4F, 0.7F), worldIn, blockEntity.getPos(), 32);
             } else if (playerIn.isSneaking() && held.isEmpty() && !lastStack.isEmpty()) {
                 playerIn.setStackInHand(hand, lastStack);
                 lastStack = ItemStack.EMPTY;
-                NetworkHandler.sendAround(new PlaySoundPacket(pos, SoundEvents.ENTITY_ENDER_PEARL_THROW.getName(), SoundCategory.BLOCKS.getName(), 0.4F, 0.7F), worldIn, blockEntity.getPos(), 32);
+                NetworkHandler.sendAround(new PlaySoundPacket(pos, SoundEvents.ENTITY_ENDER_PEARL_THROW.getId(), SoundCategory.BLOCKS.getName(), 0.4F, 0.7F), worldIn, blockEntity.getPos(), 32);
             }
         }
         return ActionResult.SUCCESS;

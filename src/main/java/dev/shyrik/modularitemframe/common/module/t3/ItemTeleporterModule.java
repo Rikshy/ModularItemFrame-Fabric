@@ -6,6 +6,8 @@ import dev.shyrik.modularitemframe.api.util.ItemHelper;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.block.ModularFrameEntity;
+import dev.shyrik.modularitemframe.common.network.NetworkHandler;
+import dev.shyrik.modularitemframe.common.network.packet.SpawnParticlesPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -17,11 +19,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
@@ -131,7 +135,7 @@ public class ItemTeleporterModule extends ModuleBase {
         super.onFrameUpgradesChanged();
 
         if (linkedLoc != null) {
-            if (!blockEntity.getPos().isWithinDistance(linkedLoc, ConfigValues.BaseTeleportRange + (blockEntity.getRangeUpCount() * 10))) {
+            if (!blockEntity.getPos().isWithinDistance(linkedLoc, ModularItemFrame.getConfig().BaseTeleportRange + (blockEntity.getRangeUpCount() * 10))) {
                 linkedLoc = null;
                 direction = EnumMode.NONE;
             }
@@ -145,16 +149,16 @@ public class ItemTeleporterModule extends ModuleBase {
             if (nbt == null) nbt = new CompoundTag();
             nbt.putLong(NBT_LINK, blockEntity.getPos().asLong());
             driver.setTag(nbt);
-            playerIn.sendMessage(new TranslationTextComponent("modularitemframe.message.loc_saved"));
+            playerIn.sendMessage(new TranslatableText("modularitemframe.message.loc_saved"), false);
         } else {
             if (nbt != null && nbt.contains(NBT_LINK)) {
                 BlockPos tmp = BlockPos.fromLong(nbt.getLong(NBT_LINK));
                 BlockEntity targetBlockEntity = blockEntity.getWorld().getBlockEntity(tmp);
                 int countRange = blockEntity.getRangeUpCount();
                 if (!(targetBlockEntity instanceof ModularFrameEntity) || !((((ModularFrameEntity) targetBlockEntity).module instanceof ItemTeleporterModule)))
-                    playerIn.sendMessage(new TranslationTextComponent("modularitemframe.message.invalid_target"));
-                else if (!blockEntity.getPos().isWithinDistance(tmp, ConfigValues.BaseTeleportRange + (countRange * 10))) {
-                    playerIn.sendMessage(new TranslationTextComponent("modularitemframe.message.too_far", ConfigValues.BaseTeleportRange + (countRange * 10)));
+                    playerIn.sendMessage(new TranslatableText("modularitemframe.message.invalid_target"), false);
+                else if (!blockEntity.getPos().isWithinDistance(tmp, ModularItemFrame.getConfig().BaseTeleportRange + (countRange * 10))) {
+                    playerIn.sendMessage(new TranslatableText("modularitemframe.message.too_far", ModularItemFrame.getConfig().BaseTeleportRange + (countRange * 10)), false);
                 } else {
                     linkedLoc = tmp;
                     direction = EnumMode.DISPENSE;
@@ -165,7 +169,7 @@ public class ItemTeleporterModule extends ModuleBase {
                     targetModule.direction = EnumMode.VACUUM;
                     targetModule.reloadModel = true;
 
-                    playerIn.sendMessage(new TranslationTextComponent("modularitemframe.message.link_established"));
+                    playerIn.sendMessage(new TranslatableText("modularitemframe.message.link_established"), false);
                     nbt.remove(NBT_LINK);
                     driver.setTag(nbt);
 
@@ -203,18 +207,18 @@ public class ItemTeleporterModule extends ModuleBase {
     @Override
     public void tick( World world,  BlockPos pos) {
         if (direction != EnumMode.VACUUM) return;
-        if (ConfigValues.DisableAutomaticItemTransfer) return;
+        if (ModularItemFrame.getConfig() .DisableAutomaticItemTransfer) return;
         if (!hasValidConnection(world)) return;
-        if (world.getGameTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
+        if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
 
-        List<ItemEntity> entities = world.getEntitiesWithinAABB(ItemEntity.class, getVacuumBB(pos));
+        List<ItemEntity> entities = world.getEntities(ItemEntity.class, getVacuumBB(pos));
         for (ItemEntity entity : entities) {
             ItemStack entityStack = entity.getStack();
             if (!entity.isAlive() || entityStack.isEmpty()) continue;
 
-            ItemHelper.ejectStack(world, linkedLoc, world.getBlockState(linkedLoc).get(BlockModularFrame.FACING), entityStack);
+            ItemHelper.ejectStack(world, linkedLoc, world.getBlockState(linkedLoc).get(ModularFrameBlock.FACING), entityStack);
             entity.remove();
-            NetworkHandler.sendAround(new SpawnParticlesPacket(ParticleTypes.EXPLOSION.getRegistryName(), entity.getPosition(), 1), world, entity.getPosition(), 32);
+            NetworkHandler.sendAround(new SpawnParticlesPacket(ParticleTypes.EXPLOSION.getRegistryName(), entity.getPos(), 1), world, entity.getPos(), 32);
             break;
         }
     }
@@ -249,23 +253,23 @@ public class ItemTeleporterModule extends ModuleBase {
         return true;
     }
 
-    private AxisAlignedBB getVacuumBB( BlockPos pos) {
-        int range = ConfigValues.BaseVacuumRange + blockEntity.getRangeUpCount();
+    private Box getVacuumBB(BlockPos pos) {
+        int range = ModularItemFrame.getConfig().BaseVacuumRange + blockEntity.getRangeUpCount();
         switch (blockEntity.blockFacing()) {
             case DOWN:
-                return new AxisAlignedBB(pos.add(-5, 0, -5), pos.add(5, -5, 5));
+                return new Box(pos.add(-5, 0, -5), pos.add(5, -5, 5));
             case UP:
-                return new AxisAlignedBB(pos.add(-5, 0, -5), pos.add(5, 5, 5));
+                return new Box(pos.add(-5, 0, -5), pos.add(5, 5, 5));
             case NORTH:
-                return new AxisAlignedBB(pos.add(-5, -5, 0), pos.add(5, 5, -5));
+                return new Box(pos.add(-5, -5, 0), pos.add(5, 5, -5));
             case SOUTH:
-                return new AxisAlignedBB(pos.add(-5, -5, 0), pos.add(5, 5, 5));
+                return new Box(pos.add(-5, -5, 0), pos.add(5, 5, 5));
             case WEST:
-                return new AxisAlignedBB(pos.add(0, -5, -5), pos.add(5, 5, 5));
+                return new Box(pos.add(0, -5, -5), pos.add(5, 5, 5));
             case EAST:
-                return new AxisAlignedBB(pos.add(0, -5, -5), pos.add(-5, 5, 5));
+                return new Box(pos.add(0, -5, -5), pos.add(-5, 5, 5));
         }
-        return new AxisAlignedBB(pos, pos.add(1, 1, 1));
+        return new Box(pos, pos.add(1, 1, 1));
     }
 
 

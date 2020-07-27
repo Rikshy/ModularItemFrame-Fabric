@@ -3,6 +3,9 @@ package dev.shyrik.modularitemframe.common.module.t1;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
+import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
+import dev.shyrik.modularitemframe.common.block.ModularFrameEntity;
+import dev.shyrik.modularitemframe.init.ModularItemFrameConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -12,6 +15,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -30,7 +34,7 @@ public class TankModule extends ModuleBase {
     private int BUCKET_VOLUME = 1000;
 
     public EnumMode mode = EnumMode.NONE;
-    private FluidTank tank = new FluidTank(ConfigValues.TankFrameCapacity);
+    private FluidTank tank = new FluidTank(ModularItemFrame.getConfig().TankFrameCapacity);
 
     @Override
     public Identifier getId() {
@@ -86,11 +90,11 @@ public class TankModule extends ModuleBase {
     @Override
     public void screw(World world, BlockPos pos, PlayerEntity playerIn, ItemStack driver) {
         if (!world.isClient) {
-            if (ConfigValues.TankTransferRate > 0) {
+            if (ModularItemFrame.getConfig().TankTransferRate > 0) {
                 int modeIdx = mode.getIndex() + 1;
                 if (modeIdx == EnumMode.values().length) modeIdx = 0;
                 mode = EnumMode.VALUES[modeIdx];
-                playerIn.sendMessage(new TranslationTextComponent("modularitemframe.message.mode_change", mode.getName()));
+                playerIn.sendMessage(new TranslatableText("modularitemframe.message.mode_change", mode.getName()), false);
             }
         }
     }
@@ -113,8 +117,8 @@ public class TankModule extends ModuleBase {
                 FluidHandler handler = blockEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, blockEntity.blockFacing().getOpposite()).orElse(null);
                 if (handler != null) {
                     if (mode == EnumMode.DRAIN)
-                        FluidUtil.tryFluidTransfer(tank, handler, ConfigValues.TankTransferRate, true);
-                    else FluidUtil.tryFluidTransfer(handler, tank, ConfigValues.TankTransferRate, true);
+                        FluidUtil.tryFluidTransfer(tank, handler, ModularItemFrame.getConfig().TankTransferRate, true);
+                    else FluidUtil.tryFluidTransfer(handler, tank, ModularItemFrame.getConfig().TankTransferRate, true);
                     blockEntity.markDirty();
                 }
             }
@@ -123,7 +127,7 @@ public class TankModule extends ModuleBase {
 
     @Override
     public void onFrameUpgradesChanged() {
-        int newCapacity = (int) Math.pow(ConfigValues.TankFrameCapacity / (float) BUCKET_VOLUME, blockEntity.getCapacityUpCount() + 1) * BUCKET_VOLUME;
+        int newCapacity = (int) Math.pow(ModularItemFrame.getConfig().TankFrameCapacity / (float) BUCKET_VOLUME, blockEntity.getCapacityUpCount() + 1) * BUCKET_VOLUME;
         tank.setCapacity(newCapacity);
         blockEntity.markDirty();
     }
@@ -151,7 +155,7 @@ public class TankModule extends ModuleBase {
         super.fromTag(nbt);
         if (nbt.contains(NBT_TANK)) tank.fromTag(nbt.getCompound(NBT_TANK));
         if (nbt.contains(NBT_MODE))
-            mode = ConfigValues.TankTransferRate > 0 ? EnumMode.VALUES[nbt.getInt(NBT_MODE)] : EnumMode.NONE;
+            mode = ModularItemFrame.getConfig().TankTransferRate > 0 ? EnumMode.VALUES[nbt.getInt(NBT_MODE)] : EnumMode.NONE;
     }
 
     public enum EnumMode {

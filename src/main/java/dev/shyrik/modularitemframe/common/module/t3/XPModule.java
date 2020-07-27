@@ -133,7 +133,7 @@ public class XPModule extends ModuleBase {
     }
 
     private Box getVacuumBB( BlockPos pos) {
-        int range = ConfigValues.BaseVacuumRange + blockEntity.getRangeUpCount();
+        int range = ModularItemFrame.getConfig().BaseVacuumRange + blockEntity.getRangeUpCount();
         switch (blockEntity.blockFacing()) {
             case DOWN:
                 return new Box(pos.add(-range, 0, -range), pos.add(range, -range, range));

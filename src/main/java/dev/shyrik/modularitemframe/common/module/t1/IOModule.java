@@ -50,7 +50,7 @@ public class IOModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public void specialRendering(FrameRenderer tesr, @Nonnull MatrixStack matrixStack, float partialTicks, @Nonnull IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
+    public void specialRendering(FrameRenderer tesr,  MatrixStack matrixStack, float partialTicks,  IRenderTypeBuffer buffer, int combinedLight, int combinedOverlay) {
         FrameItemRenderer.renderOnFrame(displayItem, blockEntity.blockFacing(), 0F, 0.1F, TransformType.FIXED, matrixStack, buffer, combinedLight, combinedOverlay);
     }
 
