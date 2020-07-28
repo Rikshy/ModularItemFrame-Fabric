@@ -156,6 +156,8 @@ public class UseModule extends ModuleBase {
 //        else
 //            result = FakePlayerHelper.leftClickInDirection(getPlayer(), world, pos.offset(facing), facing, world.getBlockState(pos), 2 + blockEntity.getRangeUpCount());
 //        FakePlayerHelper.cleanupFakePlayerFromUse(player.get(), result, displayItem, this);
+
+        // moddev: call blockState.onUse on the given block
     }
 
     private ItemStack getNextStack() {
