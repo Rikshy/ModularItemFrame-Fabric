@@ -1,24 +1,26 @@
 package dev.shyrik.modularitemframe.api.util;
 
 import com.mojang.authlib.GameProfile;
+import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Material;
 import net.minecraft.entity.*;
 import net.minecraft.entity.projectile.ArrowEntity;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.ClientConnection;
+import net.minecraft.network.NetworkSide;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.c2s.play.*;
-import net.minecraft.network.packet.s2c.play.BlockUpdateS2CPacket;
-import net.minecraft.network.packet.s2c.play.EntityS2CPacket;
-import net.minecraft.network.packet.s2c.play.HeldItemChangeS2CPacket;
-import net.minecraft.network.packet.s2c.play.TagQueryResponseS2CPacket;
+import net.minecraft.network.packet.s2c.play.*;
 import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -27,16 +29,14 @@ import net.minecraft.world.RayTraceContext;
 import net.minecraft.world.World;
 
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.Future;
+import java.util.function.Consumer;
 
 public class FakePlayerHelper {
     private static final Map<World, Map<GameProfile, UsefulFakePlayer>> PLAYERS = new WeakHashMap<>();
 
     public static class UsefulFakePlayer extends FakePlayer {
-// there is no such thing as a fake player in fabric... exploring
 
         public UsefulFakePlayer(World world, GameProfile name) {
             super((ServerWorld) world, name);
@@ -48,13 +48,13 @@ public class FakePlayerHelper {
         }
 
         @Override
-        public void sendAllContents(Inventory containerToSend, NonNullList<ItemStack> itemsList) {
+        public void onHandlerRegistered(ScreenHandler containerToSend, DefaultedList<ItemStack> itemsList) {
             //Prevent crashing when objects with containers are clicked on.
         }
 
         @Override
-        public float getCooledAttackStrength(float adjustTicks) {
-            return 1; //Prevent the attack strength from always being 0.03 due to not ticking.
+        public float getAttackCooldownProgress(float baseTime) {
+            return 1;
         }
     }
 
@@ -64,7 +64,7 @@ public class FakePlayerHelper {
     public static UsefulFakePlayer getPlayer(World world, GameProfile profile) {
         return PLAYERS.computeIfAbsent(world, p -> new HashMap<>()).computeIfAbsent(profile, p -> {
             UsefulFakePlayer player = new UsefulFakePlayer(world, profile);
-            player.connection = new NetHandlerSpaghettiServer(player);
+            player.networkHandler = new NetHandlerSpaghettiServer(player);
             return player;
         });
     }
@@ -77,17 +77,20 @@ public class FakePlayerHelper {
      * @param toHold The stack the player will be using.  Should probably come from an ItemStackHandler or similar.
      */
     public static void setupFakePlayerForUse(UsefulFakePlayer player, BlockPos pos, Direction direction, ItemStack toHold, boolean sneaking) {
-        player.inventory.main.set(player.inventory.currentItem, toHold);
-        float pitch = direction == Direction.UP ? -90 : direction == Direction.DOWN ? 90 : 0;
+        player.inventory.main.set(player.inventory.selectedSlot, toHold);
+        //float pitch = direction == Direction.UP ? -90 : direction == Direction.DOWN ? 90 : 0;
         float yaw = direction == Direction.SOUTH ? 0 : direction == Direction.WEST ? 90 : direction == Direction.NORTH ? 180 : -90;
-        Vec3i sideVec = direction.getDirectionVec();
+        Vec3i sideVec = direction.getVector();
         Direction.Axis a = direction.getAxis();
-        Direction.AxisDirection ad = direction.getAxisDirection();
+        Direction.AxisDirection ad = direction.getDirection();
         double x = a == Direction.Axis.X && ad == Direction.AxisDirection.NEGATIVE ? -.5 : .5 + sideVec.getX() / 1.9D;
         double y = 0.5 + sideVec.getY() / 1.9D;
         double z = a == Direction.Axis.Z && ad == Direction.AxisDirection.NEGATIVE ? -.5 : .5 + sideVec.getZ() / 1.9D;
-        player.setLocationAndAngles(pos.getX() + x, pos.getY() + y, pos.getZ() + z, yaw, pitch);
-        if (!toHold.isEmpty()) player.getAttributes().applyAttributeModifiers(toHold.getAttributeModifiers(EquipmentSlot.MAINHAND));
+        player.setPos(pos.getX() + x, pos.getY() + y, pos.getZ() + z);
+        player.setHeadYaw(yaw);
+        //player.applyRotation(BlockR)
+        //pitch ?;
+        if (!toHold.isEmpty()) player.getAttributes().addTemporaryModifiers(toHold.getAttributeModifiers(EquipmentSlot.MAINHAND));
         player.setSneaking(sneaking);
     }
 
@@ -98,10 +101,10 @@ public class FakePlayerHelper {
      * @param oldStack The previous stack, from before use.
      */
     public static void cleanupFakePlayerFromUse(UsefulFakePlayer player, ItemStack resultStack, ItemStack oldStack, Consumer<ItemStack> stackCallback) {
-        if (!oldStack.isEmpty()) player.getAttributes().removeAttributeModifiers(oldStack.getAttributeModifiers(EquipmentSlot.MAINHAND));
-        player.inventory.main.set(player.inventory.currentItem, ItemStack.EMPTY);
+        if (!oldStack.isEmpty()) player.getAttributes().removeModifiers(oldStack.getAttributeModifiers(EquipmentSlot.MAINHAND));
+        player.inventory.main.set(player.inventory.selectedSlot, ItemStack.EMPTY);
         stackCallback.accept(resultStack);
-        if (!player.inventory.isEmpty()) player.inventory.dropAllItems();
+        if (!player.inventory.isEmpty()) player.inventory.dropAll();
         player.setSneaking(false);
     }
 
@@ -116,15 +119,15 @@ public class FakePlayerHelper {
      */
     public static ItemStack rightClickInDirection(UsefulFakePlayer player, World world, BlockPos pos, Direction side, BlockState sourceState, int range) {
         Vec3d base = new Vec3d(player.getX(), player.getY(), player.getZ());
-        Vec3d look = player.getLookVec();
+        Vec3d look = player.getRotationVector();
         Vec3d target = base.add(look.x * range, look.y * range, look.z * range);
-        BlockHitResult trace = world.rayTrace(new RayTraceContext(base, target, RayTraceContext.ShapeType.OUTLINE, RayTraceContext.FluidHandling.NONE, player));
-        BlockHitResult traceEntity = traceEntities(player, base, target, world);
-        BlockHitResult toUse = trace == null ? traceEntity : trace;
+        HitResult trace = world.rayTrace(new RayTraceContext(base, target, RayTraceContext.ShapeType.OUTLINE, RayTraceContext.FluidHandling.NONE, player));
+        HitResult traceEntity = traceEntities(player, base, target, world);
+        HitResult toUse = trace == null ? traceEntity : trace;
 
         if (trace != null && traceEntity != null) {
-            double d1 = trace.getHitVec().distanceTo(base);
-            double d2 = traceEntity.getHitVec().distanceTo(base);
+            double d1 = trace.getPos().distanceTo(base);
+            double d2 = traceEntity.getPos().distanceTo(base);
             toUse = traceEntity.getType() == HitResult.Type.ENTITY && d1 > d2 ? traceEntity : trace;
         }
 
@@ -132,10 +135,10 @@ public class FakePlayerHelper {
 
         ItemStack itemstack = player.getMainHandStack();
         if (toUse.getType() == BlockHitResult.Type.ENTITY) {
-            if (processUseEntity(player, world, ((EntityHitResult)toUse).getEntity(), toUse, CUseEntityPacket.Action.INTERACT_AT)) return player.getMainHandStack();
-            else if (processUseEntity(player, world, ((EntityHitResult)toUse).getEntity(), null, CUseEntityPacket.Action.INTERACT)) return player.getMainHandStack();
+            if (processUseEntity(player, world, ((EntityHitResult)toUse).getEntity(), toUse, PlayerInteractEntityC2SPacket.InteractionType.INTERACT_AT)) return player.getMainHandStack();
+            else if (processUseEntity(player, world, ((EntityHitResult)toUse).getEntity(), null, PlayerInteractEntityC2SPacket.InteractionType.INTERACT)) return player.getMainHandStack();
         } else if (toUse.getType() == HitResult.Type.BLOCK) {
-            BlockPos blockpos = ((BlockHitResult)toUse).getPos();
+            BlockPos blockpos = ((BlockHitResult)toUse).getBlockPos();
             BlockState state = world.getBlockState(blockpos);
             if (state != sourceState && state.getMaterial() != Material.AIR) {
                 ActionResult resultType = player.interactionManager.interactBlock(player, world, itemstack, Hand.MAIN_HAND, (BlockHitResult)toUse);
@@ -143,7 +146,7 @@ public class FakePlayerHelper {
             }
         }
 
-        if(toUse == null || toUse.getType() == HitResult.Type.MISS) {
+        if(toUse.getType() == HitResult.Type.MISS) {
             for(int i = 1; i <= range; i++) {
                 BlockState state = world.getBlockState(pos.offset(side, i));
                 if (state != sourceState && state.getMaterial() != Material.AIR) {
@@ -153,7 +156,7 @@ public class FakePlayerHelper {
             }
         }
 
-        if (itemstack.isEmpty() && (toUse.getType() == HitResult.Type.MISS)) ForgeHooks.onEmptyClick(player, Hand.MAIN_HAND);
+        //if (itemstack.isEmpty() && (toUse.getType() == HitResult.Type.MISS)) ForgeHooks.onEmptyClick(player, Hand.MAIN_HAND);
         if (!itemstack.isEmpty()) player.interactionManager.interactItem(player, world, itemstack, Hand.MAIN_HAND);
         return player.getMainHandStack();
     }
@@ -169,28 +172,29 @@ public class FakePlayerHelper {
      */
     public static ItemStack leftClickInDirection(UsefulFakePlayer player, World world, BlockPos pos, Direction side, BlockState sourceState, int range) {
         Vec3d base = new Vec3d(player.getX(), player.getY(), player.getZ());
-        Vec3d look = player.getLookVec();
+        Vec3d look = player.getRotationVector();
         Vec3d target = base.add(look.x * range, look.y * range, look.z * range);
         HitResult  trace = world.rayTrace(new RayTraceContext(base, target, RayTraceContext.ShapeType.OUTLINE, RayTraceContext.FluidHandling.NONE, player));
         HitResult  traceEntity = traceEntities(player, base, target, world);
         HitResult  toUse = trace == null ? traceEntity : trace;
 
         if (trace != null && traceEntity != null) {
-            double d1 = trace.getHitVec().distanceTo(base);
-            double d2 = traceEntity.getHitVec().distanceTo(base);
+            double d1 = trace.getPos().distanceTo(base);
+            double d2 = traceEntity.getPos().distanceTo(base);
             toUse = traceEntity.getType() == HitResult.Type.ENTITY && d1 > d2 ? traceEntity : trace;
         }
 
-        if (toUse == null) return player.getMainHandStack();
+        if (toUse == null)
+            return player.getMainHandStack();
 
-        ItemStack itemstack = player.getMainHandStack();
         if (toUse.getType() == HitResult.Type.ENTITY) {
-            if (processUseEntity(player, world, ((EntityHitResult)toUse).getEntity(), null, CUseEntityPacket.Action.ATTACK)) return player.getMainHandStack();
+            if (processUseEntity(player, world, ((EntityHitResult)toUse).getEntity(), null, PlayerInteractEntityC2SPacket.InteractionType.ATTACK))
+                return player.getMainHandStack();
         } else if (toUse.getType() == HitResult.Type.BLOCK) {
-            BlockPos blockpos = ((BlockHitResult)toUse).getPos();
+            BlockPos blockpos = ((BlockHitResult)toUse).getBlockPos();
             BlockState state = world.getBlockState(blockpos);
             if (state != sourceState && state.getMaterial() != Material.AIR) {
-                player.interactionManager.func_225416_a(blockpos, CPlayerDiggingPacket.Action.START_DESTROY_BLOCK, ((BlockHitResult)toUse).getFace(), player.server.getWorldHeight());
+                player.interactionManager.processBlockBreakingAction(blockpos, PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, ((BlockHitResult)toUse).getSide(), player.server.getWorldHeight());
                 return player.getMainHandStack();
             }
         }
@@ -199,13 +203,13 @@ public class FakePlayerHelper {
             for(int i = 1; i <= 5; i++) {
                 BlockState state = world.getBlockState(pos.offset(side, i));
                 if (state != sourceState && state.getMaterial() != Material.AIR) {
-                    player.interactionManager.func_225416_a(pos.offset(side, i), CPlayerDiggingPacket.Action.START_DESTROY_BLOCK, side.getOpposite(), player.server.getBuildLimit());
+                    player.interactionManager.processBlockBreakingAction(pos.offset(side, i), PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, side.getOpposite(), player.server.getWorldHeight());
                     return player.getMainHandStack();
                 }
             }
         }
 
-        if (itemstack.isEmpty() && (toUse == null || toUse.getType() == HitResult.Type.MISS)) ForgeHooks.onEmptyLeftClick(player);
+        //if (itemstack.isEmpty() && (toUse.getType() == HitResult.Type.MISS)) ForgeHooks.onEmptyLeftClick(player);
         return player.getMainHandStack();
     }
 
@@ -215,18 +219,16 @@ public class FakePlayerHelper {
      * @param world The world of the calling tile entity.
      * @return A ray trace result that will likely be of type entity, but may be type block, or null.
      */
-    public static BlockHitResult traceEntities(UsefulFakePlayer player, Vec3d base, Vec3d target, World world) {
+    public static HitResult traceEntities(UsefulFakePlayer player, Vec3d base, Vec3d target, World world) {
         Entity pointedEntity = null;
-        BlockHitResult result = null;
+        HitResult result = null;
         Vec3d vec3d3 = null;
         Box search = new Box(base.x, base.y, base.z, target.x, target.y, target.z).expand(.5, .5, .5);
-        List<Entity> list = world.getEntities(player, search, entity -> EntityPredicates.EXCEPT_SPECTATOR.test(entity) && entity != null && entity.canBeCollidedWith());
+        List<Entity> list = world.getEntities(player, search, entity -> EntityPredicates.EXCEPT_SPECTATOR.test(entity) && entity != null && entity.collides());
         double d2 = 5;
 
-        for (int j = 0; j < list.size(); ++j) {
-            Entity entity1 = list.get(j);
-
-            Box aabb = entity1.getBoundingBox().expand(entity1.getCollisionBox());
+        for (Entity entity1 : list) {
+            Box aabb = entity1.getBoundingBox().expand(entity1.getCollisionBox().getAverageSideLength());
             Optional<Vec3d> hitVec = aabb.rayTrace(base, target);
 
             if (aabb.contains(base)) {
@@ -239,7 +241,7 @@ public class FakePlayerHelper {
                 double d3 = base.distanceTo(hitVec.get());
 
                 if (d3 < d2 || d2 == 0.0D) {
-                    if (entity1.getLowestRidingEntity() == player.getLowestRidingEntity() && !entity1.canRiderInteract()) {
+                    if (entity1.getPrimaryPassenger() == player.getPrimaryPassenger()) {
                         if (d2 == 0.0D) {
                             pointedEntity = entity1;
                             vec3d3 = hitVec.get();
@@ -270,26 +272,26 @@ public class FakePlayerHelper {
      * @param player The player.
      * @param world The world of the calling tile entity.
      * @param entity The entity to interact with.
-     * @param result The actual ray trace result, only necessary if using {@link CUseEntityPacket.Action#INTERACT_AT}
+     * @param result The actual ray trace result, only necessary if using {@link PlayerInteractEntityC2SPacket.InteractionType#INTERACT_AT}
      * @param action The type of interaction to perform.
      * @return If the entity was used.
      */
-    public static boolean processUseEntity(UsefulFakePlayer player, World world, Entity entity,  HitResult result, CUseEntityPacket.Action action) {
+    public static boolean processUseEntity(UsefulFakePlayer player, World world, Entity entity, HitResult result, PlayerInteractEntityC2SPacket.InteractionType action) {
         if (entity != null) {
-            boolean flag = player.canEntityBeSeen(entity);
+            boolean flag = player.canSee(entity);
             double d0 = 36.0D;
 
             if (!flag) d0 = 9.0D;
 
             if (player.distanceTo(entity) < d0) {
-                if (action == CUseEntityPacket.Action.INTERACT) {
-                    return player.interactOn(entity, Hand.MAIN_HAND) == ActionResult.SUCCESS;
-                } else if (action == CUseEntityPacket.Action.INTERACT_AT) {
-                    if (ForgeHooks.onInteractEntityAt(player, entity, result.getHitVec(), Hand.MAIN_HAND) != null) return false;
-                    return entity.applyPlayerInteraction(player, result.getHitVec(), Hand.MAIN_HAND) == ActionResult.SUCCESS;
-                } else if (action == CUseEntityPacket.Action.ATTACK) {
+                if (action == PlayerInteractEntityC2SPacket.InteractionType.INTERACT) {
+                    return player.interact(entity, Hand.MAIN_HAND) == ActionResult.SUCCESS;
+                } else if (action == PlayerInteractEntityC2SPacket.InteractionType.INTERACT_AT) {
+                    //if (ForgeHooks.onInteractEntityAt(player, entity, result.getPos(), Hand.MAIN_HAND) != null) return false;
+                    return entity.interactAt(player, result.getPos(), Hand.MAIN_HAND) == ActionResult.SUCCESS;
+                } else if (action == PlayerInteractEntityC2SPacket.InteractionType.ATTACK) {
                     if (entity instanceof ItemEntity || entity instanceof ExperienceOrbEntity || entity instanceof ArrowEntity || entity == player) return false;
-                    player.attackTargetEntityWithCurrentItem(entity);
+                    player.attack(entity);
                     return true;
                 }
             }
@@ -298,220 +300,172 @@ public class FakePlayerHelper {
     }
 
     /**
-     * A copy-paste of the SideOnly {@link Entity#rayTrace(double, float)}
+     * A copy-paste of the SideOnly {@link Entity#rayTrace(double, float, boolean)}
      */
     public static HitResult rayTrace(UsefulFakePlayer player, World world, double reachDist, float partialTicks) {
         Vec3d vec3d = player.getCameraPosVec(partialTicks);
-        Vec3d vec3d1 = player.getLook(partialTicks);
+        Vec3d vec3d1 = player.getCameraPosVec(partialTicks);
         Vec3d vec3d2 = vec3d.add(vec3d1.x * reachDist, vec3d1.y * reachDist, vec3d1.z * reachDist);
-        return world.rayTraceBlock(new RayTraceContext(vec3d, vec3d2, RayTraceContext.ShapeType.OUTLINE, RayTraceContext.FluidHandling.NONE, player));
+        return world.rayTrace(new RayTraceContext(vec3d, vec3d2, RayTraceContext.ShapeType.OUTLINE, RayTraceContext.FluidHandling.NONE, player));
     }
 
-    public static class NetHandlerSpaghettiServer extends ServerPlayNetHandler {
+    public static class NetHandlerSpaghettiServer extends ServerPlayNetworkHandler {
 
         public NetHandlerSpaghettiServer(UsefulFakePlayer player) {
-            super(null, new NetworkManager(PacketDirection.CLIENTBOUND), player);
+            super(null, new ClientConnection(NetworkSide.CLIENTBOUND), player);
         }
 
         @Override
-        public void disconnect(ITextComponent textComponent) {
-        }
+        public void disconnect(Text textComponent) {}
 
         @Override
-        public void onDisconnect(ITextComponent reason) {
-        }
+        public void onDisconnected(Text reason) {}
 
         @Override
-        public void setPlayerLocation(double x, double y, double z, float yaw, float pitch) {
-        }
+        public void requestTeleport(double x, double y, double z, float yaw, float pitch) {}
 
         @Override
-        public void func_217261_a(CLockDifficultyPacket p_217261_1_) {
-        }
+        public void onUpdateDifficultyLock(UpdateDifficultyLockC2SPacket packet) {}
 
         @Override
-        public void func_217263_a(CSetDifficultyPacket p_217263_1_) {
-        }
+        public void onUpdateDifficulty(UpdateDifficultyC2SPacket packet) {}
 
         @Override
-        public void func_217262_a(CUpdateJigsawBlockPacket p_217262_1_) {
-        }
+        public void onJigsawGenerating(JigsawGeneratingC2SPacket packet) {}
 
         @Override
-        public void handleAnimation(CAnimateHandPacket packetIn) {
-        }
+        public void onPlayerInteractBlock(PlayerInteractBlockC2SPacket packet) {}
 
         @Override
-        public void processClientStatus(CClientStatusPacket packetIn) {
-        }
+        public void onPlayerInteractItem(PlayerInteractItemC2SPacket packet) {}
 
         @Override
-        public void processPlayer(CPlayerPacket packetIn) {
-        }
+        public void onSpectatorTeleport(SpectatorTeleportC2SPacket packet) {}
 
         @Override
-        public void processEnchantItem(CEnchantItemPacket packetIn) {
-        }
+        public void onResourcePackStatus(ResourcePackStatusC2SPacket packet) {}
 
         @Override
-        public void processCloseWindow(CCloseWindowPacket packetIn) {
-        }
+        public void onBoatPaddleState(BoatPaddleStateC2SPacket packet) {}
 
         @Override
-        public void handleSeenAdvancements(CSeenAdvancementsPacket packetIn) {
-        }
+        public void onUpdateSelectedSlot(UpdateSelectedSlotC2SPacket packet) {}
 
         @Override
-        public void processVehicleMove(CMoveVehiclePacket packetIn) {
-        }
+        public void onGameMessage(ChatMessageC2SPacket packet) {}
 
         @Override
-        public void handleRecipeBookUpdate(CRecipeInfoPacket packetIn) {
-        }
+        public void onHandSwing(HandSwingC2SPacket packet) {}
 
         @Override
-        public void handleResourcePackStatus(CResourcePackStatusPacket packetIn) {
-        }
+        public void onClientCommand(ClientCommandC2SPacket packet) {}
 
         @Override
-        public void processChatMessage(CChatMessagePacket packetIn) {
-        }
+        public void onPlayerInteractEntity(PlayerInteractEntityC2SPacket packet) {}
 
         @Override
-        public void handleSpectate(CSpectatePacket packetIn) {
-        }
+        public void onClientStatus(ClientStatusC2SPacket packet) {}
 
         @Override
-        public void processClientSettings(CClientSettingsPacket packetIn) {
-        }
+        public void onGuiClose(GuiCloseC2SPacket packet) {}
 
         @Override
-        public void processClickWindow(CClickWindowPacket packetIn) {
-        }
+        public void onClickWindow(ClickWindowC2SPacket packet) {}
 
         @Override
-        public void processCustomPayload(CCustomPayloadPacket packetIn) {
-        }
+        public void onCraftRequest(CraftRequestC2SPacket packet) {}
 
         @Override
-        public void processCreativeInventoryAction(CCreativeInventoryActionPacket packetIn) {
-        }
+        public void onButtonClick(ButtonClickC2SPacket packet) {}
 
         @Override
-        public void processConfirmTeleport(CConfirmTeleportPacket packetIn) {
-        }
+        public void onCreativeInventoryAction(CreativeInventoryActionC2SPacket packet) {}
 
         @Override
-        public void processEntityAction(CEntityActionPacket packetIn) {
-        }
+        public void onConfirmTransaction(ConfirmGuiActionC2SPacket packet) {}
 
         @Override
-        public void processConfirmTransaction(CConfirmTransactionPacket packetIn) {
-        }
+        public void onSignUpdate(UpdateSignC2SPacket packet) {}
 
         @Override
-        public void processInput(CInputPacket packetIn) {
-        }
+        public void onKeepAlive(KeepAliveC2SPacket packet) {}
 
         @Override
-        public void processEditBook(CEditBookPacket packetIn) {
-        }
+        public void onPlayerAbilities(UpdatePlayerAbilitiesC2SPacket packet) {}
 
         @Override
-        public void processNBTQueryBlockEntity(CQueryTileEntityNBTPacket packetIn) {
-        }
+        public void onClientSettings(ClientSettingsC2SPacket packet) {}
 
         @Override
-        public void processHeldItemChange(CHeldItemChangePacket packetIn) {
-        }
+        public void onCustomPayload(CustomPayloadC2SPacket packet) {}
 
         @Override
-        public void processPlaceRecipe(CPlaceRecipePacket packetIn) {
-        }
+        public void onPlayerAction(PlayerActionC2SPacket packet) {}
 
         @Override
-        public void processKeepAlive(CKeepAlivePacket packetIn) {
-        }
+        public void onPlayerMove(PlayerMoveC2SPacket packet) {}
 
         @Override
-        public void processPlayerDigging(CPlayerDiggingPacket packetIn) {
-        }
+        public void onQueryBlockNbt(QueryBlockNbtC2SPacket packet) {}
 
         @Override
-        public void processNBTQueryEntity(CQueryEntityNBTPacket packetIn) {
-        }
+        public void onQueryEntityNbt(QueryEntityNbtC2SPacket packet) {}
 
         @Override
-        public void processSelectTrade(CSelectTradePacket packetIn) {
-        }
+        public void onBookUpdate(BookUpdateC2SPacket packet) {}
 
         @Override
-        public void processPickItem(CPickItemPacket packetIn) {
-        }
+        public void onVillagerTradeSelect(SelectVillagerTradeC2SPacket packet) {}
 
         @Override
-        public void processTabComplete(CTabCompletePacket packetIn) {
-        }
+        public void onJigsawUpdate(UpdateJigsawC2SPacket packet) {}
 
         @Override
-        public void processPlayerAbilities(CPlayerAbilitiesPacket packetIn) {
-        }
+        public void onStructureBlockUpdate(UpdateStructureBlockC2SPacket packet) {}
 
         @Override
-        public void processTryUseItemOnBlock(CPlayerTryUseItemOnBlockPacket packetIn) {
-        }
+        public void onUpdateBeacon(UpdateBeaconC2SPacket packet) {}
 
         @Override
-        public void processSteerBoat(CSteerBoatPacket packetIn) {
-        }
+        public void onRenameItem(RenameItemC2SPacket packet) {}
 
         @Override
-        public void processUpdateCommandBlock(CUpdateCommandBlockPacket packetIn) {
-        }
+        public void onPickFromInventory(PickFromInventoryC2SPacket packet) {}
 
         @Override
-        public void processRenameItem(CRenameItemPacket packetIn) {
-        }
+        public void onUpdateCommandBlockMinecart(UpdateCommandBlockMinecartC2SPacket packet) {}
 
         @Override
-        public void processUpdateSign(CUpdateSignPacket packetIn) {
-        }
+        public void onUpdateCommandBlock(UpdateCommandBlockC2SPacket packet) {}
 
         @Override
-        public void processTryUseItem(CPlayerTryUseItemPacket packetIn) {
-        }
+        public void onRequestCommandCompletions(RequestCommandCompletionsC2SPacket packet) {}
 
         @Override
-        public void processUseEntity(CUseEntityPacket packetIn) {
-        }
+        public void onAdvancementTab(AdvancementTabC2SPacket packet) {}
 
         @Override
-        public void processUpdateCommandMinecart(CUpdateMinecartCommandBlockPacket packetIn) {
-        }
+        public void onRecipeBookData(RecipeBookDataC2SPacket packet) {}
 
         @Override
-        public void processUpdateStructureBlock(CUpdateStructureBlockPacket packetIn) {
-        }
+        public void onTeleportConfirm(TeleportConfirmC2SPacket packet) {}
 
         @Override
-        public void processUpdateBeacon(CUpdateBeaconPacket packetIn) {
-        }
+        public void onVehicleMove(VehicleMoveC2SPacket packet) {}
 
         @Override
-        public void sendPacket(IPacket<?> packetIn, @Nullable GenericFutureListener<? extends Future<? super Void>> futureListeners) {
-        }
+        public void onPlayerInput(PlayerInputC2SPacket packet) {}
 
         @Override
-        public void setPlayerLocation(double x, double y, double z, float yaw, float pitch, Set<SPlayerPositionLookPacket.Flags> relativeSet) {
-        }
+        public void sendPacket(Packet<?> packet, GenericFutureListener<? extends Future<? super Void>> listener) {}
 
         @Override
-        public void sendPacket(IPacket<?> packetIn) {
-        }
+        public void teleportRequest(double x, double y, double z, float yaw, float pitch, Set<PlayerPositionLookS2CPacket.Flag> relativeSet) {}
 
         @Override
-        public void tick() {
-        }
+        public void sendPacket(Packet<?> packetIn) {}
 
+        @Override
+        public void tick() {}
     }
 }

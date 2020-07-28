@@ -87,11 +87,11 @@ public class SlotHelper {
             return ItemStack.EMPTY;
         }
 
-        slot.onSlotChange(stackInSlot, originalStack);
+        slot.onStackChanged(originalStack, stackInSlot);
         if (stackInSlot.isEmpty()) {
             slot.setStack(ItemStack.EMPTY);
         } else {
-            slot.onSlotChanged();
+            slot.markDirty();
         }
 
         if (stackInSlot.getCount() == originalStack.getCount()) {
@@ -211,7 +211,7 @@ public class SlotHelper {
                 stackInSlot.setCount(Math.min(stackToShift.getCount(), max));
                 stackToShift.decrement(stackInSlot.getCount());
                 slot.setStack(stackInSlot);
-                slot.onSlotChanged();
+                slot.markDirty();
                 changed = true;
             }
         }
@@ -234,12 +234,12 @@ public class SlotHelper {
                 if (resultingStackSize <= max) {
                     stackToShift.setCount(0);
                     stackInSlot.setCount(resultingStackSize);
-                    slot.onSlotChanged();
+                    slot.markDirty();
                     changed = true;
                 } else if (stackInSlot.getCount() < max) {
                     stackToShift.decrement(max - stackInSlot.getCount());
                     stackInSlot.setCount(max);
-                    slot.onSlotChanged();
+                    slot.markDirty();
                     changed = true;
                 }
             }

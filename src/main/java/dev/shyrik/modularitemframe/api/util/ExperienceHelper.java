@@ -2,7 +2,7 @@ package dev.shyrik.modularitemframe.api.util;
 
 import net.minecraft.entity.player.PlayerEntity;
 
-public class ExperienceHandler {
+public class ExperienceHelper {
 
     private static final int MAX_LEVEL = 21862;
     private static final int[] xpmap = new int[MAX_LEVEL + 1];
@@ -47,15 +47,5 @@ public class ExperienceHandler {
 
     public static int getPlayerXP( PlayerEntity player) {
         return (int) (getExperienceForLevel(player.experienceLevel) + player.experienceProgress);
-    }
-
-    public static void addPlayerXP( PlayerEntity player, int amount) {
-        // maybe redundant: player.addExperience(int amount)
-//        int experience = Math.max(0, getPlayerXP(player) + amount);
-//        player.totalExperience = experience;
-//        player.experienceLevel = getLevelForExperience(experience);
-//        int expForLevel = getExperienceForLevel(player.experienceLevel);
-//        player.experience = (experience - expForLevel) / (float) getXpBarCapacity(player.experienceLevel);
-        player.addExperience(amount);
     }
 }

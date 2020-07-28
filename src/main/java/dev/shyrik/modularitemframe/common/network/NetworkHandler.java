@@ -1,8 +1,6 @@
 package dev.shyrik.modularitemframe.common.network;
 
-import dev.shyrik.modularitemframe.common.network.packet.NetworkPacket;
-import dev.shyrik.modularitemframe.common.network.packet.PlaySoundPacket;
-import dev.shyrik.modularitemframe.common.network.packet.SpawnParticlesPacket;
+import dev.shyrik.modularitemframe.common.network.packet.*;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.server.PlayerStream;
@@ -17,6 +15,7 @@ public class NetworkHandler {
     public static void register() {
         ClientSidePacketRegistry.INSTANCE.register(PlaySoundPacket.ID, PlaySoundPacket::accept);
         ClientSidePacketRegistry.INSTANCE.register(SpawnParticlesPacket.ID, SpawnParticlesPacket::accept);
+        ClientSidePacketRegistry.INSTANCE.register(TeleportPacket.ID, TeleportPacket::accept);
     }
 
     public static void sendAround(World world, BlockPos pos, double radius, NetworkPacket packet) {

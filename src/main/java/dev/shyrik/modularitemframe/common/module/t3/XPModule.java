@@ -2,16 +2,16 @@ package dev.shyrik.modularitemframe.common.module.t3;
 
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
+import dev.shyrik.modularitemframe.api.util.ExperienceHelper;
+import dev.shyrik.modularitemframe.api.util.FakePlayer;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.resource.language.I18n;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.command.ExperienceCommand;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -86,7 +86,7 @@ public class XPModule extends ModuleBase {
         }
         drainXP = addExperience(drainXP);
         if (drainXP > 0) {
-            ExperienceHelper.addPlayerXP(player, -drainXP); // EXP Handler wurde zT in PlayerEntity eingebaut, aber ich habe keine tabelle gefunden für die absoluten Zahlen pro lvl
+            player.addExperience(-drainXP); // EXP Handler wurde zT in PlayerEntity eingebaut, aber ich habe keine tabelle gefunden für die absoluten Zahlen pro lvl
         }
     }
 
@@ -108,7 +108,7 @@ public class XPModule extends ModuleBase {
         requiredXP = Math.min(experience, requiredXP);
 
         addExperience(-requiredXP);
-        ExperienceHelper.addPlayerXP(player, requiredXP);
+        player.addExperience(requiredXP);
     }
 
     @Override

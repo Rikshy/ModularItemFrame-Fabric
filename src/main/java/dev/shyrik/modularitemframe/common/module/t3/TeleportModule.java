@@ -5,6 +5,7 @@ import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
 import dev.shyrik.modularitemframe.common.block.ModularFrameEntity;
 import dev.shyrik.modularitemframe.common.network.NetworkHandler;
+import dev.shyrik.modularitemframe.common.network.packet.TeleportPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -131,8 +132,8 @@ public class TeleportModule extends ModuleBase {
                 player.stopRiding();
 
                 if (player.teleport(target.getX() + 0.5D, target.getY() + 0.5D, target.getZ() + 0.5D, true)) {
-                    NetworkHandler.sendAround(new TeleportEffectPacket(player.getPos()), world, player.getPos(), 32);
-                    NetworkHandler.sendAround(new TeleportEffectPacket(target), world, target, 32);
+                    NetworkHandler.sendAround(world, player.getBlockPos(), 32, new TeleportPacket(player.getBlockPos()));
+                    NetworkHandler.sendAround(world, target, 32, new TeleportPacket(target));
                 }
             }
         }
@@ -140,13 +141,13 @@ public class TeleportModule extends ModuleBase {
     }
 
     @Override
-    public void screw(World world, BlockPos pos, PlayerEntity playerIn, ItemStack driver) {
+    public void screw(World world, BlockPos pos, PlayerEntity player, ItemStack driver) {
         CompoundTag nbt = driver.getTag();
-        if (playerIn.isSneaking()) {
+        if (player.isSneaking()) {
             if (nbt == null) nbt = new CompoundTag();
             nbt.putLong(NBT_LINK, blockEntity.getPos().asLong());
             driver.setTag(nbt);
-            playerIn.sendMessage(new TranslatableText("modularitemframe.message.loc_saved"), false);
+            player.sendMessage(new TranslatableText("modularitemframe.message.loc_saved"), false);
         } else {
             if (nbt != null && nbt.contains(NBT_LINK)) {
                 BlockPos tmp = BlockPos.fromLong(nbt.getLong(NBT_LINK));
@@ -154,13 +155,13 @@ public class TeleportModule extends ModuleBase {
                 BlockEntity targetTile = blockEntity.getWorld().getBlockEntity(tmp);
                 int countRange = blockEntity.getRangeUpCount();
                 if (!(targetTile instanceof ModularFrameEntity) || !((((ModularFrameEntity) targetTile).module instanceof TeleportModule)))
-                    playerIn.sendMessage(new TranslatableText("modularitemframe.message.invalid_target"), true);
+                    player.sendMessage(new TranslatableText("modularitemframe.message.invalid_target"), true);
                 else if (!blockEntity.getPos().isWithinDistance(tmp, ModularItemFrame.getConfig().BaseTeleportRange + (countRange * 10))) {
-                    playerIn.sendMessage(new TranslatableText("modularitemframe.message.too_far", ModularItemFrame.getConfig().BaseTeleportRange + (countRange * 10)), true);
+                    player.sendMessage(new TranslatableText("modularitemframe.message.too_far", ModularItemFrame.getConfig().BaseTeleportRange + (countRange * 10)), true);
                 } else {
                     linkedLoc = tmp;
                     ((TeleportModule) ((ModularFrameEntity) targetTile).module).linkedLoc = blockEntity.getPos();
-                    playerIn.sendMessage(new TranslatableText("modularitemframe.message.link_established"), false);
+                    player.sendMessage(new TranslatableText("modularitemframe.message.link_established"), false);
                     nbt.remove(NBT_LINK);
                     driver.setTag(nbt);
                 }
