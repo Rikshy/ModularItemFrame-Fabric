@@ -3,9 +3,6 @@ package dev.shyrik.modularitemframe.common.module.t1;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
-import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
-import dev.shyrik.modularitemframe.common.block.ModularFrameEntity;
-import dev.shyrik.modularitemframe.init.ModularItemFrameConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -27,7 +24,7 @@ import net.minecraft.world.World;
 
 public class TankModule extends ModuleBase {
 
-    public static final Identifier LOC = new Identifier(ModularItemFrame.MOD_ID, "module_t1_tank");
+    public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t1_tank");
     public static final Identifier BG_LOC = new Identifier(ModularItemFrame.MOD_ID, "block/module_t1_tank");
     private static final String NBT_MODE = "tankmode";
     private static final String NBT_TANK = "tank";
@@ -39,7 +36,7 @@ public class TankModule extends ModuleBase {
 
     @Override
     public Identifier getId() {
-        return LOC;
+        return ID;
     }
 
     @Override

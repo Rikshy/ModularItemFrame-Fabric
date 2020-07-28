@@ -1,4 +1,4 @@
-package dev.shyrik.modularitemframe.mixin;
+package dev.shyrik.modularitemframe.api.util;
 
 import net.minecraft.item.ItemStack;
 

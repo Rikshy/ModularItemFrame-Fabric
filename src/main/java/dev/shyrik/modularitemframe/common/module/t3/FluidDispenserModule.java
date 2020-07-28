@@ -18,14 +18,14 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 public class FluidDispenserModule extends ModuleBase {
-    public static final Identifier LOC = new Identifier(ModularItemFrame.MOD_ID, "module_t3_fluid_dispenser");
+    public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t3_fluid_dispenser");
     public static final Identifier BG_LOC = new Identifier(ModularItemFrame.MOD_ID, "block/module_t3_fluid_dispenser");
 
     private static final int BUCKET_VOLUME = 1000;
 
     @Override
     public Identifier getId() {
-        return LOC;
+        return ID;
     }
 
     @Override

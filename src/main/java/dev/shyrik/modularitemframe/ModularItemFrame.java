@@ -5,10 +5,19 @@ import dev.shyrik.modularitemframe.init.Registrar;
 import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
 import me.sargunvohra.mcmods.autoconfig1u.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
 
 public class ModularItemFrame implements ModInitializer {
 
     public static final String MOD_ID = "modularitemframe";
+
+    public static ItemGroup GROUP = new ItemGroup(1, MOD_ID) {
+        @Override
+        public ItemStack createIcon() {
+            return null;
+        }
+    };
 
     @Override
     public void onInitialize() {

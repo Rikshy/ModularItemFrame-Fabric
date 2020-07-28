@@ -9,6 +9,6 @@ public class ModularItemFrameClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         // Here we will put client-only registration code
-        BlockEntityRendererRegistry.INSTANCE.register(Registrar.MODULARFRAME_ENTITY, FrameRenderer::new);
+        BlockEntityRendererRegistry.INSTANCE.register(Registrar.MODULAR_FRAME_ENTITY, FrameRenderer::new);
     }
 }

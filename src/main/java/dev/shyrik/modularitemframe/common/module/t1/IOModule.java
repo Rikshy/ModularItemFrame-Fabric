@@ -8,12 +8,10 @@ import dev.shyrik.modularitemframe.client.FrameRenderer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
@@ -27,7 +25,7 @@ import net.minecraft.world.World;
 
 public class IOModule extends ModuleBase {
 
-    public static final Identifier LOC = new Identifier(ModularItemFrame.MOD_ID, "module_t1_io");
+    public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t1_io");
     public static final Identifier BG_LOC = new Identifier(ModularItemFrame.MOD_ID, "block/module_t1_io");
 
     private static final String NBT_LAST = "lastclick";
@@ -40,7 +38,7 @@ public class IOModule extends ModuleBase {
 
     @Override
     public Identifier getId() {
-        return LOC;
+        return ID;
     }
 
     @Override

@@ -7,7 +7,7 @@ import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.module.t2.CraftingPlusModule;
 import dev.shyrik.modularitemframe.common.network.NetworkHandler;
 import dev.shyrik.modularitemframe.common.network.packet.PlaySoundPacket;
-import dev.shyrik.modularitemframe.mixin.IngredientGetMatchingStacks;
+import dev.shyrik.modularitemframe.api.util.IngredientGetMatchingStacks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -15,7 +15,6 @@ import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.Ingredient;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
@@ -28,7 +27,7 @@ import net.minecraft.world.World;
 
 public class AutoCraftingModule extends CraftingPlusModule {
 
-    public static final Identifier LOC = new Identifier(ModularItemFrame.MOD_ID, "module_t3_auto_crafting");
+    public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t3_auto_crafting");
     public static final Identifier BG_LOC = new Identifier(ModularItemFrame.MOD_ID, "block/module_t3_auto_crafting");
 
     @Override
@@ -45,7 +44,7 @@ public class AutoCraftingModule extends CraftingPlusModule {
 
     @Override
     public Identifier getId() {
-        return LOC;
+        return ID;
     }
 
     @Override

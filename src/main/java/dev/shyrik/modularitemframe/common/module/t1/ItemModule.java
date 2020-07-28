@@ -21,7 +21,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 public class ItemModule extends ModuleBase {
-    public static final Identifier LOC = new Identifier(ModularItemFrame.MOD_ID, "module_t1_item");
+    public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t1_item");
     public static final Identifier BG_LOC = new Identifier(ModularItemFrame.MOD_ID, "block/module_t1_item");
     private static final String NBT_DISPLAY = "display";
     private static final String NBT_ROTATION = "rotation";
@@ -31,7 +31,7 @@ public class ItemModule extends ModuleBase {
 
     @Override
     public Identifier getId() {
-        return LOC;
+        return ID;
     }
 
     @Environment(EnvType.CLIENT)

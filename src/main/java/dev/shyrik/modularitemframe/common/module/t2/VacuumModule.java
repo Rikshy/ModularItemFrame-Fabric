@@ -31,7 +31,7 @@ import java.util.List;
 
 public class VacuumModule extends ModuleBase {
 
-    public static final Identifier LOC = new Identifier(ModularItemFrame.MOD_ID, "module_t2_vacuum");
+    public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_vacuum");
     public static final Identifier BG_LOC = new Identifier(ModularItemFrame.MOD_ID, "block/module_t2_vacuum");
     private static final String NBT_MODE = "rangemode";
     private static final String NBT_RANGEX = "rangex";
@@ -45,7 +45,7 @@ public class VacuumModule extends ModuleBase {
 
     @Override
     public Identifier getId() {
-        return LOC;
+        return ID;
     }
 
     @Override

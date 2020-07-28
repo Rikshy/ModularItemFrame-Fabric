@@ -1,7 +1,6 @@
 package dev.shyrik.modularitemframe.common.module.t2;
 
 import com.mojang.authlib.GameProfile;
-import com.mojang.realmsclient.dto.PlayerInfo;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.InventoryHelper;
@@ -27,11 +26,10 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.world.World;
 
-import java.lang.ref.WeakReference;
 import java.util.UUID;
 
 public class UseModule extends ModuleBase {
-    public static final Identifier LOC = new Identifier(ModularItemFrame.MOD_ID, "module_t2_use");
+    public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_use");
     public static final Identifier BG_LOC = new Identifier(ModularItemFrame.MOD_ID, "block/module_nyi");
 
     private static final GameProfile DEFAULT_CLICKER = new GameProfile(UUID.nameUUIDFromBytes("modularitemframe".getBytes()), "[Frame Clicker]");
@@ -49,7 +47,7 @@ public class UseModule extends ModuleBase {
 
     @Override
     public Identifier getId() {
-        return LOC;
+        return ID;
     }
 
     @Override

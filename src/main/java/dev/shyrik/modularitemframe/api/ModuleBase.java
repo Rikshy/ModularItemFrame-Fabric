@@ -100,7 +100,7 @@ public abstract class ModuleBase {
                 if (mat.getTextureId().toString().contains("default_inner"))
                     return MinecraftClient.getInstance().getBakedModelManager().method_24153(mat.getAtlasId()).getSprite(innerTexture());
                 return MinecraftClient.getInstance().getBakedModelManager().method_24153(mat.getAtlasId()).getSprite(mat.getTextureId());
-            }, ModelRotation.X0_Y0, RegistryHelper.getId(Registrar.MODULARFRAME));
+            }, ModelRotation.X0_Y0, RegistryHelper.getId(Registrar.MODULAR_FRAME));
 
             reloadModel = false;
         }

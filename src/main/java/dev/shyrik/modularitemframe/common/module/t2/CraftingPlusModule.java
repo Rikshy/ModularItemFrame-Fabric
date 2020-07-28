@@ -21,7 +21,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 public class CraftingPlusModule extends CraftingModule {
-    public static final Identifier LOC = new Identifier(ModularItemFrame.MOD_ID, "module_t2_craft_plus");
+    public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_craft_plus");
     public static final Identifier BG_LOC = new Identifier(ModularItemFrame.MOD_ID, "block/module_t2_craft_plus");
     private static final String NBT_MODE = "cpmode";
 
@@ -29,7 +29,7 @@ public class CraftingPlusModule extends CraftingModule {
 
     @Override
     public Identifier getId() {
-        return LOC;
+        return ID;
     }
 
     @Override

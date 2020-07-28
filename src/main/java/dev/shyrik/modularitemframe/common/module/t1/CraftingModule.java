@@ -10,7 +10,9 @@ import dev.shyrik.modularitemframe.common.network.packet.PlaySoundPacket;
 import dev.shyrik.modularitemframe.common.screenhandler.CraftingFrameScreenHandler;
 import dev.shyrik.modularitemframe.common.screenhandler.FrameCrafting;
 import dev.shyrik.modularitemframe.common.screenhandler.IScreenHandlerCallback;
-import dev.shyrik.modularitemframe.mixin.IngredientGetMatchingStacks;
+import dev.shyrik.modularitemframe.api.util.IngredientGetMatchingStacks;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.resource.language.I18n;
@@ -40,7 +42,7 @@ import java.util.Optional;
 
 public class CraftingModule extends ModuleBase implements IScreenHandlerCallback {
 
-    public static final Identifier LOC = new Identifier(ModularItemFrame.MOD_ID, "module_t1_crafting");
+    public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t1_crafting");
     public static final Identifier BG_LOC = new Identifier(ModularItemFrame.MOD_ID, "block/module_t1_crafting");
     private static final String NBT_GHOSTINVENTORY = "ghostinventory";
     private static final String NBT_DISPLAY = "display";
@@ -51,20 +53,23 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
 
     @Override
     public Identifier getId() {
-        return LOC;
+        return ID;
     }
 
     @Override
+    @Environment(EnvType.CLIENT)
     public Identifier frontTexture() {
         return BG_LOC;
     }
 
     @Override
+    @Environment(EnvType.CLIENT)
     public String getModuleName() {
         return I18n.translate("modularitemframe.module.crafting");
     }
 
     @Override
+    @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
         //FrameItemRenderer.renderOnFrame(displayItem, tile.blockFacing(), 0, 0.1F, TransformType.FIXED, matrixStack, buffer, combinedLight, combinedOverlay);
     }

@@ -2,7 +2,6 @@ package dev.shyrik.modularitemframe.common.module.t1;
 
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
-import dev.shyrik.modularitemframe.api.util.InventoryHelper;
 import dev.shyrik.modularitemframe.api.util.ItemHelper;
 import dev.shyrik.modularitemframe.api.util.RegistryHelper;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
@@ -15,8 +14,6 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sound.SoundCategory;
@@ -30,7 +27,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 public class NullifyModule extends ModuleBase {
-    public static final Identifier LOC = new Identifier(ModularItemFrame.MOD_ID, "module_t1_null");
+    public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t1_null");
     public static final Identifier BG_LOC = new Identifier(ModularItemFrame.MOD_ID, "block/module_t1_null");
     private static final String NBT_LASTSTACK = "laststack";
 
@@ -80,7 +77,7 @@ public class NullifyModule extends ModuleBase {
 
     @Override
     public Identifier getId() {
-        return LOC;
+        return ID;
     }
 
     @Override

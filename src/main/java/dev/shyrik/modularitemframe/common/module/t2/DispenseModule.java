@@ -23,7 +23,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 public class DispenseModule extends ModuleBase {
-    public static final Identifier LOC = new Identifier(ModularItemFrame.MOD_ID, "module_t2_dispense");
+    public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_dispense");
     public static final Identifier BG_LOC = new Identifier(ModularItemFrame.MOD_ID, "block/module_t2_dispense");
     private static final String NBT_RANGE = "range";
 
@@ -31,7 +31,7 @@ public class DispenseModule extends ModuleBase {
 
     @Override
     public Identifier getId() {
-        return LOC;
+        return ID;
     }
 
     @Override

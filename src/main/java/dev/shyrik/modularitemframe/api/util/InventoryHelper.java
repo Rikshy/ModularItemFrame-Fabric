@@ -1,11 +1,8 @@
 package dev.shyrik.modularitemframe.api.util;
 
-import dev.shyrik.modularitemframe.mixin.IngredientGetMatchingStacks;
-import dev.shyrik.modularitemframe.mixin.IngredientMixin;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.util.collection.DefaultedList;
 

@@ -38,7 +38,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     List<UpgradeBase> upgrades = new ArrayList<>();
     
     public ModularFrameEntity() {
-        super(Registrar.MODULARFRAME_ENTITY);
+        super(Registrar.MODULAR_FRAME_ENTITY);
     }
 
     //region <upgrade>
@@ -89,7 +89,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     }
 
     public boolean isBlastResist() {
-        return countUpgradeOfType(BlaseResistUpgrade.class) >= 1;
+        return countUpgradeOfType(BlastResistUpgrade.class) >= 1;
     }
 
     public int countUpgradeOfType(Class<? extends UpgradeBase> clsUp) {

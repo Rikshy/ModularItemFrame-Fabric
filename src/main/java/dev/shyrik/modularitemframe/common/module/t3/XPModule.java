@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 import java.util.List;
 
 public class XPModule extends ModuleBase {
-    public static final Identifier LOC = new Identifier(ModularItemFrame.MOD_ID,"module_t3_xp");
+    public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID,"module_t3_xp");
     public static final Identifier BG_LOC = new Identifier(ModularItemFrame.MOD_ID,"block/module_t3_xp");
     private static final int MAX_XP = 21862;
 
@@ -36,7 +36,7 @@ public class XPModule extends ModuleBase {
 
     @Override
     public Identifier getId() {
-        return LOC;
+        return ID;
     }
 
     @Override

@@ -27,7 +27,7 @@ import java.util.List;
 
 public class TrashCanModule extends ModuleBase {
 
-    public static final Identifier LOC = new Identifier(ModularItemFrame.MOD_ID, "module_t2_trashcan");
+    public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_trashcan");
     public static final Identifier BG_LOC1 = new Identifier(ModularItemFrame.MOD_ID, "block/module_t2_trashcan_1");
     public static final Identifier BG_LOC2 = new Identifier(ModularItemFrame.MOD_ID, "block/module_t2_trashcan_2");
     public static final Identifier BG_LOC3 = new Identifier(ModularItemFrame.MOD_ID, "block/module_t2_trashcan_3");
@@ -41,7 +41,7 @@ public class TrashCanModule extends ModuleBase {
 
     @Override
     public Identifier getId() {
-        return LOC;
+        return ID;
     }
 
     @Override

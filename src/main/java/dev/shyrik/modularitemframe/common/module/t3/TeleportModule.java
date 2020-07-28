@@ -29,7 +29,7 @@ import java.util.Objects;
 
 public class TeleportModule extends ModuleBase {
 
-    public static final Identifier LOC = new Identifier(ModularItemFrame.MOD_ID, "module_t3_tele");
+    public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t3_tele");
 
     private static final String NBT_LINK = "linked_pos";
     private static final String NBT_LINKX = "linked_posX";
@@ -40,7 +40,7 @@ public class TeleportModule extends ModuleBase {
 
     @Override
     public Identifier getId() {
-        return LOC;
+        return ID;
     }
 
     @Override

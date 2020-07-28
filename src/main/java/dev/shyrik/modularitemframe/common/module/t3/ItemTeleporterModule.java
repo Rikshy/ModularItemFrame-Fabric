@@ -36,7 +36,7 @@ import java.util.Objects;
 
 public class ItemTeleporterModule extends ModuleBase {
 
-    public static final Identifier LOC = new Identifier(ModularItemFrame.MOD_ID, "module_t3_itemtele");
+    public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t3_itemtele");
     public static final Identifier BG_IN = new Identifier(ModularItemFrame.MOD_ID, "block/module_t3_itemtelein");
     public static final Identifier BG_OUT = new Identifier(ModularItemFrame.MOD_ID, "block/module_t3_itemteleout");
     public static final Identifier BG_NONE = new Identifier(ModularItemFrame.MOD_ID, "block/module_t3_itemtelenone");
@@ -52,7 +52,7 @@ public class ItemTeleporterModule extends ModuleBase {
 
     @Override
     public Identifier  getId() {
-        return LOC;
+        return ID;
     }
 
     @Override
