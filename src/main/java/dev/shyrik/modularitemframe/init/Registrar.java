@@ -38,7 +38,7 @@ public class Registrar {
 
     public static final Item SCREWDRIVER = create("screwdriver", new ScrewdriverItem(new Item.Settings().group(ModularItemFrame.GROUP)));
     public static final Item CANVAS = create("canvas", new Item(new Item.Settings().group(ModularItemFrame.GROUP)));
-    public static final Item MODULAR_FRAME_ITEM = new BlockItem(MODULAR_FRAME, new Item.Settings().group(ModularItemFrame.GROUP));
+    public static final Item MODULAR_FRAME_ITEM = create("modular_frame", new BlockItem(MODULAR_FRAME, new Item.Settings().group(ModularItemFrame.GROUP)));
 
     public static final ModuleItem CRAFTING_MODULE = createMod(CraftingModule.ID, CraftingModule.class);
     public static final ModuleItem IO_MODULE = createMod(IOModule.ID, IOModule.class);
