@@ -39,6 +39,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     
     public ModularFrameEntity() {
         super(Registrar.MODULAR_FRAME_ENTITY);
+        setModule(new EmptyModule());
     }
 
     //region <upgrade>
