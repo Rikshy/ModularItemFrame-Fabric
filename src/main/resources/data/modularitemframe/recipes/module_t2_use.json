@@ -19,7 +19,7 @@
       "item": "modularitemframe:canvas"
     },
     "I": {
-      "tag": "forge:ingots/iron"
+      "item": "minecraft:iron_ingot"
     }
   }
 }

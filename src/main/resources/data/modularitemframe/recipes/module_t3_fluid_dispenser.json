@@ -19,7 +19,7 @@
       "item": "modularitemframe:module_t1_tank"
     },
     "O": {
-      "tag": "forge:obsidian"
+      "item": "minecraft:obsidian"
     }
   }
 }

@@ -16,7 +16,7 @@
       "item": "modularitemframe:module_t1_item"
     },
     "I": {
-      "tag": "forge:ingots/iron"
+      "item": "minecraft:iron_ingot"
     }
   }
 }

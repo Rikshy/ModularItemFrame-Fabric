@@ -19,7 +19,7 @@
       "item": "modularitemframe:canvas"
     },
     "O": {
-      "tag": "forge:obsidian"
+      "item": "minecraft:obsidian"
     }
   }
 }

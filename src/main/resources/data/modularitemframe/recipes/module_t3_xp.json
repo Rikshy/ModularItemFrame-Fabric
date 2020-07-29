@@ -10,7 +10,7 @@
   ],
   "key": {
     "#": {
-      "tag": "forge:gems/emerald"
+      "item": "minecraft:emerald"
     },
     "V": {
       "item": "modularitemframe:module_t2_vacuum"
@@ -22,7 +22,7 @@
       "item": "modularitemframe:canvas"
     },
     "O": {
-      "tag": "forge:obsidian"
+      "item": "minecraft:obsidian"
     }
   }
 }

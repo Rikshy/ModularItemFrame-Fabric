@@ -19,7 +19,7 @@
       "item": "modularitemframe:module_t2_dispense"
     },
     "O": {
-      "tag": "forge:obsidian"
+      "item": "minecraft:obsidian"
     }
   }
 }

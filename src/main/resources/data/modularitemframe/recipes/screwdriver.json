@@ -10,10 +10,10 @@
   ],
   "key": {
     "S": {
-      "tag": "forge:rods/wooden"
+      "item": "minecraft:stick"
     },
     "I": {
-      "tag": "forge:ingots/iron"
+      "item": "minecraft:iron_ingot"
     },
     "C": {
       "item": "modularitemframe:canvas"

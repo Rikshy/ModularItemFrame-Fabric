@@ -10,7 +10,7 @@
   ],
   "key": {
     "#": {
-      "tag": "forge:chests/ender"
+      "item": "minecraft:ender_chest"
     },
     "V": {
       "item": "modularitemframe:module_t2_vacuum"
@@ -22,7 +22,7 @@
       "item": "modularitemframe:canvas"
     },
     "O": {
-      "tag": "forge:obsidian"
+      "item": "minecraft:obsidian"
     }
   }
 }

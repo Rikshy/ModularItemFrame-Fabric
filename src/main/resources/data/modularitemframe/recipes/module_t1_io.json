@@ -10,7 +10,7 @@
   ],
   "key": {
     "S": {
-      "tag": "forge:stone"
+      "item": "minecraft:stone"
     },
     "C": {
       "item": "modularitemframe:canvas"

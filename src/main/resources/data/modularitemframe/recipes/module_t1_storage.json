@@ -10,7 +10,7 @@
   ],
   "key": {
     "#": {
-      "tag": "forge:chests/wooden"
+      "item": "minecraft:chest"
     },
     "C": {
       "item": "modularitemframe:canvas"

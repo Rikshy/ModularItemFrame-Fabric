@@ -11,7 +11,7 @@
       "item": "modularitemframe:modular_frame"
     },
     "O": {
-      "tag": "forge:obsidian"
+      "item": "minecraft:obsidian"
     }
   }
 }

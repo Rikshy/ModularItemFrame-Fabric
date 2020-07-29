@@ -11,10 +11,10 @@
   ],
   "key": {
     "#": {
-      "tag": "forge:leather"
+      "item": "minecraft:leather"
     },
     "S": {
-      "tag": "forge:rods/wooden"
+      "item": "minecraft:stick"
     }
   }
 }

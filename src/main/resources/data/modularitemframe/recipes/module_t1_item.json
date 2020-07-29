@@ -13,7 +13,7 @@
       "item": "modularitemframe:canvas"
     },
     "S": {
-      "tag": "forge:rods/wooden"
+      "item": "minecraft:stick"
     }
   }
 }
