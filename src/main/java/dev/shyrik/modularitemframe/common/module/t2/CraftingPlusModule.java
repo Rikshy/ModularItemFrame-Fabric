@@ -59,7 +59,7 @@ public class CraftingPlusModule extends CraftingModule {
                 playerIn.sendMessage(new TranslatableText(mode.getName()), false);
                 blockEntity.markDirty();
             } else {
-                //playerIn.openContainer(getContainer(blockEntity.getCachedState(), world, pos));
+                playerIn.openHandledScreen(getScreenHandler(blockEntity.getCachedState(), world, pos));
                 blockEntity.markDirty();
             }
         }

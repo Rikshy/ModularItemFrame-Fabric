@@ -83,6 +83,7 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
             currentFront = blockEntity.module.frontTexture();
             model = models.get(currentFront);
         }
+
         return model;
     }
 
@@ -109,8 +110,8 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
                 );
 
         matrixStack.pop();
-//
-//        entity.module.specialRendering(this, matrixStack, tickDelta, vertexConsumers, light, overlay);
+
+        entity.module.specialRendering(this, matrixStack, tickDelta, vertexConsumers, light, overlay);
     }
 
     private void rotateFrameOnFacing(Direction facing, MatrixStack matrixStack) {
