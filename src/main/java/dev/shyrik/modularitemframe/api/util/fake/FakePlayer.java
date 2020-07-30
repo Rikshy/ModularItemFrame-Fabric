@@ -1,17 +1,21 @@
-package dev.shyrik.modularitemframe.api.util;
+package dev.shyrik.modularitemframe.api.util.fake;
 
 import com.mojang.authlib.GameProfile;
+import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.MessageType;
 import net.minecraft.network.packet.c2s.play.ClientSettingsC2SPacket;
 import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.network.ServerPlayerInteractionManager;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stat;
 import net.minecraft.text.Text;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.OptionalInt;
@@ -21,6 +25,19 @@ public class FakePlayer extends ServerPlayerEntity {
 
     public FakePlayer(ServerWorld world, GameProfile name) {
         super(world.getServer(), world, name, new ServerPlayerInteractionManager(world));
+    }
+    @Override
+    public float getEyeHeight(EntityPose pose) {
+        return 0; //Allows for the position of the player to be the exact source when raytracing.
+    }
+    @Override
+    public void onHandlerRegistered(ScreenHandler containerToSend, DefaultedList<ItemStack> itemsList) {
+        //Prevent crashing when objects with containers are clicked on.
+    }
+
+    @Override
+    public float getAttackCooldownProgress(float baseTime) {
+        return 1;
     }
 
     @Override public Vec3d getPos(){ return new Vec3d(0, 0, 0); }

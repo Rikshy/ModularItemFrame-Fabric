@@ -3,7 +3,7 @@ package dev.shyrik.modularitemframe.common.module.t3;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.ExperienceHelper;
-import dev.shyrik.modularitemframe.api.util.FakePlayer;
+import dev.shyrik.modularitemframe.api.util.fake.FakePlayer;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
