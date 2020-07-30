@@ -168,13 +168,11 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     }
 
     //region <syncing>
-//    @Override
-//    public void markDirty() {
-//        super.markDirty();
-//        BlockState state = world.getBlockState(pos);
-//        world.not.notifyBlockUpdate(pos, state, state, 1);
-//        world.notifyBlockUpdate(pos, state, state, 2);
-//    }
+    @Override
+    public void markDirty() {
+        super.markDirty();
+        sync();
+    }
 
 //    @Override
 //    public void handleUpdateTag(CompoundTag tag) {
@@ -201,32 +199,13 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     @Override
     public CompoundTag toTag(CompoundTag compound) {
         compound = super.toTag(compound);
-        compound.putString(NBTMODULE, module.getId().toString());
-        compound.put(NBTMODULEDATA, module.toTag());
-
-
-        ListTag upgradeList = new ListTag();
-        for (UpgradeBase up : upgrades) {
-            upgradeList.add(StringTag.of(up.getId().toString()));
-        }
-        compound.put(NBTUPGRADES, upgradeList);
-        return compound;
+        return toClientTag(compound);
     }
 
     @Override
     public void fromTag(BlockState state, CompoundTag cmp) {
         super.fromTag(state, cmp);
-        if (module.getId().toString().equals(cmp.getString(NBTMODULE))) {
-            module.fromTag(cmp.getCompound(NBTMODULEDATA));
-        } else {
-            setModule(new Identifier(cmp.getString(NBTMODULE)));
-            module.fromTag(cmp.getCompound(NBTMODULEDATA));
-            cmp.remove(NBTMODULEDATA);
-        }
-        upgrades = new ArrayList<>();
-        for (Tag sub : cmp.getList(NBTUPGRADES, 8)) {
-            tryAddUpgrade(new Identifier(sub.asString()), false);
-        }
+        fromClientTag(cmp);
     }
 
     @Override
