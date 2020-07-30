@@ -1,6 +1,6 @@
 package dev.shyrik.modularitemframe.mixin;
 
-import dev.shyrik.modularitemframe.api.util.IngredientGetMatchingStacks;
+import dev.shyrik.modularitemframe.api.mixin.IngredientGetMatchingStacks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
 import org.spongepowered.asm.mixin.Mixin;

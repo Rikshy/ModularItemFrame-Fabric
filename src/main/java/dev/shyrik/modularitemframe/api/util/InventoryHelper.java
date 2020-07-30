@@ -1,5 +1,6 @@
 package dev.shyrik.modularitemframe.api.util;
 
+import dev.shyrik.modularitemframe.api.mixin.IngredientGetMatchingStacks;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;

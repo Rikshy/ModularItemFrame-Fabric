@@ -1,5 +1,6 @@
 package dev.shyrik.modularitemframe.api.util;
 
+import dev.shyrik.modularitemframe.api.mixin.IngredientGetMatchingStacks;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftingInventory;

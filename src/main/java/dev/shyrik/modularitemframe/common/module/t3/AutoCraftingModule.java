@@ -7,7 +7,7 @@ import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.module.t2.CraftingPlusModule;
 import dev.shyrik.modularitemframe.common.network.NetworkHandler;
 import dev.shyrik.modularitemframe.common.network.packet.PlaySoundPacket;
-import dev.shyrik.modularitemframe.api.util.IngredientGetMatchingStacks;
+import dev.shyrik.modularitemframe.api.mixin.IngredientGetMatchingStacks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;

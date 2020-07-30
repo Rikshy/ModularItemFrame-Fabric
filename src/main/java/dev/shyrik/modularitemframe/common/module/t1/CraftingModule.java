@@ -10,7 +10,7 @@ import dev.shyrik.modularitemframe.common.network.packet.PlaySoundPacket;
 import dev.shyrik.modularitemframe.common.screenhandler.CraftingFrameScreenHandler;
 import dev.shyrik.modularitemframe.common.screenhandler.FrameCrafting;
 import dev.shyrik.modularitemframe.common.screenhandler.IScreenHandlerCallback;
-import dev.shyrik.modularitemframe.api.util.IngredientGetMatchingStacks;
+import dev.shyrik.modularitemframe.api.mixin.IngredientGetMatchingStacks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
