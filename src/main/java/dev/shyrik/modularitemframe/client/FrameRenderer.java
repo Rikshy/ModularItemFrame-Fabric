@@ -1,40 +1,91 @@
 package dev.shyrik.modularitemframe.client;
 
+import dev.shyrik.modularitemframe.ModularItemFrame;
+import dev.shyrik.modularitemframe.api.ModuleBase;
+import dev.shyrik.modularitemframe.api.ModuleItem;
+import dev.shyrik.modularitemframe.api.util.RegistryHelper;
 import dev.shyrik.modularitemframe.common.block.ModularFrameEntity;
-import net.fabricmc.fabric.impl.client.model.ModelLoaderHooks;
-import net.fabricmc.fabric.impl.client.model.ModelLoadingRegistryImpl;
+import dev.shyrik.modularitemframe.common.module.EmptyModule;
+import dev.shyrik.modularitemframe.init.Registrar;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.block.BlockModels;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
-import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.ModelLoader;
-import net.minecraft.client.render.model.UnbakedModel;
+import net.minecraft.client.render.model.*;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.fluid.Fluid;
+import net.minecraft.resource.ResourceManager;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Quaternion;
+import net.minecraft.util.profiler.Profiler;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@Environment(EnvType.CLIENT)
 public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
 
-    private UnbakedModel model = null;
+    private BakedModel model = null;
+    private Identifier currentFront = null;
+    private static final Map<Identifier, BakedModel> models = new HashMap<>();
 
     public FrameRenderer(BlockEntityRenderDispatcher dispatcher) {
         super(dispatcher);
     }
     public BlockEntityRenderDispatcher getDispatcher() { return dispatcher; }
 
-    private BakedModel getBakedModel(ModularFrameEntity blockEntity) {
-        if (model == null) {
-            try {
-                model = null;//MinecraftClient.getInstance().getDataFixer()..getBakedModelManager() ModelLoader.instance().getUnbakedModel(new ResourceLocation(ModularItemFrame.MOD_ID,"block/modular_frame"));
-            } catch (Exception e) {
-                e.printStackTrace();
+    public static void onApplyModelLoader(ModelLoader modelLoader, ResourceManager resourceManager, Profiler profiler) {
+        UnbakedModel unbakedFrame = modelLoader.getOrLoadModel(new Identifier(ModularItemFrame.MOD_ID, "block/modular_frame"));
+        BakedModelManager bmMan = MinecraftClient.getInstance().getBakedModelManager();
+
+        ModuleItem.getModuleIds().forEach(id -> {
+            ModuleBase module = ModuleItem.createModule(id);
+            assert module != null;
+            if (module.hasModelVariants()) {
+                for (Identifier front : module.getVariantFronts()) {
+                    BakedModel bakedFrame = unbakedFrame.bake(modelLoader, mat -> {
+                        if (mat.getTextureId().toString().contains("default_front"))
+                            return bmMan.method_24153(mat.getAtlasId()).getSprite(front);
+                        if (mat.getTextureId().toString().contains("default_back"))
+                            return bmMan.method_24153(mat.getAtlasId()).getSprite(module.backTexture());
+                        if (mat.getTextureId().toString().contains("default_inner"))
+                            return bmMan.method_24153(mat.getAtlasId()).getSprite(module.innerTexture());
+                        return bmMan.method_24153(mat.getAtlasId()).getSprite(mat.getTextureId());
+                    }, ModelRotation.X0_Y0, RegistryHelper.getId(Registrar.MODULAR_FRAME));
+
+                    models.put(front, bakedFrame);
+                }
+            } else {
+                BakedModel bakedFrame = unbakedFrame.bake(modelLoader, mat -> {
+                    if (mat.getTextureId().toString().contains("default_front"))
+                        return bmMan.method_24153(mat.getAtlasId()).getSprite(module.frontTexture());
+                    if (mat.getTextureId().toString().contains("default_back"))
+                        return bmMan.method_24153(mat.getAtlasId()).getSprite(module.backTexture());
+                    if (mat.getTextureId().toString().contains("default_inner"))
+                        return bmMan.method_24153(mat.getAtlasId()).getSprite(module.innerTexture());
+                    return bmMan.method_24153(mat.getAtlasId()).getSprite(mat.getTextureId());
+                }, ModelRotation.X0_Y0, RegistryHelper.getId(Registrar.MODULAR_FRAME));
+
+                models.put(module.frontTexture(), bakedFrame);
             }
+        });
+
+        models.put(EmptyModule.FG_ID,
+                unbakedFrame.bake(modelLoader, mat ->
+                                bmMan.method_24153(mat.getAtlasId()).getSprite(mat.getTextureId()),
+                                ModelRotation.X0_Y0,
+                                RegistryHelper.getId(Registrar.MODULAR_FRAME)));
+    }
+
+    private BakedModel getBakedModel(ModularFrameEntity blockEntity) {
+        if (currentFront != blockEntity.module.frontTexture()) {
+            currentFront = blockEntity.module.frontTexture();
+            model = models.get(currentFront);
         }
-        return null;//blockEntity.module.bakeModel(ModelLoader.instance(), model);
+        return model;
     }
 
     @Override
@@ -43,7 +94,6 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
         BakedModel modelFrame = getBakedModel(entity);
 
         rotateFrameOnFacing(entity.blockFacing(), matrixStack);
-
 
         MinecraftClient.getInstance()
                 .getBlockRenderManager()
@@ -61,8 +111,8 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
                 );
 
         matrixStack.pop();
-
-        entity.module.specialRendering(this, matrixStack, tickDelta, vertexConsumers, light, overlay);
+//
+//        entity.module.specialRendering(this, matrixStack, tickDelta, vertexConsumers, light, overlay);
     }
 
     private void rotateFrameOnFacing(Direction facing, MatrixStack matrixStack) {
