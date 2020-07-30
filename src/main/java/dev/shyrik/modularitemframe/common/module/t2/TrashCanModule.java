@@ -68,7 +68,7 @@ public class TrashCanModule extends ModuleBase {
     }
 
     @Override
-    public ActionResult onUse(World worldIn, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
+    public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
         return ActionResult.PASS;
     }
 
@@ -82,7 +82,11 @@ public class TrashCanModule extends ModuleBase {
                 for (int slot = 0; slot < trash.size(); slot++) {
                     if (!trash.getStack(slot).isEmpty()) {
                         trash.setStack(slot, ItemStack.EMPTY);
-                        NetworkHandler.sendAround(world, pos, 32, new PlaySoundPacket(pos, SoundEvents.BLOCK_LAVA_EXTINGUISH.getId(), SoundCategory.BLOCKS.getName(), 0.4F, 0.7F));
+                        NetworkHandler.sendAround(
+                                world,
+                                pos,
+                                32,
+                                new PlaySoundPacket(pos, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 0.4F, 0.7F));
                         break;
                     }
                 }

@@ -87,10 +87,10 @@ public class NullifyModule extends ModuleBase {
     }
 
     @Override
-    public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, BlockHitResult hit) {
+    public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
         if (!world.isClient) {
-            ItemStack held = playerIn.getStackInHand(hand);
-            if (!playerIn.isSneaking() && !held.isEmpty()) {
+            ItemStack held = player.getStackInHand(hand);
+            if (!player.isSneaking() && !held.isEmpty()) {
                 if (ItemHelper.simpleAreStacksEqual(held, lastStack)) {
                     if (held.getCount() + lastStack.getCount() > lastStack.getMaxCount())
                         lastStack.setCount(lastStack.getMaxCount());
@@ -99,11 +99,19 @@ public class NullifyModule extends ModuleBase {
                     lastStack = held.copy();
                 }
                 held.setCount(0);
-                NetworkHandler.sendAround(world, blockEntity.getPos(), 32, new PlaySoundPacket(pos, RegistryHelper.getId(SoundEvents.BLOCK_LAVA_EXTINGUISH), SoundCategory.BLOCKS.getName(), 0.4F, 0.7F));
-            } else if (playerIn.isSneaking() && held.isEmpty() && !lastStack.isEmpty()) {
-                playerIn.setStackInHand(hand, lastStack);
+                NetworkHandler.sendAround(
+                        world,
+                        blockEntity.getPos(),
+                        32,
+                        new PlaySoundPacket(pos, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 0.4F, 0.7F));
+            } else if (player.isSneaking() && held.isEmpty() && !lastStack.isEmpty()) {
+                player.setStackInHand(hand, lastStack);
                 lastStack = ItemStack.EMPTY;
-                NetworkHandler.sendAround(world, blockEntity.getPos(), 32, new PlaySoundPacket(pos, RegistryHelper.getId(SoundEvents.ENTITY_ENDER_PEARL_THROW), SoundCategory.BLOCKS.getName(), 0.4F, 0.7F));
+                NetworkHandler.sendAround(
+                        world,
+                        blockEntity.getPos(),
+                        32,
+                        new PlaySoundPacket(pos, SoundEvents.ENTITY_ENDER_PEARL_THROW, SoundCategory.BLOCKS, 0.4F, 0.7F));
             }
         }
         return ActionResult.SUCCESS;
@@ -111,14 +119,14 @@ public class NullifyModule extends ModuleBase {
 
     @Override
     public CompoundTag toTag() {
-        CompoundTag compound = super.toTag();
-        compound.put(NBT_LASTSTACK, lastStack.toTag(new CompoundTag()));
-        return compound;
+        CompoundTag tag = super.toTag();
+        tag.put(NBT_LASTSTACK, lastStack.toTag(new CompoundTag()));
+        return tag;
     }
 
     @Override
-    public void fromTag(CompoundTag nbt) {
-        super.fromTag(nbt);
-        if (nbt.contains(NBT_LASTSTACK)) lastStack = ItemStack.fromTag(nbt.getCompound(NBT_LASTSTACK));
+    public void fromTag(CompoundTag tag) {
+        super.fromTag(tag);
+        if (tag.contains(NBT_LASTSTACK)) lastStack = ItemStack.fromTag(tag.getCompound(NBT_LASTSTACK));
     }
 }

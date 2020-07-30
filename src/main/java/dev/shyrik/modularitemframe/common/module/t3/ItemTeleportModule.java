@@ -35,7 +35,7 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.Objects;
 
-public class ItemTeleporterModule extends ModuleBase {
+public class ItemTeleportModule extends ModuleBase {
 
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t3_itemtele");
     public static final Identifier BG_IN = new Identifier(ModularItemFrame.MOD_ID, "block/module_t3_itemtelein");
@@ -151,31 +151,31 @@ public class ItemTeleporterModule extends ModuleBase {
     }
 
     @Override
-    public void screw(World world, BlockPos pos, PlayerEntity playerIn, ItemStack driver) {
+    public void screw(World world, BlockPos pos, PlayerEntity player, ItemStack driver) {
         CompoundTag nbt = driver.getTag();
-        if (playerIn.isSneaking()) {
+        if (player.isSneaking()) {
             if (nbt == null) nbt = new CompoundTag();
             nbt.putLong(NBT_LINK, blockEntity.getPos().asLong());
             driver.setTag(nbt);
-            playerIn.sendMessage(new TranslatableText("modularitemframe.message.loc_saved"), false);
+            player.sendMessage(new TranslatableText("modularitemframe.message.loc_saved"), false);
         } else {
             if (nbt != null && nbt.contains(NBT_LINK)) {
                 BlockPos tmp = BlockPos.fromLong(nbt.getLong(NBT_LINK));
                 BlockEntity targetBlockEntity = blockEntity.getWorld().getBlockEntity(tmp);
                 int countRange = blockEntity.getRangeUpCount();
-                if (!(targetBlockEntity instanceof ModularFrameEntity) || !((((ModularFrameEntity) targetBlockEntity).module instanceof ItemTeleporterModule)))
-                    playerIn.sendMessage(new TranslatableText("modularitemframe.message.invalid_target"), false);
+                if (!(targetBlockEntity instanceof ModularFrameEntity) || !((((ModularFrameEntity) targetBlockEntity).module instanceof ItemTeleportModule)))
+                    player.sendMessage(new TranslatableText("modularitemframe.message.invalid_target"), false);
                 else if (!blockEntity.getPos().isWithinDistance(tmp, ModularItemFrame.getConfig().BaseTeleportRange + (countRange * 10))) {
-                    playerIn.sendMessage(new TranslatableText("modularitemframe.message.too_far", ModularItemFrame.getConfig().BaseTeleportRange + (countRange * 10)), false);
+                    player.sendMessage(new TranslatableText("modularitemframe.message.too_far", ModularItemFrame.getConfig().BaseTeleportRange + (countRange * 10)), false);
                 } else {
                     linkedLoc = tmp;
                     direction = EnumMode.DISPENSE;
 
-                    ItemTeleporterModule targetModule = (ItemTeleporterModule) ((ModularFrameEntity) targetBlockEntity).module;
+                    ItemTeleportModule targetModule = (ItemTeleportModule) ((ModularFrameEntity) targetBlockEntity).module;
                     targetModule.linkedLoc = blockEntity.getPos();
                     targetModule.direction = EnumMode.VACUUM;
 
-                    playerIn.sendMessage(new TranslatableText("modularitemframe.message.link_established"), false);
+                    player.sendMessage(new TranslatableText("modularitemframe.message.link_established"), false);
                     nbt.remove(NBT_LINK);
                     driver.setTag(nbt);
 
@@ -187,78 +187,82 @@ public class ItemTeleporterModule extends ModuleBase {
     }
 
     @Override
-    public ActionResult onUse(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, BlockHitResult hit) {
+    public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
         if (direction != EnumMode.VACUUM) return ActionResult.FAIL;
-        if (!hasValidConnection(worldIn)) return ActionResult.FAIL;
+        if (!hasValidConnection(world)) return ActionResult.FAIL;
 
-        ItemStack held = playerIn.getStackInHand(hand);
+        ItemStack held = player.getStackInHand(hand);
 
         if (!held.isEmpty()) {
-            ItemHelper.ejectStack(worldIn, linkedLoc, worldIn.getBlockState(linkedLoc).get(ModularFrameBlock.FACING), held);
+            ItemHelper.ejectStack(world, linkedLoc, world.getBlockState(linkedLoc).get(ModularFrameBlock.FACING), held);
             held.setCount(0);
         }
         return ActionResult.SUCCESS;
     }
 
     @Override
-    public void onRemove(World worldIn, BlockPos pos, Direction facing, PlayerEntity playerIn) {
-        if (hasValidConnection(worldIn)) {
-            ItemTeleporterModule targetModule = (ItemTeleporterModule) ((ModularFrameEntity) Objects.requireNonNull(worldIn.getBlockEntity(linkedLoc))).module;
+    public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player) {
+        if (hasValidConnection(world)) {
+            ItemTeleportModule targetModule = (ItemTeleportModule) ((ModularFrameEntity) Objects.requireNonNull(world.getBlockEntity(linkedLoc))).module;
             targetModule.linkedLoc = null;
             targetModule.direction = EnumMode.NONE;
         }
     }
 
     @Override
-    public void tick( World world,  BlockPos pos) {
+    public void tick(World world, BlockPos pos) {
         if (direction != EnumMode.VACUUM) return;
         if (ModularItemFrame.getConfig() .DisableAutomaticItemTransfer) return;
         if (!hasValidConnection(world)) return;
         if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
 
-        List<ItemEntity> entities = world.getEntities(ItemEntity.class, getVacuumBB(pos), itemEntity -> true);
+        List<ItemEntity> entities = world.getEntities(ItemEntity.class, getVacuumBox(pos), itemEntity -> true);
         for (ItemEntity entity : entities) {
             ItemStack entityStack = entity.getStack();
             if (!entity.isAlive() || entityStack.isEmpty()) continue;
 
             ItemHelper.ejectStack(world, linkedLoc, world.getBlockState(linkedLoc).get(ModularFrameBlock.FACING), entityStack);
             entity.remove();
-            NetworkHandler.sendAround(world, blockEntity.getPos(), 32, new SpawnParticlesPacket(RegistryHelper.getId(ParticleTypes.EXPLOSION), entity.getBlockPos(), 1));
+            NetworkHandler.sendAround(
+                    world,
+                    blockEntity.getPos(),
+                    32,
+                    new SpawnParticlesPacket(ParticleTypes.EXPLOSION, entity.getBlockPos(), 1));
             break;
         }
     }
 
     @Override
     public CompoundTag toTag() {
-        CompoundTag compound = super.toTag();
+        CompoundTag tag = super.toTag();
         if (linkedLoc != null) {
-            compound.putInt(NBT_LINKX, linkedLoc.getX());
-            compound.putInt(NBT_LINKY, linkedLoc.getY());
-            compound.putInt(NBT_LINKZ, linkedLoc.getZ());
-            compound.putInt(NBT_DIR, direction.index);
+            tag.putInt(NBT_LINKX, linkedLoc.getX());
+            tag.putInt(NBT_LINKY, linkedLoc.getY());
+            tag.putInt(NBT_LINKZ, linkedLoc.getZ());
+            tag.putInt(NBT_DIR, direction.index);
         }
-        return compound;
+        return tag;
     }
 
     @Override
-    public void fromTag(CompoundTag nbt) {
-        super.fromTag(nbt);
-        if (nbt.contains(NBT_LINKX))
-            linkedLoc = new BlockPos(nbt.getInt(NBT_LINKX), nbt.getInt(NBT_LINKY), nbt.getInt(NBT_LINKZ));
-        if (nbt.contains(NBT_DIR)) direction = EnumMode.values()[nbt.getInt(NBT_DIR)];
+    public void fromTag(CompoundTag tag) {
+        super.fromTag(tag);
+        if (tag.contains(NBT_LINKX))
+            linkedLoc = new BlockPos(tag.getInt(NBT_LINKX), tag.getInt(NBT_LINKY), tag.getInt(NBT_LINKZ));
+        if (tag.contains(NBT_DIR)) direction = EnumMode.values()[tag.getInt(NBT_DIR)];
     }
 
-    private boolean hasValidConnection( World world) {
+    private boolean hasValidConnection(World world) {
         if (linkedLoc == null) return false;
         BlockEntity blockEntity = world.getBlockEntity(linkedLoc);
         if (!(blockEntity instanceof ModularFrameEntity)
-                || !(((ModularFrameEntity) blockEntity).module instanceof ItemTeleporterModule)
-                || ((ItemTeleporterModule) ((ModularFrameEntity) blockEntity).module).direction != EnumMode.DISPENSE)
+                || !(((ModularFrameEntity) blockEntity).module instanceof ItemTeleportModule)
+                || ((ItemTeleportModule) ((ModularFrameEntity) blockEntity).module).direction != EnumMode.DISPENSE)
             return false;
         return true;
     }
 
-    private Box getVacuumBB(BlockPos pos) {
+    private Box getVacuumBox(BlockPos pos) {
         int range = ModularItemFrame.getConfig().BaseVacuumRange + blockEntity.getRangeUpCount();
         switch (blockEntity.blockFacing()) {
             case DOWN:

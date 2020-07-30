@@ -55,7 +55,7 @@ public class Registrar {
 
     public static final ModuleItem AUTO_CRAFTING_MODULE = createMod(AutoCraftingModule.ID, AutoCraftingModule.class);
     public static final ModuleItem FLUID_DISPENSE_MODULE = createMod(FluidDispenserModule.ID, FluidDispenserModule.class);
-    public static final ModuleItem ITEM_TP_MODULE = createMod(ItemTeleporterModule.ID, ItemTeleporterModule.class);
+    public static final ModuleItem ITEM_TP_MODULE = createMod(ItemTeleportModule.ID, ItemTeleportModule.class);
     public static final ModuleItem TP_MODULE = createMod(TeleportModule.ID, TeleportModule.class);
     public static final ModuleItem XP_MODULE = createMod(XPModule.ID, XPModule.class);
 

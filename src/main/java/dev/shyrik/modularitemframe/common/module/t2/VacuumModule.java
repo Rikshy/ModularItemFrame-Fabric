@@ -67,32 +67,32 @@ public class VacuumModule extends ModuleBase {
     }
 
     @Override
-    public void screw(World world,  BlockPos pos,  PlayerEntity playerIn, ItemStack driver) {
+    public void screw(World world, BlockPos pos, PlayerEntity player, ItemStack driver) {
         if (world.isClient) return;
 
-        if (playerIn.isSneaking()) {
+        if (player.isSneaking()) {
             int modeIdx = mode.getIndex() + 1;
             if (modeIdx == EnumMode.values().length) modeIdx = 0;
             mode = EnumMode.VALUES[modeIdx];
-            playerIn.sendMessage(new TranslatableText("modularitemframe.message.vacuum_mode_change", mode.getName()), false);
+            player.sendMessage(new TranslatableText("modularitemframe.message.vacuum_mode_change", mode.getName()), false);
         } else {
-            adjustRange(playerIn);
+            adjustRange(player);
         }
         blockEntity.markDirty();
     }
 
     @Override
-    public ActionResult onUse(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, BlockHitResult hit) {
+    public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
         return ActionResult.FAIL;
     }
 
     @Override
-    public void tick( World world,  BlockPos pos) {
+    public void tick(World world, BlockPos pos) {
         if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
 
         Inventory handler = (Inventory) blockEntity.getAttachedInventory();
         if (handler != null) {
-            List<ItemEntity> entities = world.getEntities(ItemEntity.class, getVacuumBB(pos), itemEntity -> true);
+            List<ItemEntity> entities = world.getEntities(ItemEntity.class, getVacuumBox(pos), itemEntity -> true);
             for (ItemEntity entity : entities) {
                 ItemStack entityStack = entity.getStack();
                 if (!entity.isAlive() || entityStack.isEmpty() || InventoryHelper.getFittingSlot(handler, entityStack) < 0)
@@ -101,7 +101,11 @@ public class VacuumModule extends ModuleBase {
                 ItemStack remain = InventoryHelper.giveStack(handler, entityStack);
                 if (remain.isEmpty()) entity.remove();
                 else entity.setStack(remain);
-                NetworkHandler.sendAround(entity.world, entity.getBlockPos(), 32, new SpawnParticlesPacket(RegistryHelper.getId(ParticleTypes.EXPLOSION), entity.getBlockPos(), 1));
+                NetworkHandler.sendAround(
+                        entity.world,
+                        entity.getBlockPos(),
+                        32,
+                        new SpawnParticlesPacket(ParticleTypes.EXPLOSION, entity.getBlockPos(), 1));
                 break;
             }
         }
@@ -120,25 +124,24 @@ public class VacuumModule extends ModuleBase {
 
     @Override
     public CompoundTag toTag() {
-        CompoundTag nbt = super.toTag();
-        nbt.putInt(NBT_MODE, mode.getIndex());
-        nbt.putInt(NBT_RANGEX, rangeX);
-        nbt.putInt(NBT_RANGEY, rangeY);
-        nbt.putInt(NBT_RANGEZ, rangeZ);
-        return nbt;
+        CompoundTag tag = super.toTag();
+        tag.putInt(NBT_MODE, mode.getIndex());
+        tag.putInt(NBT_RANGEX, rangeX);
+        tag.putInt(NBT_RANGEY, rangeY);
+        tag.putInt(NBT_RANGEZ, rangeZ);
+        return tag;
     }
 
     @Override
-    public void fromTag(CompoundTag nbt) {
-        super.fromTag(nbt);
-        if (nbt.contains(NBT_MODE)) mode = EnumMode.VALUES[nbt.getInt(NBT_MODE)];
-        if (nbt.contains(NBT_RANGEX)) rangeX = nbt.getInt(NBT_RANGEX);
-        if (nbt.contains(NBT_RANGEY)) rangeY = nbt.getInt(NBT_RANGEY);
-        if (nbt.contains(NBT_RANGEZ)) rangeZ = nbt.getInt(NBT_RANGEZ);
+    public void fromTag(CompoundTag tag) {
+        super.fromTag(tag);
+        if (tag.contains(NBT_MODE)) mode = EnumMode.VALUES[tag.getInt(NBT_MODE)];
+        if (tag.contains(NBT_RANGEX)) rangeX = tag.getInt(NBT_RANGEX);
+        if (tag.contains(NBT_RANGEY)) rangeY = tag.getInt(NBT_RANGEY);
+        if (tag.contains(NBT_RANGEZ)) rangeZ = tag.getInt(NBT_RANGEZ);
     }
 
-    // vorher AxisAlignedBB jetzt Box
-    private Box getVacuumBB(BlockPos pos) {
+    private Box getVacuumBox(BlockPos pos) {
         switch (blockEntity.blockFacing()) {
             case DOWN:
                 return new Box(pos.add(-rangeX, 0, -rangeZ), pos.add(rangeX, -rangeY, rangeZ));
@@ -156,7 +159,7 @@ public class VacuumModule extends ModuleBase {
         return new Box(pos, pos.add(1, 1, 1));
     }
 
-    private void adjustRange( PlayerEntity playerIn) {
+    private void adjustRange(PlayerEntity player) {
         int maxRange = ModularItemFrame.getConfig().BaseVacuumRange + blockEntity.getRangeUpCount();
         if (maxRange > 1) {
             int r = 0;
@@ -177,7 +180,7 @@ public class VacuumModule extends ModuleBase {
                     r = rangeZ;
                     break;
             }
-            playerIn.sendMessage(new TranslatableText("modularitemframe.message.vacuum_range_change", mode.getName(), r), false);
+            player.sendMessage(new TranslatableText("modularitemframe.message.vacuum_range_change", mode.getName(), r), false);
         }
     }
 

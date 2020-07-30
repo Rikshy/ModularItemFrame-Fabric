@@ -43,7 +43,7 @@ public class EmptyModule extends ModuleBase {
     }
 
     @Override
-    public ActionResult onUse(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, BlockHitResult trace) {
+    public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult trace) {
         return ActionResult.PASS;
     }
 }

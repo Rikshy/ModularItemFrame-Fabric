@@ -1,6 +1,7 @@
 package dev.shyrik.modularitemframe.common.network.packet;
 
 import dev.shyrik.modularitemframe.ModularItemFrame;
+import dev.shyrik.modularitemframe.api.util.RegistryHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.network.PacketContext;
@@ -19,8 +20,13 @@ public class SpawnParticlesPacket extends NetworkPacket {
     private final BlockPos pos;
     private final int amount;
 
-    public SpawnParticlesPacket(Identifier particleId, BlockPos pos, int amount) {
+    private SpawnParticlesPacket(Identifier particleId, BlockPos pos, int amount) {
         this.particleId = particleId;
+        this.pos = pos;
+        this.amount = amount;
+    }
+    public SpawnParticlesPacket(ParticleType particle, BlockPos pos, int amount) {
+        this.particleId = RegistryHelper.getId(particle);
         this.pos = pos;
         this.amount = amount;
     }
@@ -50,7 +56,7 @@ public class SpawnParticlesPacket extends NetworkPacket {
         packetContext.getTaskQueue().execute(() -> {
             SpawnParticlesPacket packet = decode(packetByteBuf);
 
-            ParticleType<?> particle = Registry.PARTICLE_TYPE.get(packet.particleId);
+            ParticleType<?> particle = RegistryHelper.getParticle(packet.particleId);
             if (particle != null) {
                 for (int i = 0; i < packet.amount; i++) {
                     MinecraftClient mc = MinecraftClient.getInstance();

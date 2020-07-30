@@ -58,27 +58,27 @@ public class XPModule extends ModuleBase {
     }
 
     @Override
-    public void onBlockClicked( World worldIn,  BlockPos pos,  PlayerEntity playerIn) {
-        if (!worldIn.isClient) {
-            if (playerIn.isSneaking()) drainContainerXpToReachPlayerLevel(playerIn, 0);
-            else drainContainerXpToReachPlayerLevel(playerIn, playerIn.experienceLevel + 1);
+    public void onBlockClicked(World world, BlockPos pos, PlayerEntity player) {
+        if (!world.isClient) {
+            if (player.isSneaking()) drainContainerXpToReachPlayerLevel(player, 0);
+            else drainContainerXpToReachPlayerLevel(player, player.experienceLevel + 1);
             blockEntity.markDirty();
         }
     }
 
     @Override
-    public ActionResult onUse(World worldIn,  BlockPos pos,  BlockState state,  PlayerEntity playerIn,  Hand hand,  Direction facing, BlockHitResult hit) {
-        //if (playerIn instanceof FakePlayer) return ActionResult.FAIL;
+    public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
+        if (player instanceof FakePlayer) return ActionResult.FAIL;
 
-        if (!worldIn.isClient) {
-            if (playerIn.isSneaking()) drainPlayerXpToReachPlayerLevel(playerIn, 0);
-            else drainPlayerXpToReachPlayerLevel(playerIn, playerIn.experienceLevel - 1);
+        if (!world.isClient) {
+            if (player.isSneaking()) drainPlayerXpToReachPlayerLevel(player, 0);
+            else drainPlayerXpToReachPlayerLevel(player, player.experienceLevel - 1);
             blockEntity.markDirty();
         }
         return ActionResult.SUCCESS;
     }
 
-    private void drainPlayerXpToReachPlayerLevel( PlayerEntity player, int level) {
+    private void drainPlayerXpToReachPlayerLevel(PlayerEntity player, int level) {
         int targetXP = ExperienceHelper.getExperienceForLevel(level);
         int drainXP = ExperienceHelper.getPlayerXP(player) - targetXP;
         if (drainXP <= 0) {
@@ -102,7 +102,7 @@ public class XPModule extends ModuleBase {
         return xpToAdd;
     }
 
-    private void drainContainerXpToReachPlayerLevel( PlayerEntity player, int level) {
+    private void drainContainerXpToReachPlayerLevel(PlayerEntity player, int level) {
         int requiredXP = level == 0 ? experience : ExperienceHelper.getExperienceForLevel(level) - ExperienceHelper.getPlayerXP(player);
 
         requiredXP = Math.min(experience, requiredXP);
@@ -112,19 +112,19 @@ public class XPModule extends ModuleBase {
     }
 
     @Override
-    public void onRemove( World worldIn,  BlockPos pos,  Direction facing,  PlayerEntity playerIn) {
-        super.onRemove(worldIn, pos, facing, playerIn);
-        if (playerIn == null || playerIn instanceof FakePlayer)
-            worldIn.spawnEntity(new ExperienceOrbEntity(worldIn, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, experience));
-        else playerIn.addExperience(experience);
+    public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player) {
+        super.onRemove(world, pos, facing, player);
+        if (player == null || player instanceof FakePlayer)
+            world.spawnEntity(new ExperienceOrbEntity(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, experience));
+        else player.addExperience(experience);
     }
 
     @Override
-    public void tick( World world,  BlockPos pos) {
+    public void tick(World world, BlockPos pos) {
         if (experience >= MAX_XP) return;
         if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
 
-        List<ExperienceOrbEntity> entities = world.getEntities(ExperienceOrbEntity.class, getVacuumBB(pos), experienceOrbEntity -> true);
+        List<ExperienceOrbEntity> entities = world.getEntities(ExperienceOrbEntity.class, getVacuumBox(pos), experienceOrbEntity -> true);
         for (ExperienceOrbEntity entity : entities) {
             if (!entity.isAlive()) continue;
 
@@ -132,7 +132,7 @@ public class XPModule extends ModuleBase {
         }
     }
 
-    private Box getVacuumBB( BlockPos pos) {
+    private Box getVacuumBox(BlockPos pos) {
         int range = ModularItemFrame.getConfig().BaseVacuumRange + blockEntity.getRangeUpCount();
         switch (blockEntity.blockFacing()) {
             case DOWN:
@@ -153,16 +153,16 @@ public class XPModule extends ModuleBase {
 
     @Override
     public CompoundTag toTag() {
-        CompoundTag nbt = super.toTag();
-        nbt.putInt(NBT_XP, experience);
-        nbt.putInt(NBT_LEVEL, levels);
-        return nbt;
+        CompoundTag tag = super.toTag();
+        tag.putInt(NBT_XP, experience);
+        tag.putInt(NBT_LEVEL, levels);
+        return tag;
     }
 
     @Override
-    public void fromTag(CompoundTag nbt) {
-        super.fromTag(nbt);
-        if (nbt.contains(NBT_XP)) experience = nbt.getInt(NBT_XP);
-        if (nbt.contains(NBT_LEVEL)) levels = nbt.getInt(NBT_LEVEL);
+    public void fromTag(CompoundTag tag) {
+        super.fromTag(tag);
+        if (tag.contains(NBT_XP)) experience = tag.getInt(NBT_XP);
+        if (tag.contains(NBT_LEVEL)) levels = tag.getInt(NBT_LEVEL);
     }
 }

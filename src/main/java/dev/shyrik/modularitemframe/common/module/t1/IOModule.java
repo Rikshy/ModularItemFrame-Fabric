@@ -51,7 +51,7 @@ public class IOModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public void specialRendering(FrameRenderer tesr, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
+    public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
         ItemRenderHelper.renderOnFrame(displayItem, blockEntity.blockFacing(), 0F, 0.1F, ModelTransformation.Mode.FIXED, matrixStack, buffer, combinedLight, combinedOverlay);
     }
 
@@ -62,19 +62,18 @@ public class IOModule extends ModuleBase {
     }
 
     @Override
-    public void onBlockClicked(World worldIn, BlockPos pos, PlayerEntity playerIn) {
-        if (!worldIn.isClient) {
+    public void onBlockClicked(World world, BlockPos pos, PlayerEntity player) {
+        if (!world.isClient) {
             Inventory handler = (Inventory) blockEntity.getAttachedInventory();
             if (handler != null) {
                 Direction blockFacing = blockEntity.blockFacing();
-                Inventory player = playerIn.inventory;
 
                 int slot = InventoryHelper.getFirstOccupiedSlot(handler);
                 if (slot >= 0) {
-                    int amount = playerIn.isSneaking() ? handler.getStack(slot).getMaxCount() : 1;
+                    int amount = player.isSneaking() ? handler.getStack(slot).getMaxCount() : 1;
                     ItemStack extract = handler.removeStack(slot, amount);
-                    extract = InventoryHelper.giveStack(player, extract);
-                    if (!extract.isEmpty()) ItemHelper.ejectStack(worldIn, pos, blockFacing, extract);
+                    extract = InventoryHelper.giveStack(player.inventory, extract);
+                    if (!extract.isEmpty()) ItemHelper.ejectStack(world, pos, blockFacing, extract);
                     blockEntity.getAttachedTile().markDirty();
                     blockEntity.markDirty();
                 }
@@ -83,16 +82,15 @@ public class IOModule extends ModuleBase {
     }
 
     @Override
-    public ActionResult onUse(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, BlockHitResult hit) {
-        if (!worldIn.isClient) {
+    public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
+        if (!world.isClient) {
             Inventory handler = (Inventory)blockEntity.getAttachedInventory();
             if (handler != null) {
-                Inventory player = playerIn.inventory;
-                ItemStack held = playerIn.getStackInHand(hand);
-                long time = worldIn.getTime();
+                ItemStack held = player.getStackInHand(hand);
+                long time = world.getTime();
 
-                if (time - lastClick <= 8L && !playerIn.isSneaking() && !lastStack.isEmpty())
-                    InventoryHelper.giveAllPossibleStacks(handler, player, lastStack, held);
+                if (time - lastClick <= 8L && !player.isSneaking() && !lastStack.isEmpty())
+                    InventoryHelper.giveAllPossibleStacks(handler, player.inventory, lastStack, held);
                 else if (!held.isEmpty()) {
                     ItemStack heldCopy = held.copy();
                     heldCopy.setCount(1);
@@ -134,17 +132,17 @@ public class IOModule extends ModuleBase {
 
     @Override
     public  CompoundTag toTag() {
-        CompoundTag cmp = new CompoundTag();
-        cmp.putLong(NBT_LAST, lastClick);
-        cmp.put(NBT_LASTSTACK, lastStack.toTag(new CompoundTag()));
-        cmp.put(NBT_DISPLAY, displayItem.toTag(new CompoundTag()));
-        return cmp;
+        CompoundTag tag = new CompoundTag();
+        tag.putLong(NBT_LAST, lastClick);
+        tag.put(NBT_LASTSTACK, lastStack.toTag(new CompoundTag()));
+        tag.put(NBT_DISPLAY, displayItem.toTag(new CompoundTag()));
+        return tag;
     }
 
     @Override
-    public void fromTag(CompoundTag cmp) {
-        if (cmp.contains(NBT_LAST)) lastClick = cmp.getLong(NBT_LAST);
-        if (cmp.contains(NBT_LASTSTACK)) lastStack = ItemStack.fromTag(cmp.getCompound(NBT_LASTSTACK));
-        if (cmp.contains(NBT_DISPLAY)) displayItem = ItemStack.fromTag(cmp.getCompound(NBT_DISPLAY));
+    public void fromTag(CompoundTag tag) {
+        if (tag.contains(NBT_LAST)) lastClick = tag.getLong(NBT_LAST);
+        if (tag.contains(NBT_LASTSTACK)) lastStack = ItemStack.fromTag(tag.getCompound(NBT_LASTSTACK));
+        if (tag.contains(NBT_DISPLAY)) displayItem = ItemStack.fromTag(tag.getCompound(NBT_DISPLAY));
     }
 }

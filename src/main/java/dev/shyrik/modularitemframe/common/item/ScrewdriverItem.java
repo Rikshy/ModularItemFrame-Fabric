@@ -25,8 +25,8 @@ public class ScrewdriverItem extends ToolItem {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, World worldIn, List<Text> tooltip, TooltipContext ctx) {
-        super.appendTooltip(stack, worldIn, tooltip, ctx);
+    public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext ctx) {
+        super.appendTooltip(stack, world, tooltip, ctx);
         tooltip.add(new TranslatableText("Mode: " + readModeFromTag(stack).getName()));
     }
 

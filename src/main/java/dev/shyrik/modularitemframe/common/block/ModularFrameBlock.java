@@ -4,6 +4,7 @@ import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleItem;
 import dev.shyrik.modularitemframe.api.UpgradeBase;
 import dev.shyrik.modularitemframe.api.UpgradeItem;
+import dev.shyrik.modularitemframe.api.util.fake.FakePlayer;
 import dev.shyrik.modularitemframe.api.util.RegistryHelper;
 import dev.shyrik.modularitemframe.common.item.ScrewdriverItem;
 import dev.shyrik.modularitemframe.common.module.EmptyModule;
@@ -36,7 +37,8 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
     public static final AbstractBlock.Settings DEFAULT_SETTINGS = AbstractBlock.Settings
             .of(Material.WOOD)
             .sounds(BlockSoundGroup.WOOD)
-            .strength(4);
+            .strength(4)
+            .nonOpaque();
 
     private static final VoxelShape UP_SHAPE = Block.createCuboidShape(2, 0, 2, 14, 1.75, 14);
     private static final VoxelShape DOWN_SHAPE = Block.createCuboidShape(2, 14.25, 2, 14, 16, 14);
@@ -52,7 +54,6 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
     //region <initialize>
     public ModularFrameBlock(AbstractBlock.Settings props) {
         super(props);
-
         setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH));
     }
 
@@ -63,7 +64,7 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
 
     @Override
     @SuppressWarnings("deprecation")
-    public VoxelShape getOutlineShape(BlockState state, BlockView worldIn, BlockPos pos, ShapeContext context) {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         switch (state.get(FACING)) {
             case UP:
                 return UP_SHAPE;
@@ -79,7 +80,7 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
                 return WEST_SHAPE;
         }
 
-        return super.getOutlineShape(state, worldIn, pos, context);
+        return super.getOutlineShape(state, world, pos, context);
     }
     //endregion
 
@@ -97,15 +98,14 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
     //region <interaction>
     @Override
     @SuppressWarnings("deprecation")
-    public void onBlockBreakStart(BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn) {
-        getBE(worldIn, pos).module.onBlockClicked(worldIn, pos, playerIn);
+    public void onBlockBreakStart(BlockState state, World world, BlockPos pos, PlayerEntity player) {
+        getBE(world, pos).module.onBlockClicked(world, pos, player);
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         ActionResult result = ActionResult.PASS;
-        if (/*!(player instanceof FakePlayer) || */ModularItemFrame.getConfig().AllowFakePlayers) {
         if (!(player instanceof FakePlayer) || ModularItemFrame.getConfig().AllowFakePlayers) {
             ModularFrameEntity blockEntity = getBE(world, pos);
             ItemStack handItem = player.getStackInHand(hand);
@@ -162,8 +162,8 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
     }
 
     @SuppressWarnings("deprecation")
-    public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World worldIn, BlockPos pos) {
-        return getBE(worldIn, pos).module.getScreenHandler(state, worldIn, pos);
+    public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
+        return getBE(world, pos).module.getScreenHandler(state, world, pos);
     }
 
 //    public static void onPlayerInteracted(PlayerInteractEvent.RightClickBlock event) {
@@ -187,9 +187,9 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
         return canAttachTo(world, pos.offset(side.getOpposite()), side);
     }
 
-    public boolean canAttachTo(BlockView worldIn, BlockPos pos, Direction side) {
-        BlockState state = worldIn.getBlockState(pos);
-        return (state.isSideSolidFullSquare(worldIn, pos, side) || state.getMaterial().isSolid()) && !RepeaterBlock.isRedstoneGate(state);
+    public boolean canAttachTo(BlockView world, BlockPos pos, Direction side) {
+        BlockState state = world.getBlockState(pos);
+        return (state.isSideSolidFullSquare(world, pos, side) || state.getMaterial().isSolid()) && !RepeaterBlock.isRedstoneGate(state);
     }
 
     @Override
@@ -240,9 +240,13 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
     //endregion
 
     //region <other>
+    @SuppressWarnings("deprecation")
+    public BlockRenderType getRenderType(BlockState state) {
+        return BlockRenderType.MODEL;
+    }
 //    @Override
 //    @SuppressWarnings("deprecation")
-//    public boolean canEntitySpawn(BlockState state, @Nonnull IBlockReader worldIn, @Nonnull BlockPos pos, EntityType<?> type) {
+//    public boolean canEntitySpawn(BlockState state, @Nonnull IBlockReader world, @Nonnull BlockPos pos, EntityType<?> type) {
 //        return false;
 //    }
     //endregion

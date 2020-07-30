@@ -63,17 +63,17 @@ public class ItemModule extends ModuleBase {
         ItemRenderHelper.renderOnFrame(displayItem, blockEntity.blockFacing(), rotation, 0.1F, ModelTransformation.Mode.FIXED, matrixStack, buffer, combinedLight, combinedOverlay);
     }
 
-    public void screw(World world, BlockPos pos, PlayerEntity playerIn, ItemStack driver) {
+    public void screw(World world, BlockPos pos, PlayerEntity player, ItemStack driver) {
         if (!world.isClient) {
-            rotate(playerIn);
+            rotate(player);
             blockEntity.markDirty();
         }
     }
 
     @Override
-    public ActionResult onUse(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, BlockHitResult hit) {
-        if (!worldIn.isClient) {
-            ItemStack copy = playerIn.getStackInHand(hand).copy();
+    public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
+        if (!world.isClient) {
+            ItemStack copy = player.getStackInHand(hand).copy();
             copy.setCount(1);
             displayItem = copy;
             blockEntity.markDirty();
@@ -83,16 +83,16 @@ public class ItemModule extends ModuleBase {
 
     @Override
     public CompoundTag toTag() {
-        CompoundTag compound = new CompoundTag();
-        compound.put(NBT_DISPLAY, displayItem.toTag(new CompoundTag()));
-        compound.putInt(NBT_ROTATION, rotation);
-        return compound;
+        CompoundTag tag = new CompoundTag();
+        tag.put(NBT_DISPLAY, displayItem.toTag(new CompoundTag()));
+        tag.putInt(NBT_ROTATION, rotation);
+        return tag;
     }
 
     @Override
-    public void fromTag(CompoundTag nbt) {
-        super.fromTag(nbt);
-        if (nbt.contains(NBT_DISPLAY)) displayItem = ItemStack.fromTag(nbt.getCompound(NBT_DISPLAY));
-        if (nbt.contains(NBT_ROTATION)) rotation = nbt.getInt(NBT_ROTATION);
+    public void fromTag(CompoundTag tag) {
+        super.fromTag(tag);
+        if (tag.contains(NBT_DISPLAY)) displayItem = ItemStack.fromTag(tag.getCompound(NBT_DISPLAY));
+        if (tag.contains(NBT_ROTATION)) rotation = tag.getInt(NBT_ROTATION);
     }
 }

@@ -5,11 +5,15 @@ import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.InventoryHelper;
 import dev.shyrik.modularitemframe.api.util.ItemHelper;
+import dev.shyrik.modularitemframe.api.util.fake.FakePlayer;
+import dev.shyrik.modularitemframe.api.util.fake.FakePlayerHelper;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
+import dev.shyrik.modularitemframe.client.helper.ItemRenderHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
@@ -26,6 +30,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.world.World;
 
+import java.lang.ref.WeakReference;
 import java.util.UUID;
 
 public class UseModule extends ModuleBase {
@@ -43,7 +48,7 @@ public class UseModule extends ModuleBase {
     private boolean rightClick = false;
     private int rotation = 0;
     private ItemStack displayItem = ItemStack.EMPTY;
-    //private WeakReference<FakePlayerHelper.UsefulFakePlayer> player;
+    private WeakReference<FakePlayer> player;
 
     @Override
     public Identifier getId() {
@@ -57,26 +62,26 @@ public class UseModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public void specialRendering(FrameRenderer tesr, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
+    public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
         Direction facing = blockEntity.blockFacing();
         switch (facing) {
             case DOWN:
             case NORTH:
-                //FrameItemRenderer.renderOnFrame(displayItem, Direction.WEST, rotation, 0.5F, TransformType.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
+                ItemRenderHelper.renderOnFrame(displayItem, Direction.WEST, rotation, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
                 break;
             case UP:
             case SOUTH:
-                //FrameItemRenderer.renderOnFrame(displayItem, Direction.EAST, rotation, 0.5F, TransformType.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
+                ItemRenderHelper.renderOnFrame(displayItem, Direction.EAST, rotation, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
                 break;
             case WEST:
                 matrixStack.multiply(new Quaternion(0, 90.0F, 0.0F, true));
                 matrixStack.translate(-1, 0 ,0);
-                //FrameItemRenderer.renderOnFrame(displayItem, Direction.WEST, rotation, 0.5F, TransformType.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
+                ItemRenderHelper.renderOnFrame(displayItem, Direction.WEST, rotation, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
                 break;
             case EAST:
                 matrixStack.multiply(new Quaternion(0, 90.0F, 0.0F, true));
                 matrixStack.translate(-1, 0 ,0);
-                //FrameItemRenderer.renderOnFrame(displayItem, Direction.EAST, rotation, 0.5F, TransformType.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
+                ItemRenderHelper.renderOnFrame(displayItem, Direction.EAST, rotation, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
                 break;
         }
     }
@@ -88,21 +93,21 @@ public class UseModule extends ModuleBase {
     }
 
     @Override
-    public void onRemove( World worldIn, BlockPos pos, Direction facing,  PlayerEntity playerIn) {
-        if (!worldIn.isClient) ItemHelper.ejectStack(worldIn, pos, facing, displayItem);
+    public void onRemove(World world, BlockPos pos, Direction facing,  PlayerEntity player) {
+        if (!world.isClient) ItemHelper.ejectStack(world, pos, facing, displayItem);
     }
 
     @Override
-    public ActionResult onUse(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, BlockHitResult hit) {
-        if (!worldIn.isClient) {
-            ItemStack held = playerIn.getStackInHand(hand);
+    public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
+        if (!world.isClient) {
+            ItemStack held = player.getStackInHand(hand);
             if (held.isEmpty()) {
-                playerIn.setStackInHand(hand, displayItem.copy());
+                player.setStackInHand(hand, displayItem.copy());
                 displayItem.setCount(0);
             } else {
                 if (displayItem.isEmpty()) {
                     displayItem = held.copy();
-                    playerIn.setStackInHand(hand, ItemStack.EMPTY);
+                    player.setStackInHand(hand, ItemStack.EMPTY);
                 }
             }
         }
@@ -110,9 +115,9 @@ public class UseModule extends ModuleBase {
     }
 
     @Override
-    public void screw( World world,  BlockPos pos,  PlayerEntity playerIn, ItemStack driver) {
+    public void screw(World world, BlockPos pos, PlayerEntity player, ItemStack driver) {
         if (!world.isClient) {
-            if (playerIn.isSneaking()) {
+            if (player.isSneaking()) {
                 isSneaking = !isSneaking;
             } else {
                 rightClick = !rightClick;
@@ -120,40 +125,39 @@ public class UseModule extends ModuleBase {
             String mode = isSneaking ? I18n.translate("modularitemframe.mode.sn") + " + " : "";
             mode += rightClick ? I18n.translate("modularitemframe.mode.rc") : I18n.translate("modularitemframe.mode.lc");
 
-            playerIn.sendMessage(new TranslatableText("modularitemframe.message.mode_change", mode), false);
+            player.sendMessage(new TranslatableText("modularitemframe.message.mode_change", mode), false);
             blockEntity.markDirty();
         }
     }
 
     @Override
-    public void tick( World world,  BlockPos pos) {
+    public void tick(World world, BlockPos pos) {
         if (!world.isClient) {
             if (displayItem.isEmpty()) {
                 displayItem = getNextStack();
                 rotation = 0;
-                blockEntity.markDirty();
             } else {
                 if (rotation >= 360) {
                     rotation -= 360;
                     hitIt(world, pos);
                 }
                 rotation += 15 * (blockEntity.getSpeedUpCount() + 1);
-                blockEntity.markDirty();
             }
+            blockEntity.markDirty();
         }
     }
 
     private void hitIt(World world, BlockPos pos) {
-        //if (player == null) player = new WeakReference<>(FakePlayerHelper.getPlayer(world, DEFAULT_CLICKER));
+        if (player == null) player = new WeakReference<>(FakePlayerHelper.getPlayer(world, DEFAULT_CLICKER));
 
         Direction facing = blockEntity.blockFacing();
-        //FakePlayerHelper.setupFakePlayerForUse(getPlayer(), pos, facing, displayItem, isSneaking);
+        FakePlayerHelper.setupFakePlayerForUse(getPlayer(), pos, facing, displayItem, isSneaking);
         ItemStack result;
-//        if (rightClick)
-//            result = FakePlayerHelper.rightClickInDirection(getPlayer(), world, pos.offset(facing), facing, world.getBlockState(pos), 2 + blockEntity.getRangeUpCount());
-//        else
-//            result = FakePlayerHelper.leftClickInDirection(getPlayer(), world, pos.offset(facing), facing, world.getBlockState(pos), 2 + blockEntity.getRangeUpCount());
-//        FakePlayerHelper.cleanupFakePlayerFromUse(player.get(), result, displayItem, this);
+        if (rightClick)
+            result = FakePlayerHelper.rightClickInDirection(getPlayer(), world, pos.offset(facing), facing, world.getBlockState(pos), 2 + blockEntity.getRangeUpCount());
+        else
+            result = FakePlayerHelper.leftClickInDirection(getPlayer(), world, pos.offset(facing), facing, world.getBlockState(pos), 2 + blockEntity.getRangeUpCount());
+        FakePlayerHelper.cleanupFakePlayerFromUse(player.get(), result, displayItem, stack -> displayItem = stack);
 
         // moddev: call blockState.onUse on the given block
     }
@@ -170,31 +174,26 @@ public class UseModule extends ModuleBase {
         return ItemStack.EMPTY;
     }
 
-    //FakePlayerHelper.UsefulFakePlayer getPlayer() {
-    //    return player.get();
-    //}
+    FakePlayer getPlayer() {
+        return player.get();
+    }
 
     @Override
     public CompoundTag toTag() {
-        CompoundTag cmp = super.toTag();
-        cmp.put(NBT_DISPLAY, displayItem.toTag(new CompoundTag()));
-        cmp.putBoolean(NBT_SNEAK, isSneaking);
-        cmp.putBoolean(NBT_RIGHT, rightClick);
-        cmp.putInt(NBT_ROTATION, rotation);
-        return cmp;
+        CompoundTag tag = super.toTag();
+        tag.put(NBT_DISPLAY, displayItem.toTag(new CompoundTag()));
+        tag.putBoolean(NBT_SNEAK, isSneaking);
+        tag.putBoolean(NBT_RIGHT, rightClick);
+        tag.putInt(NBT_ROTATION, rotation);
+        return tag;
     }
 
     @Override
-    public void fromTag(CompoundTag cmp) {
-        super.fromTag(cmp);
-        if (cmp.contains(NBT_DISPLAY)) displayItem = ItemStack.fromTag(cmp.getCompound(NBT_DISPLAY));
-        if (cmp.contains(NBT_SNEAK)) isSneaking = cmp.getBoolean(NBT_SNEAK);
-        if (cmp.contains(NBT_RIGHT)) rightClick = cmp.getBoolean(NBT_RIGHT);
-        if (cmp.contains(NBT_ROTATION)) rotation = cmp.getInt(NBT_ROTATION);
-    }
-
-    //@Override
-    public void accept(ItemStack stack) {
-        displayItem = stack;
+    public void fromTag(CompoundTag tag) {
+        super.fromTag(tag);
+        if (tag.contains(NBT_DISPLAY)) displayItem = ItemStack.fromTag(tag.getCompound(NBT_DISPLAY));
+        if (tag.contains(NBT_SNEAK)) isSneaking = tag.getBoolean(NBT_SNEAK);
+        if (tag.contains(NBT_RIGHT)) rightClick = tag.getBoolean(NBT_RIGHT);
+        if (tag.contains(NBT_ROTATION)) rotation = tag.getInt(NBT_ROTATION);
     }
 }

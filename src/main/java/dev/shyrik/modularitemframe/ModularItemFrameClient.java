@@ -11,7 +11,6 @@ import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegi
 public class ModularItemFrameClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        // Here we will put client-only registration code
         PreStitchCallback.EVENT.register(ClientSetup::stitch);
         ApplyModelLoaderCallback.EVENT.register(FrameRenderer::onApplyModelLoader);
         BlockEntityRendererRegistry.INSTANCE.register(Registrar.MODULAR_FRAME_ENTITY, FrameRenderer::new);

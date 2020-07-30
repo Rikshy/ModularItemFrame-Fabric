@@ -54,20 +54,20 @@ public class AutoCraftingModule extends CraftingPlusModule {
     }
 
     @Override
-    public void screw(World world, BlockPos pos, PlayerEntity playerIn, ItemStack driver) {
+    public void screw(World world, BlockPos pos, PlayerEntity player, ItemStack driver) {
         if (!world.isClient) {
-            //playerIn.openContainer(getContainer(blockEntity.getCachedState(), world, pos));
+            player.openHandledScreen(getScreenHandler(blockEntity.getCachedState(), world, pos));
             blockEntity.markDirty();
         }
     }
 
     @Override
-    public ActionResult onUse(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, BlockHitResult hit) {
+    public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
         return ActionResult.FAIL;
     }
 
     @Override
-    public void tick( World world,  BlockPos pos) {
+    public void tick(World world,  BlockPos pos) {
         if (world.isClient) return;
         if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
 
@@ -92,6 +92,10 @@ public class AutoCraftingModule extends CraftingPlusModule {
             }
         }
 
-        NetworkHandler.sendAround(world, blockEntity.getPos(), 32, new PlaySoundPacket(pos, SoundEvents.BLOCK_LADDER_STEP.getId(), SoundCategory.BLOCKS.getName(), 0.3F, 0.7F));
+        NetworkHandler.sendAround(
+                world,
+                blockEntity.getPos(),
+                32,
+                new PlaySoundPacket(pos, SoundEvents.BLOCK_LADDER_STEP, SoundCategory.BLOCKS, 0.3F, 0.7F));
     }
 }

@@ -11,7 +11,7 @@ public class GhostSlot  extends Slot {
     }
 
     @Override
-    public boolean canTakeItems(PlayerEntity playerIn) {
+    public boolean canTakeItems(PlayerEntity player) {
         return false;
     }
 

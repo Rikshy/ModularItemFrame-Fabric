@@ -39,7 +39,7 @@ public class CraftingFrameScreenHandler extends ScreenHandler {
 
         addSlot(new CraftingResultSlot(player, this.matrix, this.craftResult, 0, 124, 35) {
             @Override
-            public boolean canTakeItems(PlayerEntity playerIn) {
+            public boolean canTakeItems(PlayerEntity player) {
                 return false;
             }
         });
@@ -64,8 +64,8 @@ public class CraftingFrameScreenHandler extends ScreenHandler {
     }
 
     @Override
-    public boolean canUse(PlayerEntity playerIn) {
-        return callbacks.isUsableByPlayer(playerIn);
+    public boolean canUse(PlayerEntity player) {
+        return callbacks.isUsableByPlayer(player);
     }
 
     /**

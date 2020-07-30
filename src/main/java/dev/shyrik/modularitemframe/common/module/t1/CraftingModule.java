@@ -77,21 +77,21 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
     }
 
     @Override
-    public void screw(World world, BlockPos pos, PlayerEntity playerIn, ItemStack driver) {
+    public void screw(World world, BlockPos pos, PlayerEntity player, ItemStack driver) {
         if (!world.isClient) {
-            playerIn.openHandledScreen(getScreenHandler(blockEntity.getCachedState(), world, pos));
+            player.openHandledScreen(getScreenHandler(blockEntity.getCachedState(), world, pos));
             blockEntity.markDirty();
         }
     }
 
     @Override
-    public ActionResult onUse(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, BlockHitResult hit) {
+    public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
         if (!hasValidRecipe())
-            playerIn.openHandledScreen(getScreenHandler(state, worldIn, pos));
+            player.openHandledScreen(getScreenHandler(state, world, pos));
         else {
-            if (!worldIn.isClient) {
-                if (playerIn.isSneaking()) craft(playerIn, true);
-                else craft(playerIn, false);
+            if (!world.isClient) {
+                if (player.isSneaking()) craft(player, true);
+                else craft(player, false);
             }
         }
         blockEntity.markDirty();
@@ -117,7 +117,11 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
                 }
             }
         } while (--craftAmount > 0);
-        NetworkHandler.sendAround(player.world, blockEntity.getPos(), 32, new PlaySoundPacket(blockEntity.getPos(), SoundEvents.BLOCK_LADDER_STEP.getId(), SoundCategory.BLOCKS.getName(), 0.4F, 0.7F));
+        NetworkHandler.sendAround(
+                player.world,
+                blockEntity.getPos(),
+                32,
+                new PlaySoundPacket(blockEntity.getPos(), SoundEvents.BLOCK_LADDER_STEP, SoundCategory.BLOCKS, 0.4F, 0.7F));
     }
 
     protected Inventory getWorkingInventories(Inventory playerInventory) {
@@ -157,21 +161,21 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
 
     @Override
     public CompoundTag toTag() {
-        CompoundTag compound = super.toTag();
-        compound.put(NBT_DISPLAY, displayItem.toTag(new CompoundTag()));
-        compound.put(NBT_GHOSTINVENTORY, ghostInventory.getTags());
-        return compound;
+        CompoundTag tag = super.toTag();
+        tag.put(NBT_DISPLAY, displayItem.toTag(new CompoundTag()));
+        tag.put(NBT_GHOSTINVENTORY, ghostInventory.getTags());
+        return tag;
     }
 
     @Override
-    public void fromTag(CompoundTag nbt) {
-        super.fromTag(nbt);
-        if (nbt.contains(NBT_DISPLAY)) displayItem = ItemStack.fromTag(nbt.getCompound(NBT_DISPLAY));
-        if (nbt.contains(NBT_GHOSTINVENTORY)) ghostInventory.readTags(nbt.getList(NBT_GHOSTINVENTORY, 0));
+    public void fromTag(CompoundTag tag) {
+        super.fromTag(tag);
+        if (tag.contains(NBT_DISPLAY)) displayItem = ItemStack.fromTag(tag.getCompound(NBT_DISPLAY));
+        if (tag.contains(NBT_GHOSTINVENTORY)) ghostInventory.readTags(tag.getList(NBT_GHOSTINVENTORY, 0));
     }
 
     @Override
-    public NamedScreenHandlerFactory getScreenHandler(BlockState state, World worldIn, BlockPos pos) {
+    public NamedScreenHandlerFactory getScreenHandler(BlockState state, World world, BlockPos pos) {
         return new SimpleNamedScreenHandlerFactory((id, playerInventory, player) ->
                 new CraftingFrameScreenHandler(
                         id,

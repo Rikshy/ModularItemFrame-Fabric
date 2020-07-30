@@ -169,13 +169,13 @@ public class TeleportModule extends ModuleBase {
         }
     }
 
-    private boolean isTargetLocationValid( World worldIn) {
+    private boolean isTargetLocationValid(World world) {
         if (blockEntity.blockFacing().getAxis().isHorizontal() || blockEntity.blockFacing() == Direction.UP)
-            return worldIn.isAir(linkedLoc.offset(Direction.DOWN));
-        else return worldIn.isAir(linkedLoc.offset(Direction.UP));
+            return world.isAir(linkedLoc.offset(Direction.DOWN));
+        else return world.isAir(linkedLoc.offset(Direction.UP));
     }
 
-    private boolean hasValidConnection( World world, PlayerEntity player) {
+    private boolean hasValidConnection(World world, PlayerEntity player) {
         if (linkedLoc == null) {
             if (player != null) player.sendMessage(new TranslatableText("modularitemframe.message.no_target"), false);
             return false;
@@ -195,28 +195,28 @@ public class TeleportModule extends ModuleBase {
     }
 
     @Override
-    public void onRemove( World worldIn, BlockPos pos,  Direction facing,  PlayerEntity playerIn) {
-        if (hasValidConnection(worldIn, null)) {
-            ((TeleportModule) ((ModularFrameEntity) Objects.requireNonNull(worldIn.getBlockEntity(linkedLoc))).module).linkedLoc = null;
+    public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player) {
+        if (hasValidConnection(world, null)) {
+            ((TeleportModule) ((ModularFrameEntity) Objects.requireNonNull(world.getBlockEntity(linkedLoc))).module).linkedLoc = null;
         }
-        super.onRemove(worldIn, pos, facing, playerIn);
+        super.onRemove(world, pos, facing, player);
     }
 
     @Override
     public CompoundTag toTag() {
-        CompoundTag compound = super.toTag();
+        CompoundTag tag = super.toTag();
         if (linkedLoc != null) {
-            compound.putInt(NBT_LINKX, linkedLoc.getX());
-            compound.putInt(NBT_LINKY, linkedLoc.getY());
-            compound.putInt(NBT_LINKZ, linkedLoc.getZ());
+            tag.putInt(NBT_LINKX, linkedLoc.getX());
+            tag.putInt(NBT_LINKY, linkedLoc.getY());
+            tag.putInt(NBT_LINKZ, linkedLoc.getZ());
         }
-        return compound;
+        return tag;
     }
 
     @Override
-    public void fromTag(CompoundTag nbt) {
-        super.fromTag(nbt);
-        if (nbt.contains(NBT_LINKX))
-            linkedLoc = new BlockPos(nbt.getInt(NBT_LINKX), nbt.getInt(NBT_LINKY), nbt.getInt(NBT_LINKZ));
+    public void fromTag(CompoundTag tag) {
+        super.fromTag(tag);
+        if (tag.contains(NBT_LINKX))
+            linkedLoc = new BlockPos(tag.getInt(NBT_LINKX), tag.getInt(NBT_LINKY), tag.getInt(NBT_LINKZ));
     }
 }

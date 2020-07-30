@@ -66,11 +66,11 @@ public class DispenseModule extends ModuleBase {
     }
 
     @Override
-    public ActionResult onUse(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, BlockHitResult hit) {
-        if (!worldIn.isClient) {
-            ItemStack held = playerIn.getStackInHand(hand);
+    public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
+        if (!world.isClient) {
+            ItemStack held = player.getStackInHand(hand);
             if (!held.isEmpty()) {
-                ItemHelper.ejectStack(worldIn, pos, facing.getOpposite(), held.copy());
+                ItemHelper.ejectStack(world, pos, facing.getOpposite(), held.copy());
                 held.setCount(0);
             }
         }

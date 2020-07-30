@@ -29,4 +29,8 @@ public class RegistryHelper {
     public static Identifier getId(SoundEvent soundEvent) {
         return Registry.SOUND_EVENT.getId(soundEvent);
     }
+
+    public static ParticleType getParticle(Identifier id) {
+        return Registry.PARTICLE_TYPE.get(id);
+    }
 }

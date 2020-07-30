@@ -50,16 +50,16 @@ public class CraftingPlusModule extends CraftingModule {
     }
 
     @Override
-    public void screw(World world, BlockPos pos, PlayerEntity playerIn, ItemStack driver) {
+    public void screw(World world, BlockPos pos, PlayerEntity player, ItemStack driver) {
         if (!world.isClient) {
-            if (playerIn.isSneaking()) {
+            if (player.isSneaking()) {
                 int modeIdx = mode.getIndex() + 1;
                 if (modeIdx == EnumMode.values().length) modeIdx = 0;
                 mode = EnumMode.values()[modeIdx];
-                playerIn.sendMessage(new TranslatableText(mode.getName()), false);
+                player.sendMessage(new TranslatableText(mode.getName()), false);
                 blockEntity.markDirty();
             } else {
-                playerIn.openHandledScreen(getScreenHandler(blockEntity.getCachedState(), world, pos));
+                player.openHandledScreen(getScreenHandler(blockEntity.getCachedState(), world, pos));
                 blockEntity.markDirty();
             }
         }
@@ -83,15 +83,15 @@ public class CraftingPlusModule extends CraftingModule {
 
     @Override
     public CompoundTag toTag() {
-        CompoundTag nbt = super.toTag();
-        nbt.putInt(NBT_MODE, mode.getIndex());
-        return nbt;
+        CompoundTag tag = super.toTag();
+        tag.putInt(NBT_MODE, mode.getIndex());
+        return tag;
     }
 
     @Override
-    public void fromTag(CompoundTag nbt) {
-        super.fromTag(nbt);
-        if (nbt.contains(NBT_MODE)) mode = EnumMode.values()[nbt.getInt(NBT_MODE)];
+    public void fromTag(CompoundTag tag) {
+        super.fromTag(tag);
+        if (tag.contains(NBT_MODE)) mode = EnumMode.values()[tag.getInt(NBT_MODE)];
     }
 
     public enum EnumMode {

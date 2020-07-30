@@ -86,27 +86,27 @@ public class TankModule extends ModuleBase {
     }
 
     @Override
-    public void screw(World world, BlockPos pos, PlayerEntity playerIn, ItemStack driver) {
+    public void screw(World world, BlockPos pos, PlayerEntity player, ItemStack driver) {
         if (!world.isClient) {
             if (ModularItemFrame.getConfig().TankTransferRate > 0) {
                 int modeIdx = mode.getIndex() + 1;
                 if (modeIdx == EnumMode.values().length) modeIdx = 0;
                 mode = EnumMode.VALUES[modeIdx];
-                playerIn.sendMessage(new TranslatableText("modularitemframe.message.mode_change", mode.getName()), false);
+                player.sendMessage(new TranslatableText("modularitemframe.message.mode_change", mode.getName()), false);
             }
         }
     }
 
     @Override
-    public ActionResult onUse(World worldIn, BlockPos pos, BlockState state, PlayerEntity playerIn, Hand hand, Direction facing, BlockHitResult hit) {
-        ItemStack stack = playerIn.getStackInHand(hand);
-        //FluidUtil.interactWithFluidHandler(playerIn, hand, tank);
+    public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
+        ItemStack stack = player.getStackInHand(hand);
+        //FluidUtil.interactWithFluidHandler(player, hand, tank);
         blockEntity.markDirty();
         return null;//FluidUtil.getFluidHandler(stack) != null ? ActionResult.SUCCESS : ActionResult.FAIL;
     }
 
     @Override
-    public void tick( World world, BlockPos pos) {
+    public void tick(World world, BlockPos pos) {
         if (!world.isClient && mode != EnumMode.NONE && ModularItemFrame.getConfig().TankTransferRate > 0) {
             if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
 
@@ -131,29 +131,29 @@ public class TankModule extends ModuleBase {
     }
 
     @Override
-    public void onRemove(World worldIn, BlockPos pos, Direction facing, PlayerEntity playerIn) {
-        super.onRemove(worldIn, pos, facing, playerIn);
+    public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player) {
+        super.onRemove(world, pos, facing, player);
         for ( Direction face : Direction.values()) {
             if (face == facing.getOpposite()) continue;
-            //if (FluidUtil.tryPlaceFluid(null, worldIn, Hand.MAIN_HAND, pos.offset(facing.getOpposite()), tank, tank.drain(BUCKET_VOLUME, IFluidHandler.FluidAction.SIMULATE)))
+            //if (FluidUtil.tryPlaceFluid(null, world, Hand.MAIN_HAND, pos.offset(facing.getOpposite()), tank, tank.drain(BUCKET_VOLUME, IFluidHandler.FluidAction.SIMULATE)))
              //   tank.drain(BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
         }
     }
 
     @Override
     public CompoundTag toTag() {
-        CompoundTag nbt = super.toTag();
-        nbt.putInt(NBT_MODE, mode.getIndex());
+        CompoundTag tag = super.toTag();
+        tag.putInt(NBT_MODE, mode.getIndex());
         //nbt.put(NBT_TANK, tank.toTag(new CompoundTag()));
-        return nbt;
+        return tag;
     }
 
     @Override
-    public void fromTag(CompoundTag nbt) {
-        super.fromTag(nbt);
+    public void fromTag(CompoundTag tag) {
+        super.fromTag(tag);
         //if (nbt.contains(NBT_TANK)) tank.fromTag(nbt.getCompound(NBT_TANK));
-        if (nbt.contains(NBT_MODE))
-            mode = ModularItemFrame.getConfig().TankTransferRate > 0 ? EnumMode.VALUES[nbt.getInt(NBT_MODE)] : EnumMode.NONE;
+        if (tag.contains(NBT_MODE))
+            mode = ModularItemFrame.getConfig().TankTransferRate > 0 ? EnumMode.VALUES[tag.getInt(NBT_MODE)] : EnumMode.NONE;
     }
 
     public enum EnumMode {

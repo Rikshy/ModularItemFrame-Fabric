@@ -7,6 +7,7 @@ import dev.shyrik.modularitemframe.common.module.t2.*;
 import dev.shyrik.modularitemframe.common.module.t3.*;
 
 public class ClientSetup {
+
     public static void stitch(PreStitchCallback.Context ctx) {
         ctx.addSprites(
                 ModularFrameBlock.INNER_HARDEST_LOC,
@@ -29,9 +30,9 @@ public class ClientSetup {
 
                 AutoCraftingModule.BG_LOC,
                 FluidDispenserModule.BG_LOC,
-                ItemTeleporterModule.BG_IN,
-                ItemTeleporterModule.BG_OUT,
-                ItemTeleporterModule.BG_NONE,
+                ItemTeleportModule.BG_IN,
+                ItemTeleportModule.BG_OUT,
+                ItemTeleportModule.BG_NONE,
                 XPModule.BG_LOC
         );
     }

@@ -64,12 +64,12 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         return upgrades.size() <= ModularItemFrame.getConfig().MaxFrameUpgrades;
     }
 
-    public void dropUpgrades(PlayerEntity playerIn, Direction facing) {
+    public void dropUpgrades(PlayerEntity player, Direction facing) {
         for (UpgradeBase up : upgrades) {
             up.onRemove(world, pos, facing);
 
             ItemStack remain = new ItemStack(up.getParent());
-            if (playerIn != null) remain = InventoryHelper.giveStack(playerIn.inventory, remain);
+            if (player != null) remain = InventoryHelper.giveStack(player.inventory, remain);
             if (!remain.isEmpty()) ItemHelper.ejectStack(world, pos, facing, remain);
         }
 
@@ -149,13 +149,13 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         return module instanceof EmptyModule;
     }
 
-    public void dropModule(Direction facing, PlayerEntity playerIn) {
+    public void dropModule(Direction facing, PlayerEntity player) {
         ItemStack remain = new ItemStack(module.getParent());
 
-        if (playerIn != null) remain = InventoryHelper.giveStack(playerIn.inventory, remain);
+        if (player != null) remain = InventoryHelper.giveStack(player.inventory, remain);
         if (!remain.isEmpty()) ItemHelper.ejectStack(world, pos, facing, remain);
 
-        module.onRemove(world, pos, facing, playerIn);
+        module.onRemove(world, pos, facing, player);
         setModule(new EmptyModule());
         markDirty();
     }
@@ -173,28 +173,6 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         super.markDirty();
         sync();
     }
-
-//    @Override
-//    public void handleUpdateTag(CompoundTag tag) {
-//        super.handleUpdateTag(tag);
-//        markDirty();
-//    }
-
-//    @Override
-//    public BlockEntityUpdateS2CPacket toUpdateTag() {
-//        return new BlockEntityUpdateS2CPacket(pos, getType(),toTag(new CompoundTag()));
-//    }
-
-//    @Override
-//    public SUpdateTileEntityPacket getUpdatePacket() {
-//        return new SUpdateTileEntityPacket(getPos(), -1, getUpdateTag());
-//    }
-//
-//    @Override
-//    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket packet) {
-//        super.toUpdatePacket().onDataPacket(net, packet);
-//        read(packet.getNbtCompound());
-//    }
 
     @Override
     public CompoundTag toTag(CompoundTag compound) {

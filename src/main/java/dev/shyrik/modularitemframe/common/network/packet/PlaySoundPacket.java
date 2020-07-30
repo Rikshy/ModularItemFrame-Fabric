@@ -25,10 +25,18 @@ public class PlaySoundPacket extends NetworkPacket {
     private final float volume;
     private final float pitch;
 
-    public PlaySoundPacket(BlockPos pos, Identifier soundId, String soundCategory, float volume, float pitch) {
+    private PlaySoundPacket(BlockPos pos, Identifier soundId, String soundCategory, float volume, float pitch) {
         this.soundId = soundId;
         this.pos = pos;
         this.soundCategory = soundCategory;
+        this.volume = volume;
+        this.pitch = pitch;
+    }
+
+    public PlaySoundPacket(BlockPos pos, SoundEvent sound, SoundCategory soundCategory, float volume, float pitch) {
+        this.soundId = sound.getId();
+        this.pos = pos;
+        this.soundCategory = soundCategory.getName();
         this.volume = volume;
         this.pitch = pitch;
     }

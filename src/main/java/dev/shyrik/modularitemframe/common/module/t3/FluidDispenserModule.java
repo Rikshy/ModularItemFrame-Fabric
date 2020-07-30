@@ -47,12 +47,12 @@ public class FluidDispenserModule extends ModuleBase {
     }
 
     @Override
-    public ActionResult onUse( World worldIn,  BlockPos pos,  BlockState state,  PlayerEntity playerIn,  Hand hand,  Direction facing, BlockHitResult hit) {
+    public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
         return ActionResult.FAIL;
     }
 
     @Override
-    public void tick( World world,  BlockPos pos) {
+    public void tick(World world, BlockPos pos) {
         if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) == 0) return;
         Direction facing = blockEntity.blockFacing();
         if (!world.isAir(pos.offset(facing))) return;
