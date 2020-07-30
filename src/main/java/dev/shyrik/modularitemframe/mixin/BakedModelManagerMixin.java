@@ -1,6 +1,6 @@
 package dev.shyrik.modularitemframe.mixin;
 
-import dev.shyrik.modularitemframe.api.mixin.BakedModelLoaderApplyCallback;
+import dev.shyrik.modularitemframe.api.mixin.ApplyModelLoaderCallback;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.model.BakedModelManager;
@@ -18,6 +18,6 @@ public abstract class BakedModelManagerMixin {
 
     @Inject(method = "apply", at = @At("TAIL"))
     private void onApply(ModelLoader modelLoader, ResourceManager resourceManager, Profiler profiler, CallbackInfo info) {
-        BakedModelLoaderApplyCallback.EVENT.invoker().apply(modelLoader, resourceManager, profiler);
+        ApplyModelLoaderCallback.EVENT.invoker().apply(modelLoader);
     }
 }

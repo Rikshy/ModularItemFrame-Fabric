@@ -16,11 +16,9 @@ import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.model.*;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Quaternion;
-import net.minecraft.util.profiler.Profiler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +35,7 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
     }
     public BlockEntityRenderDispatcher getDispatcher() { return dispatcher; }
 
-    public static void onApplyModelLoader(ModelLoader modelLoader, ResourceManager resourceManager, Profiler profiler) {
+    public static void onApplyModelLoader(ModelLoader modelLoader) {
         UnbakedModel unbakedFrame = modelLoader.getOrLoadModel(new Identifier(ModularItemFrame.MOD_ID, "block/modular_frame"));
         BakedModelManager bmMan = MinecraftClient.getInstance().getBakedModelManager();
 
