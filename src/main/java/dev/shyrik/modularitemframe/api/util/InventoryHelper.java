@@ -118,10 +118,20 @@ public class InventoryHelper {
 
         ItemStack invStack = inventory.getStack(slot);
         int oldInvStackSize = invStack.getCount();
-        if (oldInvStackSize + copy.getCount() > invStack.getMaxCount()) {
+        if (invStack.isEmpty()) {
+            if (stack.getCount() > inventory.getMaxCountPerStack()) {
+                ItemStack insertCopy = stack.copy();
+                insertCopy.setCount(inventory.getMaxCountPerStack());
+                inventory.setStack(slot, insertCopy);
+                invStack = insertCopy;
+            } else {
+                inventory.setStack(slot, stack);
+                invStack = stack;
+            }
+        } else if (oldInvStackSize + stack.getCount() > invStack.getMaxCount()) {
             invStack.setCount(invStack.getMaxCount());
         } else {
-            invStack.increment(copy.getCount());
+            invStack.increment(stack.getCount());
         }
 
         copy.decrement(invStack.getCount() - oldInvStackSize);
