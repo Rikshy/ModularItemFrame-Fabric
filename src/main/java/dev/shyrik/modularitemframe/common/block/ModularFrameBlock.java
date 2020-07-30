@@ -106,6 +106,7 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         ActionResult result = ActionResult.PASS;
         if (/*!(player instanceof FakePlayer) || */ModularItemFrame.getConfig().AllowFakePlayers) {
+        if (!(player instanceof FakePlayer) || ModularItemFrame.getConfig().AllowFakePlayers) {
             ModularFrameEntity blockEntity = getBE(world, pos);
             ItemStack handItem = player.getStackInHand(hand);
             Direction side = hit.getSide();
