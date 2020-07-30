@@ -16,25 +16,25 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 public class EmptyModule extends ModuleBase {
-    private static final Identifier LOC = new Identifier(ModularItemFrame.MOD_ID, "module_empty");
-    private static final Identifier FG_LOC = new Identifier(ModularItemFrame.MOD_ID, "block/default_front");
-    private static final Identifier BG_LOC = new Identifier(ModularItemFrame.MOD_ID, "block/default_back");
+    public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_empty");
+    public static final Identifier FG_ID = new Identifier(ModularItemFrame.MOD_ID, "block/default_front");
+    private static final Identifier BG_ID = new Identifier(ModularItemFrame.MOD_ID, "block/default_back");
 
     @Override
     public Identifier getId() {
-        return LOC;
+        return ID;
     }
 
     @Override
     @Environment(EnvType.CLIENT)
     public Identifier frontTexture() {
-        return FG_LOC;
+        return FG_ID;
     }
 
     @Override
     @Environment(EnvType.CLIENT)
     public Identifier backTexture() {
-        return BG_LOC;
+        return BG_ID;
     }
 
     @Override

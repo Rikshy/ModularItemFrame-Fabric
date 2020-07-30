@@ -2,8 +2,12 @@
   "required": true,
   "package": "dev.shyrik.modularitemframe.mixin",
   "compatibilityLevel": "JAVA_8",
-  "mixins": ["IngredientMixin"],
-  "client": [],
+  "mixins": [
+    "IngredientMixin"
+  ],
+  "client": [
+    "BakedModelManagerMixin"
+  ],
   "server": [],
   "injectors": {
     "defaultRequire": 1

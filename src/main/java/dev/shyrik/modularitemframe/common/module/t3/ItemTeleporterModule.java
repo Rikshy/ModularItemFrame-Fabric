@@ -1,5 +1,6 @@
 package dev.shyrik.modularitemframe.common.module.t3;
 
+import com.google.common.collect.ImmutableList;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.ItemHelper;
@@ -73,6 +74,11 @@ public class ItemTeleporterModule extends ModuleBase {
     @Environment(EnvType.CLIENT)
     public Identifier innerTexture() {
         return ModularFrameBlock.INNER_HARDEST_LOC;
+    }
+
+    @Override
+    public List<Identifier> getVariantFronts() {
+        return ImmutableList.of(BG_NONE, BG_IN, BG_OUT);
     }
 
     @Override
@@ -164,12 +170,10 @@ public class ItemTeleporterModule extends ModuleBase {
                 } else {
                     linkedLoc = tmp;
                     direction = EnumMode.DISPENSE;
-                    reloadModel = true;
 
                     ItemTeleporterModule targetModule = (ItemTeleporterModule) ((ModularFrameEntity) targetBlockEntity).module;
                     targetModule.linkedLoc = blockEntity.getPos();
                     targetModule.direction = EnumMode.VACUUM;
-                    targetModule.reloadModel = true;
 
                     playerIn.sendMessage(new TranslatableText("modularitemframe.message.link_established"), false);
                     nbt.remove(NBT_LINK);
@@ -202,7 +206,6 @@ public class ItemTeleporterModule extends ModuleBase {
             ItemTeleporterModule targetModule = (ItemTeleporterModule) ((ModularFrameEntity) Objects.requireNonNull(worldIn.getBlockEntity(linkedLoc))).module;
             targetModule.linkedLoc = null;
             targetModule.direction = EnumMode.NONE;
-            targetModule.reloadModel = true;
         }
     }
 

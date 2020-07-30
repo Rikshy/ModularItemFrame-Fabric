@@ -17,7 +17,9 @@
     "main": [
       "dev.shyrik.modularitemframe.ModularItemFrame"
     ],
-    "client": [],
+    "client": [
+      "dev.shyrik.modularitemframe.ModularItemFrameClient"
+    ],
     "server": []
   },
   "mixins": ["modularitemframe.mixins.json"],

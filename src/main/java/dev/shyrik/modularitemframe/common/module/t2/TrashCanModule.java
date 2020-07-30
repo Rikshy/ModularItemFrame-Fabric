@@ -63,6 +63,11 @@ public class TrashCanModule extends ModuleBase {
     }
 
     @Override
+    public List<Identifier> getVariantFronts() {
+        return frontTex;
+    }
+
+    @Override
     public ActionResult onUse(World worldIn, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
         return ActionResult.PASS;
     }
@@ -85,7 +90,6 @@ public class TrashCanModule extends ModuleBase {
         } else {
             if (world.getTime() % 10 == 0) {
                 texIndex = texIndex < frontTex.size() - 1 ? texIndex + 1 : 0;
-                reloadModel = true;
             }
         }
     }

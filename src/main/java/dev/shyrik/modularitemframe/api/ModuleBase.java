@@ -1,19 +1,13 @@
 package dev.shyrik.modularitemframe.api;
 
-import dev.shyrik.modularitemframe.api.util.RegistryHelper;
+import com.google.common.collect.ImmutableList;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.block.ModularFrameEntity;
-import dev.shyrik.modularitemframe.init.Registrar;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.ModelLoader;
-import net.minecraft.client.render.model.ModelRotation;
-import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -27,11 +21,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
+import java.util.List;
+
 public abstract class ModuleBase {
     protected ModularFrameEntity blockEntity;
     ModuleItem parent;
-
-    protected final String NBT_RELOADMODEL = "reloadmodel";
 
     public void setTile(ModularFrameEntity te) {
         blockEntity = te;
@@ -78,33 +72,12 @@ public abstract class ModuleBase {
     @Environment(EnvType.CLIENT)
     public abstract String getModuleName();
 
-    public boolean reloadModel = false;
-    private BakedModel bakedModel = null;
+    public boolean hasModelVariants() {
+        return !getVariantFronts().isEmpty();
+    }
 
-    /**
-     * Called by the {@link FrameRenderer} to bake the Frame model
-     * by default {@link #frontTexture()} and {@link #backTexture()} will be asked to be replaced
-     * override this with caution.
-     *
-     * @param model Contains the model of the frame
-     * @return baked model ofc
-     */
-    @Environment(EnvType.CLIENT)
-    public BakedModel bakeModel(ModelLoader loader, UnbakedModel model) {
-        if (bakedModel == null || reloadModel) {
-            bakedModel = model.bake(loader, mat -> {
-                if (mat.getTextureId().toString().contains("default_front"))
-                    return MinecraftClient.getInstance().getBakedModelManager().method_24153(mat.getAtlasId()).getSprite(frontTexture());
-                if (mat.getTextureId().toString().contains("default_back"))
-                    return MinecraftClient.getInstance().getBakedModelManager().method_24153(mat.getAtlasId()).getSprite(backTexture());
-                if (mat.getTextureId().toString().contains("default_inner"))
-                    return MinecraftClient.getInstance().getBakedModelManager().method_24153(mat.getAtlasId()).getSprite(innerTexture());
-                return MinecraftClient.getInstance().getBakedModelManager().method_24153(mat.getAtlasId()).getSprite(mat.getTextureId());
-            }, ModelRotation.X0_Y0, RegistryHelper.getId(Registrar.MODULAR_FRAME));
-
-            reloadModel = false;
-        }
-        return bakedModel;
+    public List<Identifier> getVariantFronts() {
+        return ImmutableList.of();
     }
 
     /**
@@ -168,15 +141,12 @@ public abstract class ModuleBase {
      * this gets synced automatically
      */
     public CompoundTag toTag() {
-        CompoundTag cmp = new CompoundTag();
-        cmp.putBoolean(NBT_RELOADMODEL, reloadModel);
-        return cmp;
+        return new CompoundTag();
     }
 
     /**
      * Tag deserialization in case there are some data to be saved!
      */
     public void fromTag(CompoundTag cmp) {
-        if (cmp.contains(NBT_RELOADMODEL)) reloadModel = cmp.getBoolean(NBT_RELOADMODEL);
     }
 }

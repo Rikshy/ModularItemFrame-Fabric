@@ -2,6 +2,7 @@ package dev.shyrik.modularitemframe;
 
 import dev.shyrik.modularitemframe.client.FrameRenderer;
 import dev.shyrik.modularitemframe.init.Registrar;
+import dev.shyrik.modularitemframe.api.mixin.BakedModelLoaderApplyCallback;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry;
 
@@ -10,5 +11,6 @@ public class ModularItemFrameClient implements ClientModInitializer {
     public void onInitializeClient() {
         // Here we will put client-only registration code
         BlockEntityRendererRegistry.INSTANCE.register(Registrar.MODULAR_FRAME_ENTITY, FrameRenderer::new);
+        BakedModelLoaderApplyCallback.EVENT.register(FrameRenderer::onApplyModelLoader);
     }
 }
