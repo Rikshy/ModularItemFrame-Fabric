@@ -10,19 +10,14 @@ import dev.shyrik.modularitemframe.common.network.packet.PlaySoundPacket;
 import dev.shyrik.modularitemframe.api.mixin.IngredientGetMatchingStacks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 public class AutoCraftingModule extends CraftingPlusModule {
@@ -59,11 +54,6 @@ public class AutoCraftingModule extends CraftingPlusModule {
             player.openHandledScreen(getScreenHandler(blockEntity.getCachedState(), world, pos));
             blockEntity.markDirty();
         }
-    }
-
-    @Override
-    public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
-        return ActionResult.FAIL;
     }
 
     @Override
