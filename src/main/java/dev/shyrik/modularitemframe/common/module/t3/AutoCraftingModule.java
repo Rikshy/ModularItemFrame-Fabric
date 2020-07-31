@@ -77,11 +77,10 @@ public class AutoCraftingModule extends CraftingPlusModule {
         }
     }
 
-    @Environment(EnvType.CLIENT)
     private void autoCraft(Inventory inventory, World world, BlockPos pos) {
         if (recipe == null) reloadRecipe();
 
-        if (recipe == null || recipe.getOutput().isEmpty() || !InventoryHelper.canCraft(inventory, ItemHelper.getIngredients(recipe)))
+        if (recipe == null || recipe.getOutput().isEmpty() || !InventoryHelper.canCraft(inventory, recipe))
             return;
 
         ItemHelper.ejectStack(world, pos, blockEntity.blockFacing(), recipe.getOutput().copy());

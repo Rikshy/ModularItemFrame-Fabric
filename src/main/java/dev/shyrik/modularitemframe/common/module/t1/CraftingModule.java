@@ -15,11 +15,13 @@ import dev.shyrik.modularitemframe.api.mixin.IngredientGetMatchingStacks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
@@ -99,16 +101,15 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
     }
 
     private void craft(PlayerEntity player, boolean fullStack) {
-        final Inventory playerInventory = player.inventory;
-        final Inventory workingInv = getWorkingInventories(playerInventory);
+        final Inventory workingInv = getWorkingInventories(player.inventory);
         reloadRecipe();
 
-        if (workingInv == null || recipe == null || recipe.getOutput().isEmpty() || !InventoryHelper.canCraft(workingInv, recipe.getPreviewInputs()))
+        if (workingInv == null || recipe == null || recipe.getOutput().isEmpty() || !InventoryHelper.canCraft(workingInv, recipe))
             return;
 
         int craftAmount = fullStack ? Math.min(InventoryHelper.countPossibleCrafts(workingInv, recipe), 64) : 1;
         do {
-            ItemStack remain = InventoryHelper.giveStack(playerInventory, recipe.getOutput()); //use playerinventory here!
+            ItemStack remain = InventoryHelper.giveStack(player.inventory, recipe.getOutput()); //use playerinventory here!
             if (!remain.isEmpty()) ItemHelper.ejectStack(player.world, blockEntity.getPos(), blockEntity.blockFacing(), remain);
 
             for (IngredientGetMatchingStacks ingredient : ItemHelper.getIngredients(recipe)) {

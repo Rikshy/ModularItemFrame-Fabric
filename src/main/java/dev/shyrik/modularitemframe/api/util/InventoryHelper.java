@@ -4,6 +4,8 @@ import dev.shyrik.modularitemframe.api.mixin.IngredientGetMatchingStacks;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.util.collection.DefaultedList;
 
@@ -48,9 +50,9 @@ public class InventoryHelper {
         return copy;
     }
 
-    public static boolean canCraft(Inventory inventory, DefaultedList<IngredientGetMatchingStacks> ingredients) {
+    public static boolean canCraft(Inventory inventory, Recipe<?> recipe) {
         Inventory copy = copyItemHandler(inventory);
-        for (IngredientGetMatchingStacks ingredient : ingredients) {
+        for (IngredientGetMatchingStacks ingredient : ItemHelper.getIngredients(recipe)) {
             if (ingredient.getMatchingStacks().length > 0) {
                 int slot = findSlotOfIngredient(copy, ingredient);
                 if (slot >= 0)
