@@ -125,7 +125,7 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
             } else if (handItem.getItem() instanceof ModuleItem && blockEntity.acceptsModule()) {
                 if (!world.isClient) {
                     blockEntity.setModule(RegistryHelper.getId(handItem));
-                    if (!player.isCreative()) player.getActiveItem().decrement(1);
+                    if (!player.isCreative()) player.getStackInHand(hand).decrement(1);
                     blockEntity.markDirty();
                 }
                 result = ActionResult.SUCCESS;
