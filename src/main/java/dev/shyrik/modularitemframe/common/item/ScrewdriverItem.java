@@ -1,12 +1,10 @@
 package dev.shyrik.modularitemframe.common.item;
 
+import dev.shyrik.modularitemframe.api.util.NetworkSyncedToolItem;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ToolItem;
-import net.minecraft.item.ToolMaterials;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -17,7 +15,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class ScrewdriverItem extends ToolItem {
+public class ScrewdriverItem extends NetworkSyncedToolItem {
     private static final String NBT_MODE = "mode";
 
     public ScrewdriverItem(Item.Settings props) {
