@@ -11,9 +11,8 @@ import java.util.List;
 public class SlotHelper {
 
     public static ItemStack ghostSlotClick(Slot slot, int mouseButton, SlotActionType clickTypeIn, PlayerEntity player) {
-        ItemStack stack = ItemStack.EMPTY;
         ItemStack stackSlot = slot.getStack();
-        ItemStack stackHeld = player.inventory.getMainHandStack();
+        ItemStack stackHeld = player.inventory.getCursorStack();
 
         if (mouseButton == 0 || mouseButton == 1) {
             if (stackSlot.isEmpty()) {
@@ -34,7 +33,7 @@ public class SlotHelper {
                 fillGhostSlot(slot, stackHeld, mouseButton);
             }
         }
-        return stack;
+        return stackHeld;
     }
 
     private static void adjustGhostSlot(Slot slot, int mouseButton, SlotActionType clickTypeIn) {
