@@ -22,9 +22,8 @@ public class CraftingFrameScreenHandler extends ScreenHandler {
     /**
      * The object to send callbacks to.
      */
-    private IScreenHandlerCallback callbacks;
+    private final IScreenHandlerCallback callbacks;
 
-    private boolean craftMatrixChanged = false;
     private final FrameCrafting matrix;
     private final CraftingResultInventory craftResult = new CraftingResultInventory();
     private final PlayerEntity player;
@@ -68,19 +67,26 @@ public class CraftingFrameScreenHandler extends ScreenHandler {
         return callbacks.isUsableByPlayer(player);
     }
 
-    /**
-     * Callback for when the matrix matrix is changed.
-     */
-    @Override
-    public void onContentChanged(Inventory inventoryIn) {
-        craftMatrixChanged = true;
-    }
-
     @Override
     public ItemStack onSlotClick(int slotId, int dragType_or_button, SlotActionType clickType, PlayerEntity player) {
         Slot slot = slotId < 0 ? null : getSlot(slotId);
         if (slot instanceof GhostSlot) {
-            return SlotHelper.ghostSlotClick(slot, dragType_or_button, clickType, player);
+            //if (clickType == SlotActionType.PICKUP || clickType == SlotActionType.PICKUP_ALL || clickType == SlotActionType.SWAP)
+            {
+                ItemStack dropping = player.inventory.getCursorStack();
+
+                if (dropping.getCount() > 0) {
+                    ItemStack copy = dropping.copy();
+                    copy.setCount(1);
+                    slot.setStack(copy);
+                } else if (slot.getStack().getCount() > 0) {
+                    slot.setStack(ItemStack.EMPTY);
+                }
+
+                return slot.getStack().copy();
+            }
+
+            //return ItemStack.EMPTY;
         }
         return super.onSlotClick(slotId, dragType_or_button, clickType, player);
     }
@@ -89,21 +95,54 @@ public class CraftingFrameScreenHandler extends ScreenHandler {
 
     @Override
     public final ItemStack transferSlot(PlayerEntity player, int slotIndex) {
-        if (transferCount < 1) {
-            transferCount++;
-            return SlotHelper.transferStackInSlot(slots, player, slotIndex);
+        if (slotIndex < 8) {
+            return ItemStack.EMPTY;
         }
-        return ItemStack.EMPTY;
+
+        Slot slot = getSlot(slotIndex);
+        if (slot == null || !slot.hasStack()) {
+            return ItemStack.EMPTY;
+        }
+
+        ItemStack stack = slot.getStack();
+        ItemStack stackCopy = stack.copy();
+
+        int startIndex;
+        int endIndex;
+
+        if (slotIndex < 9) {
+            return ItemStack.EMPTY;
+        } else if (slotIndex < 18) {
+            startIndex = 18;
+            endIndex = 18 + 27 + 9;
+        } else {
+            startIndex = 9;
+            endIndex = 18;
+        }
+
+        if (!insertItem(stack, startIndex, endIndex, false)) {
+            return ItemStack.EMPTY;
+        }
+
+        if (stack.getCount() == 0) {
+            slot.setStack(ItemStack.EMPTY);
+        } else {
+            slot.markDirty();
+        }
+
+        if (stack.getCount() == stackCopy.getCount()) {
+            return ItemStack.EMPTY;
+        }
+
+        slot.onTakeItem(player, stack);
+        return stackCopy;
     }
 
     @Override
     public void sendContentUpdates() {
-        if (craftMatrixChanged) {
-            craftMatrixChanged = false;
-            ItemStack stack = callbacks.onScreenHandlerMatrixChanged(matrix);
-            craftResult.setStack(0, stack);
-            ((ServerPlayerEntity)player).networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, 0, stack));
-        }
+        ItemStack stack = callbacks.onScreenHandlerMatrixChanged(matrix);
+        craftResult.setStack(0, stack);
+        ((ServerPlayerEntity)player).networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, 0, stack));
 
         super.sendContentUpdates();
     }

@@ -11,22 +11,27 @@ public class GhostSlot  extends Slot {
     }
 
     @Override
-    public boolean canTakeItems(PlayerEntity player) {
-        return false;
+    public int getMaxStackAmount() {
+        return 1;
+    }
+
+    @Override
+    public ItemStack onTakeItem(PlayerEntity player, ItemStack stack) {
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public ItemStack takeStack(int amount) {
+        return ItemStack.EMPTY;
     }
 
     @Override
     public boolean canInsert(ItemStack stack) {
-        return true;
+        return false;
     }
 
     @Override
-    public int getMaxStackAmount(ItemStack stack) {
-        return 1;
-    }
-
-    @Override
-    public int getMaxStackAmount() {
-        return 1;
+    public boolean canTakeItems(PlayerEntity player) {
+        return false;
     }
 }
