@@ -1,5 +1,8 @@
 package dev.shyrik.modularitemframe.common.module.t2;
 
+import alexiil.mc.lib.attributes.item.FixedItemInv;
+import alexiil.mc.lib.attributes.item.compat.FixedInventoryVanillaWrapper;
+import alexiil.mc.lib.attributes.item.impl.CombinedFixedItemInv;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.module.t1.CraftingModule;
@@ -14,6 +17,8 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.Arrays;
 
 public class CraftingPlusModule extends CraftingModule {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_craft_plus");
@@ -61,14 +66,15 @@ public class CraftingPlusModule extends CraftingModule {
     }
 
     @Override
-    protected Inventory getWorkingInventories(Inventory playerInventory) {
-        Inventory neighborInventory = (Inventory)blockEntity.getAttachedInventory();
-
+    protected FixedItemInv getWorkingInventories(Inventory playerInventory) {
+        FixedItemInv neighborInventory = blockEntity.getAttachedInventory();
+        FixedItemInv fixedPlayerInv = new FixedInventoryVanillaWrapper(playerInventory);
         if (neighborInventory != null) {
-            //if (mode == EnumMode.NO_PLAYER) return neighborInventory;
-            //else return new CombinedInvWrapper(neighborInventory, playerInventory);
+            if (mode == EnumMode.NO_PLAYER) return neighborInventory;
+            else return CombinedFixedItemInv.create(Arrays.asList(neighborInventory, fixedPlayerInv));
         }
-        return playerInventory;
+
+        return fixedPlayerInv;
     }
 
     @Override

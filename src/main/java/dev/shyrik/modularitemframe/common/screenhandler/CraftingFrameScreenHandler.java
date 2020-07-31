@@ -1,7 +1,7 @@
 package dev.shyrik.modularitemframe.common.screenhandler;
 
+import alexiil.mc.lib.attributes.item.FixedItemInv;
 import dev.shyrik.modularitemframe.api.util.GhostSlot;
-import dev.shyrik.modularitemframe.api.util.SlotHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.inventory.Inventory;
@@ -28,7 +28,7 @@ public class CraftingFrameScreenHandler extends ScreenHandler {
     private final CraftingResultInventory craftResult = new CraftingResultInventory();
     private final PlayerEntity player;
 
-    public CraftingFrameScreenHandler(int containerId, Inventory playerInventory, Inventory frameInventory, PlayerEntity player, IScreenHandlerCallback callbacks) {
+    public CraftingFrameScreenHandler(int containerId, Inventory playerInventory, FixedItemInv frameInventory, PlayerEntity player, IScreenHandlerCallback callbacks) {
         super(ScreenHandlerType.CRAFTING, containerId);
         this.player = player;
         this.callbacks = callbacks;
@@ -90,8 +90,6 @@ public class CraftingFrameScreenHandler extends ScreenHandler {
         }
         return super.onSlotClick(slotId, dragType_or_button, clickType, player);
     }
-
-    private int transferCount = 0;
 
     @Override
     public final ItemStack transferSlot(PlayerEntity player, int slotIndex) {

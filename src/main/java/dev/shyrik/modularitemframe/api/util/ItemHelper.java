@@ -1,35 +1,20 @@
 package dev.shyrik.modularitemframe.api.util;
 
-import dev.shyrik.modularitemframe.api.mixin.IngredientGetMatchingStacks;
+import alexiil.mc.lib.attributes.item.FixedItemInv;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.Recipe;
+import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import java.util.List;
-
 public class ItemHelper {
-
-    public static boolean areItemsEqualIgnoreDurability(ItemStack[] toCheck, ItemStack itemStack) {
-        for (ItemStack checkStack : toCheck) {
-            if (ItemStack.areItemsEqualIgnoreDamage(checkStack, itemStack)) return true;
-        }
-        return false;
-    }
-
-    public static DefaultedList<IngredientGetMatchingStacks> getIngredients(Recipe recipe) {
-        return (DefaultedList<IngredientGetMatchingStacks>)recipe.getPreviewInputs();
-    }
 
     public static boolean simpleAreItemsEqual(ItemStack stack, ItemStack stack2) {
         return stack.getItem() == stack2.getItem();
@@ -74,24 +59,7 @@ public class ItemHelper {
         world.spawnEntity(item);
     }
 
-    public static boolean increaseStackInList(List<ItemStack> list, ItemStack stack) {
-        int idx = listContainsItemStackEqual(list, stack);
-        if (idx >= 0) {
-            ItemStack listStack = list.get(idx);
-            listStack.increment(stack.getCount());
-            return true;
-        }
-        return false;
-    }
-
-    public static int listContainsItemStackEqual(List<ItemStack> list, ItemStack stack) {
-        for (int i = 0; i < list.size(); ++i) {
-            if (simpleAreItemsEqual(stack, list.get(i))) return i;
-        }
-        return -1;
-    }
-
-    public static Recipe getRecipe(Inventory inventory, World world) {
+    public static CraftingRecipe getRecipe(FixedItemInv inventory, World world) {
         CraftingInventory craft = new CraftingInventory(new ScreenHandler(ScreenHandlerType.CRAFTING, 1) {
             @Override
             public boolean canUse(PlayerEntity player) {
@@ -100,7 +68,7 @@ public class ItemHelper {
         }, 3, 3);
 
         for (int i = 0; i < 9; i++) {
-            ItemStack stack = inventory.getStack(i);
+            ItemStack stack = inventory.getInvStack(i);
 
             if (stack.isEmpty())
                 continue;

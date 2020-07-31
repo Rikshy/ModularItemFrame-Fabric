@@ -1,7 +1,8 @@
 package dev.shyrik.modularitemframe.common.screenhandler;
 
+import alexiil.mc.lib.attributes.Simulation;
+import alexiil.mc.lib.attributes.item.FixedItemInv;
 import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 
@@ -9,14 +10,14 @@ public class FrameCrafting extends CraftingInventory {
 
     private final int length;
     private final ScreenHandler eventHandler;
-    private final Inventory parent;
+    private final FixedItemInv parent;
     private boolean doNotCallUpdates;
 
-    public FrameCrafting(ScreenHandler eventHandler, Inventory parent, int width, int height) {
+    public FrameCrafting(ScreenHandler eventHandler, FixedItemInv parent, int width, int height) {
         super(eventHandler, width, height);
         int k = width * height;
 
-        assert (k == parent.size());
+        assert (k == parent.getSlotCount());
 
         this.parent = parent;
         this.length = k;
@@ -30,12 +31,12 @@ public class FrameCrafting extends CraftingInventory {
     }
 
     public ItemStack getStack(int index) {
-        return index >= size() ? ItemStack.EMPTY : parent.getStack(index);
+        return index >= size() ? ItemStack.EMPTY : parent.getInvStack(index);
     }
 
     @Override
     public void setStack(int index, ItemStack stack) {
-        parent.setStack(index, stack);
+        parent.setInvStack(index, stack, Simulation.ACTION);
         onCraftMatrixChanged();
     }
 

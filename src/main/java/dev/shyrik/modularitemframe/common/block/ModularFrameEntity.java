@@ -1,5 +1,7 @@
 package dev.shyrik.modularitemframe.common.block;
 
+import alexiil.mc.lib.attributes.SearchOptions;
+import alexiil.mc.lib.attributes.item.*;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.ModuleItem;
@@ -14,7 +16,6 @@ import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -69,7 +70,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
             up.onRemove(world, pos, facing);
 
             ItemStack remain = new ItemStack(up.getParent());
-            if (player != null) remain = InventoryHelper.giveStack(player.inventory, remain);
+            if (player != null) remain = InventoryHelper.givePlayer(player, remain);
             if (!remain.isEmpty()) ItemHelper.ejectStack(world, pos, facing, remain);
         }
 
@@ -115,13 +116,8 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         return world.getBlockEntity(pos.offset(blockFacing().getOpposite()));
     }
 
-    public Inventory getAttachedInventory() {
-        BlockEntity neighbor = getAttachedTile();
-        if (neighbor instanceof Inventory) {
-            return (Inventory)neighbor;
-        }
-
-        return null;
+    public FixedItemInv getAttachedInventory() {
+        return ItemAttributes.FIXED_INV.getFirstOrNull(world, pos.offset(blockFacing().getOpposite()), SearchOptions.inDirection(blockFacing()));
     }
 
     public BlockState getAttachedBlock() {
@@ -152,7 +148,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     public void dropModule(Direction facing, PlayerEntity player) {
         ItemStack remain = new ItemStack(module.getParent());
 
-        if (player != null) remain = InventoryHelper.giveStack(player.inventory, remain);
+        if (player != null) remain = InventoryHelper.givePlayer(player, remain);
         if (!remain.isEmpty()) ItemHelper.ejectStack(world, pos, facing, remain);
 
         module.onRemove(world, pos, facing, player);

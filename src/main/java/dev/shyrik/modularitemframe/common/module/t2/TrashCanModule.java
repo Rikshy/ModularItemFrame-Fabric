@@ -1,5 +1,7 @@
 package dev.shyrik.modularitemframe.common.module.t2;
 
+import alexiil.mc.lib.attributes.Simulation;
+import alexiil.mc.lib.attributes.item.FixedItemInv;
 import com.google.common.collect.ImmutableList;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
@@ -11,7 +13,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -77,11 +78,11 @@ public class TrashCanModule extends ModuleBase {
         if (!world.isClient) {
             if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
 
-            Inventory trash = blockEntity.getAttachedInventory();
+            FixedItemInv trash = blockEntity.getAttachedInventory();
             if (trash != null) {
-                for (int slot = 0; slot < trash.size(); slot++) {
-                    if (!trash.getStack(slot).isEmpty()) {
-                        trash.setStack(slot, ItemStack.EMPTY);
+                for (int slot = 0; slot < trash.getSlotCount(); slot++) {
+                    if (!trash.getInvStack(slot).isEmpty()) {
+                        trash.setInvStack(slot, ItemStack.EMPTY, Simulation.ACTION);
                         NetworkHandler.sendAround(
                                 world,
                                 pos,

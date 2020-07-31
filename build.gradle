@@ -16,12 +16,15 @@ minecraft {
 repositories {
     maven { url 'http://server.bbkr.space:8081/artifactory/libs-release' }
     maven { url = "https://maven.modmuss50.me/" }
+    maven { url = "https://mod-buildcraft.com/maven" }
 }
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
+
+    modCompile "alexiil.mc.lib:libblockattributes-all:${project.libattributes}"
 
     modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modCompile "me.sargunvohra.mcmods:autoconfig1u:${project.autoconfig_version}"

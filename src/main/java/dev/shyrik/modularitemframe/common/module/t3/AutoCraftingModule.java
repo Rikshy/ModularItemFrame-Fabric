@@ -1,5 +1,6 @@
 package dev.shyrik.modularitemframe.common.module.t3;
 
+import alexiil.mc.lib.attributes.item.FixedItemInv;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.util.InventoryHelper;
 import dev.shyrik.modularitemframe.api.util.ItemHelper;
@@ -7,12 +8,10 @@ import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.module.t2.CraftingPlusModule;
 import dev.shyrik.modularitemframe.common.network.NetworkHandler;
 import dev.shyrik.modularitemframe.common.network.packet.PlaySoundPacket;
-import dev.shyrik.modularitemframe.api.mixin.IngredientGetMatchingStacks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -61,13 +60,13 @@ public class AutoCraftingModule extends CraftingPlusModule {
         if (world.isClient) return;
         if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
 
-        Inventory handler = (Inventory) blockEntity.getAttachedInventory();
+        FixedItemInv handler = blockEntity.getAttachedInventory();
         if (handler != null) {
             autoCraft(handler, world, pos);
         }
     }
 
-    private void autoCraft(Inventory inventory, World world, BlockPos pos) {
+    private void autoCraft(FixedItemInv inventory, World world, BlockPos pos) {
         if (recipe == null) reloadRecipe();
 
         if (recipe == null || recipe.getOutput().isEmpty() || !InventoryHelper.canCraft(inventory, recipe))
@@ -75,11 +74,7 @@ public class AutoCraftingModule extends CraftingPlusModule {
 
         ItemHelper.ejectStack(world, pos, blockEntity.blockFacing(), recipe.getOutput().copy());
 
-        for (IngredientGetMatchingStacks ingredient : ItemHelper.getIngredients(recipe)) {
-            if (ingredient.getMatchingStacks().length > 0) {
-                InventoryHelper.removeFromInventory(inventory, ingredient.getMatchingStacks());
-            }
-        }
+        InventoryHelper.removeIngredients(inventory, recipe);
 
         NetworkHandler.sendAround(
                 world,

@@ -1,5 +1,8 @@
 package dev.shyrik.modularitemframe.common.module.t1;
 
+import alexiil.mc.lib.attributes.Simulation;
+import alexiil.mc.lib.attributes.item.FixedItemInv;
+import alexiil.mc.lib.attributes.item.ItemExtractable;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.InventoryHelper;
@@ -14,7 +17,6 @@ import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.ActionResult;
@@ -64,17 +66,16 @@ public class IOModule extends ModuleBase {
     @Override
     public void onBlockClicked(World world, BlockPos pos, PlayerEntity player) {
         if (!world.isClient) {
-            Inventory handler = (Inventory) blockEntity.getAttachedInventory();
+            FixedItemInv handler = blockEntity.getAttachedInventory();
             if (handler != null) {
-                Direction blockFacing = blockEntity.blockFacing();
-
-                int slot = InventoryHelper.getFirstOccupiedSlot(handler);
-                if (slot >= 0) {
-                    int amount = player.isSneaking() ? handler.getStack(slot).getMaxCount() : 1;
-                    ItemStack extract = handler.removeStack(slot, amount);
-                    extract = InventoryHelper.giveStack(player.inventory, extract);
-                    if (!extract.isEmpty()) ItemHelper.ejectStack(world, pos, blockFacing, extract);
-                    blockEntity.getAttachedTile().markDirty();
+                ItemExtractable extractor = handler.getExtractable();
+                ItemStack attempt = extractor.attemptAnyExtraction(1, Simulation.SIMULATE);
+                if (!attempt.isEmpty()) {
+                    int amount = player.isSneaking() ? attempt.getMaxCount() : 1;
+                    ItemStack extract = extractor.extract(amount);
+                    extract = InventoryHelper.givePlayer(player, extract);
+                    if (!extract.isEmpty()) ItemHelper.ejectStack(world, pos, blockEntity.blockFacing(), extract);
+                    lastStack = extractor.attemptAnyExtraction(1, Simulation.SIMULATE);
                     blockEntity.markDirty();
                 }
             }
@@ -84,17 +85,17 @@ public class IOModule extends ModuleBase {
     @Override
     public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
         if (!world.isClient) {
-            Inventory handler = (Inventory)blockEntity.getAttachedInventory();
+            FixedItemInv handler = blockEntity.getAttachedInventory();
             if (handler != null) {
                 ItemStack held = player.getStackInHand(hand);
                 long time = world.getTime();
 
                 if (time - lastClick <= 8L && !player.isSneaking() && !lastStack.isEmpty())
-                    InventoryHelper.giveAllPossibleStacks(handler, player.inventory, lastStack, held);
+                    InventoryHelper.giveAllPossibleStacks(handler.getInsertable(), player.inventory, lastStack, held);
                 else if (!held.isEmpty()) {
                     ItemStack heldCopy = held.copy();
                     heldCopy.setCount(1);
-                    if (InventoryHelper.giveStack(handler, heldCopy).isEmpty()){
+                    if (handler.getInsertable().insert(heldCopy).isEmpty()){
                         held.decrement(1);
 
                         lastStack = heldCopy;
@@ -111,19 +112,11 @@ public class IOModule extends ModuleBase {
     @Override
     public void tick(World world, BlockPos pos) {
         if(!world.isClient) {
-            Inventory handler = blockEntity.getAttachedInventory();
+            FixedItemInv handler = blockEntity.getAttachedInventory();
             if (handler != null) {
-                int slot = InventoryHelper.getFirstOccupiedSlot(handler);
-                if (slot >= 0) {
-                    ItemStack slotStack = handler.getStack(slot);
-                    if (!ItemStack.areItemsEqual(slotStack, displayItem)) {
-                        ItemStack copy = slotStack.copy();
-                        copy.setCount(1);
-                        displayItem = copy;
-                        blockEntity.markDirty();
-                    }
-                } else {
-                    displayItem = ItemStack.EMPTY;
+                ItemStack attempt = handler.getExtractable().attemptAnyExtraction(1, Simulation.SIMULATE);
+                if (!ItemStack.areItemsEqual(attempt, displayItem)) {
+                    displayItem = attempt;
                     blockEntity.markDirty();
                 }
             }

@@ -2,6 +2,7 @@ package dev.shyrik.modularitemframe.common.module.t3;
 
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
+import dev.shyrik.modularitemframe.api.util.fake.FakePlayer;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
 import dev.shyrik.modularitemframe.common.block.ModularFrameEntity;
 import dev.shyrik.modularitemframe.common.network.NetworkHandler;
@@ -116,7 +117,7 @@ public class TeleportModule extends ModuleBase {
 
     @Override
     public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
-        //if (player instanceof FakePlayer) return ActionResult.FAIL;
+        if (player instanceof FakePlayer) return ActionResult.FAIL;
 
         if (!world.isClient) {
             if (hasValidConnection(world, player)) {

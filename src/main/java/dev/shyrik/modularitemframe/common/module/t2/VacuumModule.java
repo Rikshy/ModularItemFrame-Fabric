@@ -1,9 +1,10 @@
 package dev.shyrik.modularitemframe.common.module.t2;
 
+import alexiil.mc.lib.attributes.Simulation;
+import alexiil.mc.lib.attributes.item.FixedItemInv;
+import alexiil.mc.lib.attributes.item.ItemInsertable;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
-import dev.shyrik.modularitemframe.api.util.InventoryHelper;
-import dev.shyrik.modularitemframe.api.util.RegistryHelper;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.network.NetworkHandler;
 import dev.shyrik.modularitemframe.common.network.packet.SpawnParticlesPacket;
@@ -13,7 +14,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.particle.ParticleTypes;
@@ -90,15 +90,18 @@ public class VacuumModule extends ModuleBase {
     public void tick(World world, BlockPos pos) {
         if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
 
-        Inventory handler = (Inventory) blockEntity.getAttachedInventory();
+        FixedItemInv handler = blockEntity.getAttachedInventory();
         if (handler != null) {
             List<ItemEntity> entities = world.getEntities(ItemEntity.class, getVacuumBox(pos), itemEntity -> true);
             for (ItemEntity entity : entities) {
                 ItemStack entityStack = entity.getStack();
-                if (!entity.isAlive() || entityStack.isEmpty() || InventoryHelper.getFittingSlot(handler, entityStack) < 0)
+                ItemInsertable inserter = handler.getInsertable();
+                if (!entity.isAlive() ||
+                        entityStack.isEmpty() ||
+                        inserter.attemptInsertion(entityStack, Simulation.SIMULATE).getCount() == entityStack.getCount())
                     continue;
 
-                ItemStack remain = InventoryHelper.giveStack(handler, entityStack);
+                ItemStack remain = inserter.insert(entityStack);
                 if (remain.isEmpty()) entity.remove();
                 else entity.setStack(remain);
                 NetworkHandler.sendAround(

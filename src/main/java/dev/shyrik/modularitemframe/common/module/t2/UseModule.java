@@ -1,5 +1,6 @@
 package dev.shyrik.modularitemframe.common.module.t2;
 
+import alexiil.mc.lib.attributes.item.FixedItemInv;
 import com.mojang.authlib.GameProfile;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
@@ -163,11 +164,10 @@ public class UseModule extends ModuleBase {
     }
 
     private ItemStack getNextStack() {
-        Inventory handler = blockEntity.getAttachedInventory();
+        FixedItemInv handler = blockEntity.getAttachedInventory();
         if (handler != null) {
-            int slot = InventoryHelper.getFirstOccupiedSlot(handler);
-            if (slot >= 0) {
-                return handler.removeStack(slot, handler.getStack(slot).getCount());
+            if (handler.getExtractable().couldExtractAnything()) {
+                return handler.getExtractable().extract(1);
             }
         }
 

@@ -1,5 +1,8 @@
 package dev.shyrik.modularitemframe.common.module.t1;
 
+import alexiil.mc.lib.attributes.item.FixedItemInv;
+import alexiil.mc.lib.attributes.item.compat.FixedInventoryVanillaWrapper;
+import alexiil.mc.lib.attributes.item.impl.DirectFixedItemInv;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.InventoryHelper;
@@ -11,23 +14,18 @@ import dev.shyrik.modularitemframe.common.network.packet.PlaySoundPacket;
 import dev.shyrik.modularitemframe.common.screenhandler.CraftingFrameScreenHandler;
 import dev.shyrik.modularitemframe.common.screenhandler.FrameCrafting;
 import dev.shyrik.modularitemframe.common.screenhandler.IScreenHandlerCallback;
-import dev.shyrik.modularitemframe.api.mixin.IngredientGetMatchingStacks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.recipe.CraftingRecipe;
-import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
@@ -51,9 +49,9 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
     private static final String NBT_GHOSTINVENTORY = "ghostinventory";
     private static final String NBT_DISPLAY = "display";
 
-    protected Recipe recipe;
+    protected CraftingRecipe recipe;
     private ItemStack displayItem = ItemStack.EMPTY;
-    private final SimpleInventory ghostInventory = new SimpleInventory(9);
+    private final DirectFixedItemInv ghostInventory = new DirectFixedItemInv(9);
 
     @Override
     public Identifier getId() {
@@ -101,7 +99,7 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
     }
 
     private void craft(PlayerEntity player, boolean fullStack) {
-        final Inventory workingInv = getWorkingInventories(player.inventory);
+        final FixedItemInv workingInv = getWorkingInventories(player.inventory);
         reloadRecipe();
 
         if (workingInv == null || recipe == null || recipe.getOutput().isEmpty() || !InventoryHelper.canCraft(workingInv, recipe))
@@ -109,14 +107,10 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
 
         int craftAmount = fullStack ? Math.min(InventoryHelper.countPossibleCrafts(workingInv, recipe), 64) : 1;
         do {
-            ItemStack remain = InventoryHelper.giveStack(player.inventory, recipe.getOutput()); //use playerinventory here!
+            ItemStack remain = InventoryHelper.givePlayer(player, recipe.getOutput()); //use playerinventory here!
             if (!remain.isEmpty()) ItemHelper.ejectStack(player.world, blockEntity.getPos(), blockEntity.blockFacing(), remain);
 
-            for (IngredientGetMatchingStacks ingredient : ItemHelper.getIngredients(recipe)) {
-                if (ingredient.getMatchingStacks().length > 0) {
-                    InventoryHelper.removeFromInventory(workingInv, ingredient.getMatchingStacks());
-                }
-            }
+            InventoryHelper.removeIngredients(workingInv, recipe);
         } while (--craftAmount > 0);
         NetworkHandler.sendAround(
                 player.world,
@@ -125,8 +119,8 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
                 new PlaySoundPacket(blockEntity.getPos(), SoundEvents.BLOCK_LADDER_STEP, SoundCategory.BLOCKS, 0.4F, 0.7F));
     }
 
-    protected Inventory getWorkingInventories(Inventory playerInventory) {
-        return playerInventory;
+    protected FixedItemInv getWorkingInventories(Inventory playerInventory) {
+        return new FixedInventoryVanillaWrapper(playerInventory);
     }
 
     protected boolean hasValidRecipe() {
@@ -164,7 +158,7 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
     public CompoundTag toTag() {
         CompoundTag tag = super.toTag();
         tag.put(NBT_DISPLAY, displayItem.toTag(new CompoundTag()));
-        tag.put(NBT_GHOSTINVENTORY, InventoryHelper.toTag(new CompoundTag(), ghostInventory, true));
+        tag.put(NBT_GHOSTINVENTORY, ghostInventory.toTag());
         return tag;
     }
 
@@ -172,7 +166,7 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
     public void fromTag(CompoundTag tag) {
         super.fromTag(tag);
         if (tag.contains(NBT_DISPLAY)) displayItem = ItemStack.fromTag(tag.getCompound(NBT_DISPLAY));
-        if (tag.contains(NBT_GHOSTINVENTORY)) InventoryHelper.fromTag(tag.getCompound(NBT_GHOSTINVENTORY), ghostInventory);
+        if (tag.contains(NBT_GHOSTINVENTORY)) ghostInventory.fromTag(tag.getCompound(NBT_GHOSTINVENTORY));
     }
 
     @Override

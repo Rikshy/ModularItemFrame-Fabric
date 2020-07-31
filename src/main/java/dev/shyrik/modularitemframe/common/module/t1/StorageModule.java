@@ -1,5 +1,7 @@
 package dev.shyrik.modularitemframe.common.module.t1;
 
+import alexiil.mc.lib.attributes.Simulation;
+import alexiil.mc.lib.attributes.item.impl.DirectFixedItemInv;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.InventoryHelper;
@@ -14,8 +16,6 @@ import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.ActionResult;
@@ -35,7 +35,7 @@ public class StorageModule extends ModuleBase {
     private static final String NBT_LASTSTACK = "laststack";
     private static final String NBT_INVENTORY= "inventory";
 
-    private final SimpleInventory inventory = new SimpleInventory(1);
+    private DirectFixedItemInv inventory = new DirectFixedItemInv(1);
 
     private long lastClick;
     private ItemStack lastStack = ItemStack.EMPTY;
@@ -65,12 +65,13 @@ public class StorageModule extends ModuleBase {
     @Override
     public void onBlockClicked(World world, BlockPos pos, PlayerEntity player) {
         if (!world.isClient) {
-            int slot = InventoryHelper.getFirstOccupiedSlot(inventory);
-            if (slot >= 0) {
-                int amount = player.isSneaking() ? inventory.getStack(slot).getMaxCount() : 1;
-                ItemStack extract = inventory.removeStack(slot, amount);
-                extract = InventoryHelper.giveStack(player.inventory, extract);
+            ItemStack attempt = inventory.attemptAnyExtraction(1, Simulation.SIMULATE);
+            if (!attempt.isEmpty()) {
+                int amount = player.isSneaking() ? attempt.getMaxCount() : 1;
+                ItemStack extract = inventory.extract(amount);
+                extract = InventoryHelper.givePlayer(player, extract);
                 if (!extract.isEmpty()) ItemHelper.ejectStack(world, pos, blockEntity.blockFacing(), extract);
+                lastStack = inventory.attemptAnyExtraction(1, Simulation.SIMULATE);
                 blockEntity.markDirty();
             }
         }
@@ -88,7 +89,7 @@ public class StorageModule extends ModuleBase {
                 else if (!held.isEmpty()) {
                     ItemStack heldCopy = held.copy();
                     heldCopy.setCount(1);
-                    if (InventoryHelper.giveStack(inventory, heldCopy).isEmpty()) {
+                    if (inventory.insert(heldCopy).isEmpty()) {
                         held.decrement(1);
 
                         lastStack = heldCopy;
@@ -104,28 +105,29 @@ public class StorageModule extends ModuleBase {
     @Override
     public void onFrameUpgradesChanged() {
         int newCapacity = (int)Math.pow(2, blockEntity.getCapacityUpCount());
-        SimpleInventory tmp = new SimpleInventory(newCapacity);
-        for (int slot = 0; slot < inventory.size(); slot++) {
-            if (slot < tmp.size())
-                tmp.setStack(slot, inventory.getStack(slot));
+        DirectFixedItemInv tmp = new DirectFixedItemInv(newCapacity);
+        for (int slot = 0; slot < inventory.getSlotCount(); slot++) {
+            if (slot < tmp.getSlotCount())
+                tmp.setInvStack(slot, inventory.getInvStack(slot), Simulation.ACTION);
             else
-                ItemHelper.ejectStack(blockEntity.getWorld(), blockEntity.getPos(), blockEntity.blockFacing(), inventory.getStack(slot));
+                ItemHelper.ejectStack(blockEntity.getWorld(), blockEntity.getPos(), blockEntity.blockFacing(), inventory.getInvStack(slot));
         }
+        inventory = tmp;
         blockEntity.markDirty();
     }
 
     @Override
     public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player) {
         super.onRemove(world, pos, facing, player);
-        for( int slot = 0; slot < inventory.size(); slot++) {
-            ItemHelper.ejectStack(world, pos, blockEntity.blockFacing(), inventory.getStack(slot));
+        for( int slot = 0; slot < inventory.getSlotCount(); slot++) {
+            ItemHelper.ejectStack(world, pos, blockEntity.blockFacing(), inventory.getInvStack(slot));
         }
     }
 
     @Override
     public CompoundTag toTag() {
         CompoundTag tag = super.toTag();
-        tag.put(NBT_INVENTORY, InventoryHelper.toTag(new CompoundTag(), inventory, false));
+        tag.put(NBT_INVENTORY, inventory.toTag());
         tag.putLong(NBT_LAST, lastClick);
         tag.put(NBT_LASTSTACK, lastStack.toTag(new CompoundTag()));
         return tag;
@@ -134,7 +136,7 @@ public class StorageModule extends ModuleBase {
     @Override
     public void fromTag(CompoundTag tag) {
         super.fromTag(tag);
-        if (tag.contains(NBT_INVENTORY)) InventoryHelper.fromTag(tag.getCompound(NBT_INVENTORY), inventory);
+        if (tag.contains(NBT_INVENTORY)) inventory.fromTag(tag.getCompound(NBT_INVENTORY));
         if (tag.contains(NBT_LAST)) lastClick = tag.getLong(NBT_LAST);
         if (tag.contains(NBT_LASTSTACK)) lastStack = ItemStack.fromTag(tag.getCompound(NBT_LASTSTACK));
     }
