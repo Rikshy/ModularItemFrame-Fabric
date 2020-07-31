@@ -1,6 +1,5 @@
 package dev.shyrik.modularitemframe.common.item;
 
-import dev.shyrik.modularitemframe.api.util.NetworkSyncedToolItem;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,7 +14,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class ScrewdriverItem extends NetworkSyncedToolItem {
+public class ScrewdriverItem extends ToolItem {
     private static final String NBT_MODE = "mode";
 
     public ScrewdriverItem(Item.Settings props) {
@@ -47,11 +46,6 @@ public class ScrewdriverItem extends NetworkSyncedToolItem {
 //    public boolean doesSneakBypassUse(ItemStack stack, IWorldReader world, BlockPos pos, PlayerEntity player) {
 //        return true;
 //    }
-
-    @Override
-    public boolean isNetworkSynced() {
-        return true;
-    }
 
     public static EnumMode getMode(ItemStack driver) {
         return readModeFromTag(driver);
