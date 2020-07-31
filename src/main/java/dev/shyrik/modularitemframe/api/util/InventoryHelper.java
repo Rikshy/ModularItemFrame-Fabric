@@ -154,4 +154,37 @@ public class InventoryHelper {
             }
         }
     }
+
+    public static CompoundTag toTag(CompoundTag tag, Inventory inventory, boolean setIfEmpty) {
+        ListTag listTag = new ListTag();
+
+        for(int i = 0; i < inventory.size(); ++i) {
+            ItemStack itemStack = inventory.getStack(i);
+            if (!itemStack.isEmpty()) {
+                CompoundTag compoundTag = new CompoundTag();
+                compoundTag.putByte("Slot", (byte)i);
+                itemStack.toTag(compoundTag);
+                listTag.add(compoundTag);
+            }
+        }
+
+        if (!listTag.isEmpty() || setIfEmpty) {
+            tag.put("Items", listTag);
+        }
+
+        return tag;
+    }
+
+    public static void fromTag(CompoundTag tag, Inventory inventory) {
+        ListTag listTag = tag.getList("Items", 10);
+
+        for(int i = 0; i < listTag.size(); ++i) {
+            CompoundTag compoundTag = listTag.getCompound(i);
+            int j = compoundTag.getByte("Slot") & 255;
+            if (j >= 0 && j < inventory.size()) {
+                inventory.setStack(j, ItemStack.fromTag(compoundTag));
+            }
+        }
+
+    }
 }

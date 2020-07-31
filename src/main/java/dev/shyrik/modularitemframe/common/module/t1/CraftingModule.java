@@ -163,7 +163,7 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
     public CompoundTag toTag() {
         CompoundTag tag = super.toTag();
         tag.put(NBT_DISPLAY, displayItem.toTag(new CompoundTag()));
-        tag.put(NBT_GHOSTINVENTORY, ghostInventory.getTags());
+        tag.put(NBT_GHOSTINVENTORY, InventoryHelper.toTag(new CompoundTag(), ghostInventory, true));
         return tag;
     }
 
@@ -171,7 +171,7 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
     public void fromTag(CompoundTag tag) {
         super.fromTag(tag);
         if (tag.contains(NBT_DISPLAY)) displayItem = ItemStack.fromTag(tag.getCompound(NBT_DISPLAY));
-        if (tag.contains(NBT_GHOSTINVENTORY)) ghostInventory.readTags(tag.getList(NBT_GHOSTINVENTORY, 0));
+        if (tag.contains(NBT_GHOSTINVENTORY)) InventoryHelper.fromTag(tag.getCompound(NBT_GHOSTINVENTORY), ghostInventory);
     }
 
     @Override

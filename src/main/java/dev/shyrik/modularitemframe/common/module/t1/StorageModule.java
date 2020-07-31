@@ -125,7 +125,7 @@ public class StorageModule extends ModuleBase {
     @Override
     public CompoundTag toTag() {
         CompoundTag tag = super.toTag();
-        tag.put(NBT_INVENTORY, inventory.getTags());
+        tag.put(NBT_INVENTORY, InventoryHelper.toTag(new CompoundTag(), inventory, false));
         tag.putLong(NBT_LAST, lastClick);
         tag.put(NBT_LASTSTACK, lastStack.toTag(new CompoundTag()));
         return tag;
@@ -134,7 +134,7 @@ public class StorageModule extends ModuleBase {
     @Override
     public void fromTag(CompoundTag tag) {
         super.fromTag(tag);
-        if (tag.contains(NBT_INVENTORY)) inventory.readTags(tag.getList(NBT_INVENTORY, (byte)0));
+        if (tag.contains(NBT_INVENTORY)) InventoryHelper.fromTag(tag.getCompound(NBT_INVENTORY), inventory);
         if (tag.contains(NBT_LAST)) lastClick = tag.getLong(NBT_LAST);
         if (tag.contains(NBT_LASTSTACK)) lastStack = ItemStack.fromTag(tag.getCompound(NBT_LASTSTACK));
     }

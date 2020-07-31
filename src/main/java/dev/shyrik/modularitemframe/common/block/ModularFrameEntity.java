@@ -171,7 +171,8 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     @Override
     public void markDirty() {
         super.markDirty();
-        sync();
+        if (world != null && !world.isClient)
+            sync();
     }
 
     @Override
