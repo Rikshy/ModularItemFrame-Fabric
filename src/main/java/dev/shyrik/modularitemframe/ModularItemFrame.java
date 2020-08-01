@@ -1,10 +1,12 @@
 package dev.shyrik.modularitemframe;
 
+import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.init.ModularItemFrameConfig;
 import dev.shyrik.modularitemframe.init.Registrar;
 import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
 import me.sargunvohra.mcmods.autoconfig1u.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 
@@ -22,6 +24,8 @@ public class ModularItemFrame implements ModInitializer {
     @Override
     public void onInitialize() {
         AutoConfig.register(ModularItemFrameConfig.class, GsonConfigSerializer::new);
+
+        //UseBlockCallback.EVENT.register(ModularFrameBlock::onPlayerInteracted);
 
         Registrar.register();
     }

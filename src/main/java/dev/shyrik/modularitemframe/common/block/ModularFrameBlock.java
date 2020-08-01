@@ -8,14 +8,18 @@ import dev.shyrik.modularitemframe.api.util.fake.FakePlayer;
 import dev.shyrik.modularitemframe.api.util.RegistryHelper;
 import dev.shyrik.modularitemframe.common.item.ScrewdriverItem;
 import dev.shyrik.modularitemframe.common.module.EmptyModule;
+import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
 import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
@@ -164,6 +168,30 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
     @SuppressWarnings("deprecation")
     public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
         return getBE(world, pos).module.getScreenHandler(state, world, pos);
+    }
+
+    public static ActionResult onPlayerInteracted(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
+        BlockState blockState = world.getBlockState(hitResult.getBlockPos());
+        if (world.getBlockState(hitResult.getBlockPos()).getBlock() instanceof ModularFrameBlock &&
+                player.getStackInHand(hand).getItem() instanceof ScrewdriverItem) {
+
+            if (world.isClient) {
+                ActionResult actionResult = world.getBlockState(hitResult.getBlockPos()).onUse(world, player, hand, hitResult);
+                if (actionResult.isAccepted()) {
+                    ((ClientPlayerEntity) player).networkHandler.sendPacket(new PlayerInteractBlockC2SPacket(hand, hitResult));
+                    return actionResult;
+                }
+            }
+            else {
+                ActionResult actionResult = blockState.onUse(world, player, hand, hitResult);
+                if (actionResult.isAccepted()) {
+                    Criteria.ITEM_USED_ON_BLOCK.test((ServerPlayerEntity)player, hitResult.getBlockPos(), player.getStackInHand(hand));
+                    return actionResult;
+                }
+            }
+            return ActionResult.SUCCESS;
+        }
+        return ActionResult.PASS;
     }
 
 //    public static void onPlayerInteracted(PlayerInteractEvent.RightClickBlock event) {
