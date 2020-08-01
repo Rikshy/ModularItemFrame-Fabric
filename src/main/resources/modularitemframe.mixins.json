@@ -5,8 +5,7 @@
   "mixins": [
   ],
   "client": [
-    "BakedModelManagerMixin",
-    "SpriteAtlasTextureMixin"
+    "BakedModelManagerMixin"
   ],
   "server": [],
   "injectors": {
