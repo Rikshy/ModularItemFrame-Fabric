@@ -1,5 +1,7 @@
 package dev.shyrik.modularitemframe.client.helper;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -11,6 +13,7 @@ import net.minecraft.util.math.Vec3d;
 import java.util.Random;
 import java.util.function.Predicate;
 
+@Environment(EnvType.CLIENT)
 public class EnderRenderHelper {
     private static final Random RANDOM = new Random(31100L);
 

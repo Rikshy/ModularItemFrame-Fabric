@@ -128,7 +128,7 @@ public class TeleportModule extends ModuleBase {
                     target = linkedLoc.offset(Direction.DOWN);
                 else target = linkedLoc;
 
-                if (player.hasPassengers()) { // kp ob es das so gibt wie das hier gemeint ist beim neuen player
+                if (player.hasPassengers()) {
                     player.removeAllPassengers();
                 }
 
