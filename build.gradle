@@ -29,6 +29,8 @@ dependencies {
     modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modCompile "me.sargunvohra.mcmods:autoconfig1u:${project.autoconfig_version}"
     include "me.sargunvohra.mcmods:autoconfig1u:${project.autoconfig_version}"
+
+    modRuntime "me.shedaniel:RoughlyEnoughItems:${project.rei_version}"
     //modImplementation "io.github.cottonmc.cotton:cotton:${project.cotton_version}"
 }
 
