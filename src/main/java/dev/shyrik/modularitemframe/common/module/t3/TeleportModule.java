@@ -4,6 +4,7 @@ import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.fake.FakePlayer;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
+import dev.shyrik.modularitemframe.client.helper.EnderRenderHelper;
 import dev.shyrik.modularitemframe.common.block.ModularFrameEntity;
 import dev.shyrik.modularitemframe.common.network.NetworkHandler;
 import dev.shyrik.modularitemframe.common.network.packet.TeleportPacket;
@@ -60,48 +61,49 @@ public class TeleportModule extends ModuleBase {
     @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
         BlockPos pos = blockEntity.getPos();
-//        FrameEnderRenderer.render(matrixStack, buffer, pos, renderer.getDispatcher().renderInfo.getProjectedView(), info -> {
-//            float x = pos.getX(), y = pos.getY(), z = pos.getZ();
-//            switch (blockEntity.blockFacing()) {
-//                case DOWN:
-//                    info.buffer.pos(info.matrix,x + 0.85f, y + 0.08f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                    info.buffer.pos(info.matrix,x + 0.85f, y + 0.08f, z + 0.14f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                    info.buffer.pos(info.matrix,x + 0.14f, y + 0.08f, z + 0.14f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                    info.buffer.pos(info.matrix,x + 0.14f, y + 0.08f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                    break;
-//                case UP:
-//                    info.buffer.pos(info.matrix,x + 0.85f, y + 0.92f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                    info.buffer.pos(info.matrix,x + 0.85f, y + 0.92f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                    info.buffer.pos(info.matrix,x + 0.16f, y + 0.92f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                    info.buffer.pos(info.matrix,x + 0.16f, y + 0.92f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                    break;
-//                case NORTH:
-//                    info.buffer.pos(info.matrix,x + 0.85f, y + 0.85f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                    info.buffer.pos(info.matrix,x + 0.14f, y + 0.85f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                    info.buffer.pos(info.matrix,x + 0.14f, y + 0.14f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                    info.buffer.pos(info.matrix,x + 0.85f, y + 0.14f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                    break;
-//                case SOUTH:
-//                    info.buffer.pos(info.matrix,x + 0.14f, y + 0.85f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                    info.buffer.pos(info.matrix,x + 0.85f, y + 0.85f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                    info.buffer.pos(info.matrix,x + 0.85f, y + 0.14f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                    info.buffer.pos(info.matrix,x + 0.14f, y + 0.14f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                    break;
-//                case WEST:
-//                    info.buffer.pos(info.matrix,x + 0.08f, y + 0.85f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                    info.buffer.pos(info.matrix,x + 0.08f, y + 0.85f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                    info.buffer.pos(info.matrix,x + 0.08f, y + 0.16f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                    info.buffer.pos(info.matrix,x + 0.08f, y + 0.16f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                    break;
-//                case EAST:
-//                    info.buffer.pos(info.matrix,x + 0.92f, y + 0.85f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                    info.buffer.pos(info.matrix,x + 0.92f, y + 0.85f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                    info.buffer.pos(info.matrix,x + 0.92f, y + 0.16f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                    info.buffer.pos(info.matrix,x + 0.92f, y + 0.16f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                    break;
-//            }
-//            return true;
-//        });
+        EnderRenderHelper.render(matrixStack, buffer, pos, renderer.getDispatcher().camera.getPos(), info -> {
+            float x = pos.getX(), y = pos.getY(), z = pos.getZ();
+            switch (blockEntity.blockFacing()) {
+                case DOWN:
+                    info.buffer.vertex(info.matrix, x + 0.85f, y + 0.08f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).next();
+                    info.buffer.vertex(info.matrix, x + 0.85f, y + 0.08f, z + 0.14f).color(info.color1, info.color2, info.color3, 1.0F).next();
+                    info.buffer.vertex(info.matrix, x + 0.14f, y + 0.08f, z + 0.14f).color(info.color1, info.color2, info.color3, 1.0F).next();
+                    info.buffer.vertex(info.matrix, x + 0.14f, y + 0.08f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).next();
+                    break;
+                case UP:
+                    info.buffer.vertex(info.matrix, x + 0.85f, y + 0.92f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).next();
+                    info.buffer.vertex(info.matrix, x + 0.85f, y + 0.92f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).next();
+                    info.buffer.vertex(info.matrix, x + 0.16f, y + 0.92f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).next();
+                    info.buffer.vertex(info.matrix, x + 0.16f, y + 0.92f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).next();
+                    break;
+                case NORTH:
+                    info.buffer.vertex(info.matrix, x + 0.85f, y + 0.85f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).next();
+                    info.buffer.vertex(info.matrix, x + 0.14f, y + 0.85f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).next();
+                    info.buffer.vertex(info.matrix, x + 0.14f, y + 0.14f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).next();
+                    info.buffer.vertex(info.matrix, x + 0.85f, y + 0.14f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).next();
+                    break;
+                case SOUTH:
+                    info.buffer.vertex(info.matrix, x + 0.14f, y + 0.85f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).next();
+                    info.buffer.vertex(info.matrix, x + 0.85f, y + 0.85f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).next();
+                    info.buffer.vertex(info.matrix, x + 0.85f, y + 0.14f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).next();
+                    info.buffer.vertex(info.matrix, x + 0.14f, y + 0.14f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).next();
+                    break;
+                case WEST:
+                    info.buffer.vertex(info.matrix, x + 0.08f, y + 0.85f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).next();
+                    info.buffer.vertex(info.matrix, x + 0.08f, y + 0.85f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).next();
+                    info.buffer.vertex(info.matrix, x + 0.08f, y + 0.16f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).next();
+                    info.buffer.vertex(info.matrix, x + 0.08f, y + 0.16f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).next();
+                    break;
+                case EAST:
+                    info.buffer.vertex(info.matrix, x + 0.92f, y + 0.85f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).next();
+                    info.buffer.vertex(info.matrix, x + 0.92f, y + 0.85f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).next();
+                    info.buffer.vertex(info.matrix, x + 0.92f, y + 0.16f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).next();
+                    info.buffer.vertex(info.matrix, x + 0.92f, y + 0.16f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).next();
+                    break;
+            }
+
+            return true;
+        });
     }
 
     @Override
