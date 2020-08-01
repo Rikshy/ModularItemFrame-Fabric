@@ -1,9 +1,12 @@
 package dev.shyrik.modularitemframe.common.module.t1;
 
+import alexiil.mc.lib.attributes.fluid.amount.FluidAmount;
+import alexiil.mc.lib.attributes.fluid.render.FluidRenderFace;
+import alexiil.mc.lib.attributes.fluid.volume.FluidKeys;
+import alexiil.mc.lib.attributes.fluid.volume.FluidVolume;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.ItemHelper;
-import dev.shyrik.modularitemframe.api.util.RegistryHelper;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
 import dev.shyrik.modularitemframe.common.network.NetworkHandler;
 import dev.shyrik.modularitemframe.common.network.packet.PlaySoundPacket;
@@ -14,6 +17,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sound.SoundCategory;
@@ -26,6 +30,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
+import java.util.Collections;
+
 public class NullifyModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t1_null");
     public static final Identifier BG_LOC = new Identifier(ModularItemFrame.MOD_ID, "block/module_t1_null");
@@ -33,47 +39,7 @@ public class NullifyModule extends ModuleBase {
 
     private ItemStack lastStack = ItemStack.EMPTY;
 
-    //private final FluidStack lavaStack;
-    //private final TextureAtlasSprite still;
-    //private final TextureAtlasSprite flowing;
-
-    @Override
-    @Environment(EnvType.CLIENT)
-    public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
-        switch (blockEntity.blockFacing()) {
-            case UP:
-                //FrameFluidRenderer.renderFluidCuboid(lavaStack, matrixStack, buffer, combinedLight, 0.3f, 0.07f, 0.3f, 0.7f, 0.07f, 0.7f);
-                break;
-            case DOWN:
-                //FrameFluidRenderer.renderFluidCuboid(lavaStack, matrixStack, buffer, combinedLight, 0.3f, 0.93f, 0.3f, 0.7f, 0.93f, 0.7f);
-                break;
-            case NORTH:
-                //FrameFluidRenderer.renderFluidCuboid(lavaStack, matrixStack, buffer, combinedLight, 0.3f, 0.3f, 0.93f, 0.7f, 0.7f, 0.93f);
-                break;
-            case EAST:
-               //FrameFluidRenderer.renderFluidCuboid(lavaStack, matrixStack, buffer, combinedLight, 0.07f, 0.3f, 0.3f, 0.07f, 0.7f, 0.7f);
-                break;
-            case WEST:
-                //FrameFluidRenderer.renderFluidCuboid(lavaStack, matrixStack, buffer, combinedLight, 0.93f, 0.3f, 0.3f, 0.93f, 0.7f, 0.7f);
-                break;
-            case SOUTH:
-                //FrameFluidRenderer.renderFluidCuboid(lavaStack, matrixStack, buffer, combinedLight, 0.3f, 0.3f, 0.07f, 0.7f, 0.7f, 0.07f);
-                break;
-        }
-    }
-
-    public NullifyModule() {
-        super();
-        //lavaStack = new FluidStack(Fluids.LAVA, 1000);
-        //still = RandomUtils.getSprite(Fluids.LAVA.getAttributes().getStillTexture());//Minecraft.getInstance().getModelManager().getAtlasTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE).getSprite(lava.getAttributes().getStillTexture());
-        //flowing = RandomUtils.getSprite(Fluids.LAVA.getAttributes().getFlowingTexture());// ModelBakery.LOCATION_LAVA_FLOW.getSprite();
-    }
-
-    @Override
-    @Environment(EnvType.CLIENT)
-    public String getModuleName() {
-        return I18n.translate("modularitemframe.module.null");
-    }
+    private final FluidVolume lava = FluidKeys.get(Fluids.LAVA).withAmount(FluidAmount.ONE);
 
     @Override
     public Identifier getId() {
@@ -84,6 +50,40 @@ public class NullifyModule extends ModuleBase {
     @Environment(EnvType.CLIENT)
     public Identifier frontTexture() {
         return BG_LOC;
+    }
+
+    @Override
+    @Environment(EnvType.CLIENT)
+    public String getModuleName() {
+        return I18n.translate("modularitemframe.module.null");
+    }
+
+    @Override
+    @Environment(EnvType.CLIENT)
+    public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
+        FluidRenderFace face = null;
+        switch (blockEntity.blockFacing()) {
+            case UP:
+                face = FluidRenderFace.createFlatFace(0.3f, 0.07f, 0.3f, 0.7f, 0.07f, 0.7f, 1, blockEntity.blockFacing());
+                break;
+            case DOWN:
+                face = FluidRenderFace.createFlatFace(0.3f, 0.93f, 0.3f, 0.7f, 0.93f, 0.7f, 1, blockEntity.blockFacing());
+                break;
+            case NORTH:
+                face = FluidRenderFace.createFlatFace(0.3f, 0.3f, 0.93f, 0.7f, 0.7f, 0.93f, 1, blockEntity.blockFacing());
+                break;
+            case EAST:
+                face = FluidRenderFace.createFlatFace(0.07f, 0.3f, 0.3f, 0.07f, 0.7f, 0.7f, 1, blockEntity.blockFacing());
+                break;
+            case WEST:
+                face = FluidRenderFace.createFlatFace(0.93f, 0.3f, 0.3f, 0.93f, 0.7f, 0.7f, 1, blockEntity.blockFacing());
+                break;
+            case SOUTH:
+                face = FluidRenderFace.createFlatFace(0.3f, 0.3f, 0.07f, 0.7f, 0.7f, 0.07f, 1, blockEntity.blockFacing());
+                break;
+        }
+
+        lava.render(Collections.singletonList(face), buffer, matrixStack);
     }
 
     @Override
