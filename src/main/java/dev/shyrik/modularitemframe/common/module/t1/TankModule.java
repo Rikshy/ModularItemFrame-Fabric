@@ -1,16 +1,23 @@
 package dev.shyrik.modularitemframe.common.module.t1;
 
+import alexiil.mc.lib.attributes.fluid.*;
+import alexiil.mc.lib.attributes.fluid.amount.FluidAmount;
+import alexiil.mc.lib.attributes.fluid.impl.SimpleFixedFluidInv;
+import alexiil.mc.lib.attributes.fluid.render.FluidRenderFace;
+import alexiil.mc.lib.attributes.fluid.volume.FluidVolume;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.FluidFillable;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.text.TranslatableText;
@@ -22,6 +29,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
+import java.util.Collections;
+
 public class TankModule extends ModuleBase {
 
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t1_tank");
@@ -29,10 +38,8 @@ public class TankModule extends ModuleBase {
     private static final String NBT_MODE = "tankmode";
     private static final String NBT_TANK = "tank";
 
-    private int BUCKET_VOLUME = 1000;
-
     public EnumMode mode = EnumMode.NONE;
-    //private FluidTank tank = new FluidTank(ModularItemFrame.getConfig().TankFrameCapacity);
+    private SimpleFixedFluidInv tank = new SimpleFixedFluidInv(1, FluidAmount.ofWhole(ModularItemFrame.getConfig().TankFrameCapacity));
 
     @Override
     public Identifier getId() {
@@ -58,31 +65,33 @@ public class TankModule extends ModuleBase {
     @Override
     @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
-        //if (tank != null && tank.getFluidAmount() > 0) {
-            //FluidStack fluid = tank.getFluid();
-            //float amount = (float) tank.getFluidAmount() / (float) tank.getCapacity();
-
+        FluidVolume vol = tank.getInvFluid(0);
+        if (!vol.amount().isZero()) {
+            double amount = (float) vol.getAmount_F().as1620() / (float) tank.getMaxAmount_F(0).as1620();
+            FluidRenderFace face = null;
             switch (blockEntity.blockFacing()) {
                 case UP:
-                    //FrameFluidRenderer.renderFluidCuboid(fluid, matrixStack, buffer, combinedLight, 0.2f, 0.08f, 0.2f, 0.8f, 0.08f, 0.2f + amount * 0.6f);
+                    face = FluidRenderFace.createFlatFace(0.2d, 0.08d, 0.2d, 0.8d, 0.08d, 0.2d + amount * 0.6d, 1, blockEntity.blockFacing());
                     break;
                 case DOWN:
-                    //FrameFluidRenderer.renderFluidCuboid(fluid, matrixStack, buffer, combinedLight, 0.2f, 0.92f, 0.2f, 0.8f, 0.92f, 0.2f + amount * 0.6f);
+                    face = FluidRenderFace.createFlatFace(0.2f, 0.92f, 0.2f, 0.8f, 0.92f, 0.2f + amount * 0.6f, 1, blockEntity.blockFacing());
                     break;
                 case NORTH:
-                    //FrameFluidRenderer.renderFluidCuboid(fluid, matrixStack, buffer, combinedLight, 0.2f, 0.2f, 0.92f, 0.8f, 0.2f + amount * 0.6f, 0.92f);
+                    face = FluidRenderFace.createFlatFace(0.2f, 0.2f, 0.92f, 0.8f, 0.2f + amount * 0.6f, 0.92f, 1, blockEntity.blockFacing());
                     break;
                 case EAST:
-                    //FrameFluidRenderer.renderFluidCuboid(fluid, matrixStack, buffer, combinedLight, 0.08f, 0.2f, 0.2f, 0.08f, 0.2f + amount * 0.6f, 0.8f);
+                    face = FluidRenderFace.createFlatFace(0.08f, 0.2f, 0.2f, 0.08f, 0.2f + amount * 0.6f, 0.8f, 1, blockEntity.blockFacing());
                     break;
                 case WEST:
-                    //FrameFluidRenderer.renderFluidCuboid(fluid, matrixStack, buffer, combinedLight, 0.92f, 0.2f, 0.2f, 0.92f, 0.2f + amount * 0.6f, 0.8f);
+                    face = FluidRenderFace.createFlatFace(0.92f, 0.2f, 0.2f, 0.92f, 0.2f + amount * 0.6f, 0.8f, 1, blockEntity.blockFacing());
                     break;
                 case SOUTH:
-                    //FrameFluidRenderer.renderFluidCuboid(fluid, matrixStack, buffer, combinedLight, 0.2f, 0.2f, 0.08f, 0.8f, 0.2f + amount * 0.6f, 0.08f);
+                    face = FluidRenderFace.createFlatFace(0.2f, 0.2f, 0.08f, 0.8f, 0.2f + amount * 0.6f, 0.08f, 1, blockEntity.blockFacing());
                     break;
             }
-        //}
+
+            vol.render(Collections.singletonList(face), buffer, matrixStack);
+        }
     }
 
     @Override
@@ -99,10 +108,9 @@ public class TankModule extends ModuleBase {
 
     @Override
     public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
-        ItemStack stack = player.getStackInHand(hand);
-        //FluidUtil.interactWithFluidHandler(player, hand, tank);
+        ActionResult result = FluidInvUtil.interactHandWithTank((FixedFluidInv) tank, player, hand).asActionResult();
         blockEntity.markDirty();
-        return null;//FluidUtil.getFluidHandler(stack) != null ? ActionResult.SUCCESS : ActionResult.FAIL;
+        return ActionResult.SUCCESS;
     }
 
     @Override
@@ -110,33 +118,41 @@ public class TankModule extends ModuleBase {
         if (!world.isClient && mode != EnumMode.NONE && ModularItemFrame.getConfig().TankTransferRate > 0) {
             if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
 
-            BlockEntity neighbor = blockEntity.getAttachedTile();
+            FixedFluidInv neighbor = blockEntity.getAttachedTanks();
             if (neighbor != null) {
-                //FluidHandler handler = blockEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, blockEntity.blockFacing().getOpposite()).orElse(null);
-                //if (handler != null) {
-                //    if (mode == EnumMode.DRAIN)
-                //        FluidUtil.tryFluidTransfer(tank, handler, ModularItemFrame.getConfig().TankTransferRate, true);
-                //    else FluidUtil.tryFluidTransfer(handler, tank, ModularItemFrame.getConfig().TankTransferRate, true);
-                    blockEntity.markDirty();
-                //}
+                if (mode == EnumMode.DRAIN)
+                    FluidVolumeUtil.move((FluidExtractable) neighbor, tank, FluidAmount.of1620(ModularItemFrame.getConfig().TankTransferRate));
+                else
+                    FluidVolumeUtil.move(tank, (FluidInsertable) neighbor, FluidAmount.of1620(ModularItemFrame.getConfig().TankTransferRate));
             }
         }
     }
 
     @Override
     public void onFrameUpgradesChanged() {
-        int newCapacity = (int) Math.pow(ModularItemFrame.getConfig().TankFrameCapacity / (float) BUCKET_VOLUME, blockEntity.getCapacityUpCount() + 1) * BUCKET_VOLUME;
-        //tank.setCapacity(newCapacity);
+        int newCapacity = (int) Math.pow(ModularItemFrame.getConfig().TankFrameCapacity, blockEntity.getCapacityUpCount() + 1);
+        SimpleFixedFluidInv tmp = new SimpleFixedFluidInv(1, FluidAmount.of1620(newCapacity));
+        tmp.insert(tank.extract(tmp.getMaxAmount_F(0).min(tank.getMaxAmount_F(0))));
+        tank = tmp;
         blockEntity.markDirty();
     }
 
     @Override
     public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player) {
         super.onRemove(world, pos, facing, player);
-        for ( Direction face : Direction.values()) {
-            if (face == facing.getOpposite()) continue;
-            //if (FluidUtil.tryPlaceFluid(null, world, Hand.MAIN_HAND, pos.offset(facing.getOpposite()), tank, tank.drain(BUCKET_VOLUME, IFluidHandler.FluidAction.SIMULATE)))
-             //   tank.drain(BUCKET_VOLUME, IFluidHandler.FluidAction.EXECUTE);
+        if (!ModularItemFrame.getConfig().dropFluidOnTankRemove && tank.getInvFluid(0).amount().isZero())
+            return;
+        Fluid fluid = tank.getInvFluid(0).getRawFluid();
+
+        for ( Direction dir : Direction.values()) {
+            if (dir == facing.getOpposite()) continue;
+            BlockState state = world.getBlockState(pos.offset(dir));
+            Block block = state.getBlock();
+            if (state.canBucketPlace(fluid))
+                world.setBlockState(pos.offset(dir), fluid.getDefaultState().getBlockState());
+            else if (block instanceof FluidFillable) {
+                ((FluidFillable) block).tryFillWithFluid(world, pos, state, fluid.getDefaultState());
+            }
         }
     }
 
@@ -144,14 +160,14 @@ public class TankModule extends ModuleBase {
     public CompoundTag toTag() {
         CompoundTag tag = super.toTag();
         tag.putInt(NBT_MODE, mode.getIndex());
-        //nbt.put(NBT_TANK, tank.toTag(new CompoundTag()));
+        tag.put(NBT_TANK, tank.toTag());
         return tag;
     }
 
     @Override
     public void fromTag(CompoundTag tag) {
         super.fromTag(tag);
-        //if (nbt.contains(NBT_TANK)) tank.fromTag(nbt.getCompound(NBT_TANK));
+        if (tag.contains(NBT_TANK)) tank.fromTag(tag.getCompound(NBT_TANK));
         if (tag.contains(NBT_MODE))
             mode = ModularItemFrame.getConfig().TankTransferRate > 0 ? EnumMode.VALUES[tag.getInt(NBT_MODE)] : EnumMode.NONE;
     }

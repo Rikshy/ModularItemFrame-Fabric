@@ -1,6 +1,8 @@
 package dev.shyrik.modularitemframe.common.block;
 
 import alexiil.mc.lib.attributes.SearchOptions;
+import alexiil.mc.lib.attributes.fluid.FixedFluidInv;
+import alexiil.mc.lib.attributes.fluid.FluidAttributes;
 import alexiil.mc.lib.attributes.item.*;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
@@ -118,6 +120,10 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
 
     public FixedItemInv getAttachedInventory() {
         return ItemAttributes.FIXED_INV.getFirstOrNull(world, pos.offset(blockFacing().getOpposite()), SearchOptions.inDirection(blockFacing()));
+    }
+
+    public FixedFluidInv getAttachedTanks() {
+        return FluidAttributes.FIXED_INV.getFirstOrNull(world, pos.offset(blockFacing().getOpposite()), SearchOptions.inDirection(blockFacing()));
     }
 
     public BlockState getAttachedBlock() {

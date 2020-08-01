@@ -13,11 +13,13 @@ public class ModularItemFrameConfig implements ConfigData {
 
     public boolean AllowFakePlayers = false; //"Allow fake players to interact with frames"
 
-    @ConfigEntry.BoundedDiscrete(min = 1000, max = 32000)
-    public int TankFrameCapacity = 4000; //"Base Fluid Capacity of the tank frame (mB)"
+    @ConfigEntry.BoundedDiscrete(min = 1, max = 32)
+    public int TankFrameCapacity = 4; //"Base Fluid Capacity of the tank frame (buckets)"
 
-    @ConfigEntry.BoundedDiscrete(min = 0, max = 1000)
-    public int TankTransferRate = 100; //"Transferrate of the tank (mB) [0=disabled]"
+    @ConfigEntry.BoundedDiscrete(min = 0, max = 1620)
+    public int TankTransferRate = 162; //"Transferrate of the tank (drips) [0=disabled]"
+
+    public boolean dropFluidOnTankRemove = false;
 
     @ConfigEntry.BoundedDiscrete(min = 0, max = 1024)
     public int BaseTeleportRange = 64; //"Base teleport distance of the teleport module"
