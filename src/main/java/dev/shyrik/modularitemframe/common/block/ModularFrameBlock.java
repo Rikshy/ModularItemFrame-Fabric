@@ -209,7 +209,7 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
         if (!world.isClient) {
             Direction side = state.get(FACING);
             if (!canAttachTo(world, pos.offset(side.getOpposite()), side)) {
-                world.removeBlock(pos, true);
+                world.breakBlock(pos, true);
             }
         }
     }
