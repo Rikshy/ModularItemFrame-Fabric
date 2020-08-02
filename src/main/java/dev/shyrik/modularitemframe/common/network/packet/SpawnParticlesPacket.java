@@ -2,8 +2,6 @@ package dev.shyrik.modularitemframe.common.network.packet;
 
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.util.RegistryHelper;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.network.PacketContext;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.PacketByteBuf;
@@ -11,7 +9,6 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 
 public class SpawnParticlesPacket extends NetworkPacket {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "spawn_particles");
@@ -25,7 +22,7 @@ public class SpawnParticlesPacket extends NetworkPacket {
         this.pos = pos;
         this.amount = amount;
     }
-    public SpawnParticlesPacket(ParticleType particle, BlockPos pos, int amount) {
+    public SpawnParticlesPacket(ParticleType<?> particle, BlockPos pos, int amount) {
         this.particleId = RegistryHelper.getId(particle);
         this.pos = pos;
         this.amount = amount;
@@ -51,10 +48,10 @@ public class SpawnParticlesPacket extends NetworkPacket {
         buf.writeInt(amount);
     }
 
-    @Environment(EnvType.CLIENT)
     public static void accept(PacketContext packetContext, PacketByteBuf packetByteBuf) {
+        SpawnParticlesPacket packet = decode(packetByteBuf);
+
         packetContext.getTaskQueue().execute(() -> {
-            SpawnParticlesPacket packet = decode(packetByteBuf);
 
             ParticleType<?> particle = RegistryHelper.getParticle(packet.particleId);
             if (particle != null) {

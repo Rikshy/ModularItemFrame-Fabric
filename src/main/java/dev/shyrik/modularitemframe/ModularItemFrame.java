@@ -1,6 +1,7 @@
 package dev.shyrik.modularitemframe;
 
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
+import dev.shyrik.modularitemframe.common.network.NetworkHandler;
 import dev.shyrik.modularitemframe.init.ModularItemFrameConfig;
 import dev.shyrik.modularitemframe.init.Registrar;
 import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
@@ -26,7 +27,6 @@ public class ModularItemFrame implements ModInitializer {
         AutoConfig.register(ModularItemFrameConfig.class, GsonConfigSerializer::new);
 
         UseBlockCallback.EVENT.register(ModularFrameBlock::onPlayerInteracted);
-
         Registrar.register();
     }
 

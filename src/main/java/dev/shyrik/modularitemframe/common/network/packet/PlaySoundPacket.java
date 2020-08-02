@@ -1,8 +1,6 @@
 package dev.shyrik.modularitemframe.common.network.packet;
 
 import dev.shyrik.modularitemframe.ModularItemFrame;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.network.PacketContext;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.PositionedSoundInstance;
@@ -64,10 +62,10 @@ public class PlaySoundPacket extends NetworkPacket {
         );
     }
 
-    @Environment(EnvType.CLIENT)
     public static void accept(PacketContext packetContext, PacketByteBuf packetByteBuf) {
+        PlaySoundPacket packet = decode(packetByteBuf);
+
         packetContext.getTaskQueue().execute(() -> {
-            PlaySoundPacket packet = decode(packetByteBuf);
 
             SoundEvent sound = Registry.SOUND_EVENT.get(packet.soundId);
             Optional<SoundCategory> cat = Arrays.stream(SoundCategory.values())

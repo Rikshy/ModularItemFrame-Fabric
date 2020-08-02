@@ -6,11 +6,11 @@ import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.module.t1.*;
 import dev.shyrik.modularitemframe.common.module.t2.*;
 import dev.shyrik.modularitemframe.common.module.t3.*;
+import dev.shyrik.modularitemframe.common.network.NetworkHandler;
 import dev.shyrik.modularitemframe.init.Registrar;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 
 import java.util.Arrays;
@@ -18,6 +18,7 @@ import java.util.Arrays;
 public class ModularItemFrameClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
+        NetworkHandler.register();
         ClientSpriteRegistryCallback.event(SpriteAtlasTexture.BLOCK_ATLAS_TEX)
                 .register((spriteAtlasTexture, registry) -> stitch(registry));
         ApplyModelLoaderCallback.EVENT.register(FrameRenderer::onApplyModelLoader);
