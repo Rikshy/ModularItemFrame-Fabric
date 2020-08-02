@@ -21,7 +21,6 @@ public class ModularItemFrameClient implements ClientModInitializer {
         ClientSpriteRegistryCallback.event(SpriteAtlasTexture.BLOCK_ATLAS_TEX)
                 .register((spriteAtlasTexture, registry) -> stitch(registry));
         ApplyModelLoaderCallback.EVENT.register(FrameRenderer::onApplyModelLoader);
-        UseBlockCallback.EVENT.register(ModularFrameBlock::onPlayerInteracted);
         BlockEntityRendererRegistry.INSTANCE.register(Registrar.MODULAR_FRAME_ENTITY, FrameRenderer::new);
     }
 

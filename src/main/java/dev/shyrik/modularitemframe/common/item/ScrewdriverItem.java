@@ -1,6 +1,5 @@
 package dev.shyrik.modularitemframe.common.item;
 
-import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
@@ -41,19 +40,6 @@ public class ScrewdriverItem extends ToolItem {
             result = ActionResult.SUCCESS;
         }
         return new TypedActionResult<>(result, player.getStackInHand(hand));
-    }
-
-//    @Override
-//    public boolean doesSneakBypassUse(ItemStack stack, IWorldReader world, BlockPos pos, PlayerEntity player) {
-//        return true;
-//    }
-
-
-    @Override
-    public ActionResult useOnBlock(ItemUsageContext context) {
-        if (context.getWorld().getBlockState(context.getBlockPos()).getBlock() instanceof ModularFrameBlock)
-            return ActionResult.SUCCESS;
-        return ActionResult.PASS;
     }
 
     public static EnumMode getMode(ItemStack driver) {

@@ -25,7 +25,7 @@ public class ModularItemFrame implements ModInitializer {
     public void onInitialize() {
         AutoConfig.register(ModularItemFrameConfig.class, GsonConfigSerializer::new);
 
-        //UseBlockCallback.EVENT.register(ModularFrameBlock::onPlayerInteracted);
+        UseBlockCallback.EVENT.register(ModularFrameBlock::onPlayerInteracted);
 
         Registrar.register();
     }

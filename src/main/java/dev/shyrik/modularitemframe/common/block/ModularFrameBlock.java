@@ -172,34 +172,17 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
 
     public static ActionResult onPlayerInteracted(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
         BlockState blockState = world.getBlockState(hitResult.getBlockPos());
-        if (world.getBlockState(hitResult.getBlockPos()).getBlock() instanceof ModularFrameBlock &&
+
+        if (blockState.getBlock() instanceof ModularFrameBlock &&
                 player.getStackInHand(hand).getItem() instanceof ScrewdriverItem) {
 
-            if (world.isClient) {
-                ActionResult actionResult = world.getBlockState(hitResult.getBlockPos()).onUse(world, player, hand, hitResult);
-                if (actionResult.isAccepted()) {
-                    ((ClientPlayerEntity) player).networkHandler.sendPacket(new PlayerInteractBlockC2SPacket(hand, hitResult));
-                    return actionResult;
-                }
+            ActionResult actionResult = blockState.onUse(world, player, hand, hitResult);
+            if (actionResult.isAccepted()) {
+                return actionResult;
             }
-            else {
-                ActionResult actionResult = blockState.onUse(world, player, hand, hitResult);
-                if (actionResult.isAccepted()) {
-                    Criteria.ITEM_USED_ON_BLOCK.test((ServerPlayerEntity)player, hitResult.getBlockPos(), player.getStackInHand(hand));
-                    return actionResult;
-                }
-            }
-            return ActionResult.SUCCESS;
         }
         return ActionResult.PASS;
     }
-
-//    public static void onPlayerInteracted(PlayerInteractEvent.RightClickBlock event) {
-//        if (event.getWorld().getBlockState(event.getPos()).getBlock() instanceof ModularFrameBlock) {
-//            event.setUseBlock(Event.Result.ALLOW);
-//            event.setUseItem(Event.Result.DENY);
-//        }
-//    }
     //endregion
 
     //region <placing/breaking>
