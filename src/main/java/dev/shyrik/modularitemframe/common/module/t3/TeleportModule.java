@@ -1,5 +1,6 @@
 package dev.shyrik.modularitemframe.common.module.t3;
 
+import com.google.common.collect.ImmutableList;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.fake.FakePlayer;
@@ -60,50 +61,17 @@ public class TeleportModule extends ModuleBase {
     @Override
     @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
-        BlockPos pos = blockEntity.getPos();
-        EnderRenderHelper.render(matrixStack, buffer, pos, renderer.getDispatcher().camera.getPos(), info -> {
-            float x = pos.getX(), y = pos.getY(), z = pos.getZ();
-            switch (blockEntity.blockFacing()) {
-                case DOWN:
-                    info.buffer.vertex(info.matrix, x + 0.85f, y + 0.08f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).next();
-                    info.buffer.vertex(info.matrix, x + 0.85f, y + 0.08f, z + 0.14f).color(info.color1, info.color2, info.color3, 1.0F).next();
-                    info.buffer.vertex(info.matrix, x + 0.14f, y + 0.08f, z + 0.14f).color(info.color1, info.color2, info.color3, 1.0F).next();
-                    info.buffer.vertex(info.matrix, x + 0.14f, y + 0.08f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).next();
-                    break;
-                case UP:
-                    info.buffer.vertex(info.matrix, x + 0.85f, y + 0.92f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).next();
-                    info.buffer.vertex(info.matrix, x + 0.85f, y + 0.92f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).next();
-                    info.buffer.vertex(info.matrix, x + 0.16f, y + 0.92f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).next();
-                    info.buffer.vertex(info.matrix, x + 0.16f, y + 0.92f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).next();
-                    break;
-                case NORTH:
-                    info.buffer.vertex(info.matrix, x + 0.85f, y + 0.85f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).next();
-                    info.buffer.vertex(info.matrix, x + 0.14f, y + 0.85f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).next();
-                    info.buffer.vertex(info.matrix, x + 0.14f, y + 0.14f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).next();
-                    info.buffer.vertex(info.matrix, x + 0.85f, y + 0.14f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).next();
-                    break;
-                case SOUTH:
-                    info.buffer.vertex(info.matrix, x + 0.14f, y + 0.85f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).next();
-                    info.buffer.vertex(info.matrix, x + 0.85f, y + 0.85f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).next();
-                    info.buffer.vertex(info.matrix, x + 0.85f, y + 0.14f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).next();
-                    info.buffer.vertex(info.matrix, x + 0.14f, y + 0.14f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).next();
-                    break;
-                case WEST:
-                    info.buffer.vertex(info.matrix, x + 0.08f, y + 0.85f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).next();
-                    info.buffer.vertex(info.matrix, x + 0.08f, y + 0.85f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).next();
-                    info.buffer.vertex(info.matrix, x + 0.08f, y + 0.16f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).next();
-                    info.buffer.vertex(info.matrix, x + 0.08f, y + 0.16f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).next();
-                    break;
-                case EAST:
-                    info.buffer.vertex(info.matrix, x + 0.92f, y + 0.85f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).next();
-                    info.buffer.vertex(info.matrix, x + 0.92f, y + 0.85f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).next();
-                    info.buffer.vertex(info.matrix, x + 0.92f, y + 0.16f, z + 0.16f).color(info.color1, info.color2, info.color3, 1.0F).next();
-                    info.buffer.vertex(info.matrix, x + 0.92f, y + 0.16f, z + 0.85f).color(info.color1, info.color2, info.color3, 1.0F).next();
-                    break;
-            }
+        ImmutableList<EnderRenderHelper.EndRenderFace> faces =
+                ImmutableList.of(
+                        new EnderRenderHelper.EndRenderFace(0.85f, 0.08f, 0.14f, Direction.UP),
+                        new EnderRenderHelper.EndRenderFace(0.85f, 0.92f, 0.14f, Direction.DOWN),
+                        new EnderRenderHelper.EndRenderFace(0.85f, 0.92f, 0.14f, Direction.NORTH),
+                        new EnderRenderHelper.EndRenderFace(0.85f, 0.08f, 0.14f, Direction.SOUTH),
+                        new EnderRenderHelper.EndRenderFace(0.85f, 0.08f, 0.14f, Direction.EAST),
+                        new EnderRenderHelper.EndRenderFace(0.85f, 0.92f, 0.14f, Direction.WEST)
+                );
 
-            return true;
-        });
+        EnderRenderHelper.render(blockEntity, matrixStack, buffer, renderer.getDispatcher().camera.getPos(), faces);
     }
 
     @Override
