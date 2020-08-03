@@ -88,7 +88,7 @@ public class VacuumModule extends ModuleBase {
 
     @Override
     public void tick(World world, BlockPos pos) {
-        if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
+        if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0 && world.isClient) return;
 
         FixedItemInv handler = blockEntity.getAttachedInventory();
         if (handler != null) {
