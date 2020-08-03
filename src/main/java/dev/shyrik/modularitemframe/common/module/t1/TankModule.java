@@ -39,7 +39,7 @@ public class TankModule extends ModuleBase {
     private static final String NBT_TANK = "tank";
 
     public EnumMode mode = EnumMode.NONE;
-    private SimpleFixedFluidInv tank = new SimpleFixedFluidInv(1, FluidAmount.ofWhole(ModularItemFrame.getConfig().TankFrameCapacity));
+    private SimpleFixedFluidInv tank = new SimpleFixedFluidInv(1, FluidAmount.ofWhole(ModularItemFrame.getConfig().tankFrameCapacity));
 
     @Override
     public Identifier getId() {
@@ -97,7 +97,7 @@ public class TankModule extends ModuleBase {
     @Override
     public void screw(World world, BlockPos pos, PlayerEntity player, ItemStack driver) {
         if (!world.isClient) {
-            if (ModularItemFrame.getConfig().TankTransferRate > 0) {
+            if (ModularItemFrame.getConfig().tankTransferRate > 0) {
                 int modeIdx = mode.getIndex() + 1;
                 if (modeIdx == EnumMode.values().length) modeIdx = 0;
                 mode = EnumMode.VALUES[modeIdx];
@@ -115,22 +115,22 @@ public class TankModule extends ModuleBase {
 
     @Override
     public void tick(World world, BlockPos pos) {
-        if (!world.isClient && mode != EnumMode.NONE && ModularItemFrame.getConfig().TankTransferRate > 0) {
+        if (!world.isClient && mode != EnumMode.NONE && ModularItemFrame.getConfig().tankTransferRate > 0) {
             if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
 
             FixedFluidInv neighbor = blockEntity.getAttachedTanks();
             if (neighbor != null) {
                 if (mode == EnumMode.DRAIN)
-                    FluidVolumeUtil.move((FluidExtractable) neighbor, tank, FluidAmount.of1620(ModularItemFrame.getConfig().TankTransferRate));
+                    FluidVolumeUtil.move((FluidExtractable) neighbor, tank, FluidAmount.of1620(ModularItemFrame.getConfig().tankTransferRate));
                 else
-                    FluidVolumeUtil.move(tank, (FluidInsertable) neighbor, FluidAmount.of1620(ModularItemFrame.getConfig().TankTransferRate));
+                    FluidVolumeUtil.move(tank, (FluidInsertable) neighbor, FluidAmount.of1620(ModularItemFrame.getConfig().tankTransferRate));
             }
         }
     }
 
     @Override
     public void onFrameUpgradesChanged() {
-        int newCapacity = (int) Math.pow(ModularItemFrame.getConfig().TankFrameCapacity, blockEntity.getCapacityUpCount() + 1);
+        int newCapacity = (int) Math.pow(ModularItemFrame.getConfig().tankFrameCapacity, blockEntity.getCapacityUpCount() + 1);
         SimpleFixedFluidInv tmp = new SimpleFixedFluidInv(1, FluidAmount.of1620(newCapacity));
         tmp.insert(tank.extract(tmp.getMaxAmount_F(0).min(tank.getMaxAmount_F(0))));
         tank = tmp;
@@ -169,7 +169,7 @@ public class TankModule extends ModuleBase {
         super.fromTag(tag);
         if (tag.contains(NBT_TANK)) tank.fromTag(tag.getCompound(NBT_TANK));
         if (tag.contains(NBT_MODE))
-            mode = ModularItemFrame.getConfig().TankTransferRate > 0 ? EnumMode.VALUES[tag.getInt(NBT_MODE)] : EnumMode.NONE;
+            mode = ModularItemFrame.getConfig().tankTransferRate > 0 ? EnumMode.VALUES[tag.getInt(NBT_MODE)] : EnumMode.NONE;
     }
 
     public enum EnumMode {

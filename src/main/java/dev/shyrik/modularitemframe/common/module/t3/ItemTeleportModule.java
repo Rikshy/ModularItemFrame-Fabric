@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.ItemHelper;
-import dev.shyrik.modularitemframe.api.util.RegistryHelper;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.block.ModularFrameEntity;
@@ -143,7 +142,7 @@ public class ItemTeleportModule extends ModuleBase {
         super.onFrameUpgradesChanged();
 
         if (linkedLoc != null) {
-            if (!blockEntity.getPos().isWithinDistance(linkedLoc, ModularItemFrame.getConfig().BaseTeleportRange + (blockEntity.getRangeUpCount() * 10))) {
+            if (!blockEntity.getPos().isWithinDistance(linkedLoc, ModularItemFrame.getConfig().teleportRange + (blockEntity.getRangeUpCount() * 10))) {
                 linkedLoc = null;
                 direction = EnumMode.NONE;
             }
@@ -165,8 +164,8 @@ public class ItemTeleportModule extends ModuleBase {
                 int countRange = blockEntity.getRangeUpCount();
                 if (!(targetBlockEntity instanceof ModularFrameEntity) || !((((ModularFrameEntity) targetBlockEntity).module instanceof ItemTeleportModule)))
                     player.sendMessage(new TranslatableText("modularitemframe.message.invalid_target"), false);
-                else if (!blockEntity.getPos().isWithinDistance(tmp, ModularItemFrame.getConfig().BaseTeleportRange + (countRange * 10))) {
-                    player.sendMessage(new TranslatableText("modularitemframe.message.too_far", ModularItemFrame.getConfig().BaseTeleportRange + (countRange * 10)), false);
+                else if (!blockEntity.getPos().isWithinDistance(tmp, ModularItemFrame.getConfig().teleportRange + (countRange * 10))) {
+                    player.sendMessage(new TranslatableText("modularitemframe.message.too_far", ModularItemFrame.getConfig().teleportRange + (countRange * 10)), false);
                 } else {
                     linkedLoc = tmp;
                     direction = EnumMode.DISPENSE;
@@ -212,7 +211,6 @@ public class ItemTeleportModule extends ModuleBase {
     @Override
     public void tick(World world, BlockPos pos) {
         if (direction != EnumMode.VACUUM) return;
-        if (ModularItemFrame.getConfig() .DisableAutomaticItemTransfer) return;
         if (!hasValidConnection(world)) return;
         if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
 
@@ -263,7 +261,7 @@ public class ItemTeleportModule extends ModuleBase {
     }
 
     private Box getVacuumBox(BlockPos pos) {
-        int range = ModularItemFrame.getConfig().BaseVacuumRange + blockEntity.getRangeUpCount();
+        int range = ModularItemFrame.getConfig().vacuumRange + blockEntity.getRangeUpCount();
         switch (blockEntity.blockFacing()) {
             case DOWN:
                 return new Box(pos.add(-5, 0, -5), pos.add(5, -5, 5));

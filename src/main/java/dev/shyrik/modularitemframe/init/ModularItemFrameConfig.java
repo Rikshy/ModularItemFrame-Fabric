@@ -2,30 +2,53 @@ package dev.shyrik.modularitemframe.init;
 
 import me.sargunvohra.mcmods.autoconfig1u.ConfigData;
 import me.sargunvohra.mcmods.autoconfig1u.annotation.*;
+import me.sargunvohra.mcmods.autoconfig1u.shadowed.blue.endless.jankson.Comment;
 
 import static dev.shyrik.modularitemframe.ModularItemFrame.MOD_ID;
 
 @Config(name=MOD_ID)
 public class ModularItemFrameConfig implements ConfigData {
 
+    @Comment("Maximum number of upgrades a frame can hold [default=5]")
     @ConfigEntry.BoundedDiscrete(min = 0, max = 10)
-    public int MaxFrameUpgrades = 5; //"Maximum number of upgrades a frame can hold"
+    public int maxFrameUpgrades = 5;
 
-    public boolean AllowFakePlayers = false; //"Allow fake players to interact with frames"
-
+    @Comment("Base fluid capacity of the tank frame (buckets) [default=4]")
     @ConfigEntry.BoundedDiscrete(min = 1, max = 32)
-    public int TankFrameCapacity = 4; //"Base Fluid Capacity of the tank frame (buckets)"
+    public int tankFrameCapacity = 4;
 
+    @Comment("Base transfer rate of the tank (drips) [0=disabled | 1620=1Bucket] [default=162]")
     @ConfigEntry.BoundedDiscrete(min = 0, max = 1620)
-    public int TankTransferRate = 162; //"Transferrate of the tank (drips) [0=disabled]"
+    public int tankTransferRate = 162;
 
+    @Comment("Tank module will spill content when removing the module. [default=false]")
     public boolean dropFluidOnTankRemove = false;
 
-    @ConfigEntry.BoundedDiscrete(min = 0, max = 1024)
-    public int BaseTeleportRange = 64; //"Base teleport distance of the teleport module"
+    @Comment("Base teleport distance of the teleport module")
+    @ConfigEntry.BoundedDiscrete(min = 0, max = 256)
+    public int teleportRange = 64;
 
+    @Comment("Base range of the vacuum module pickup range")
     @ConfigEntry.BoundedDiscrete(min = 1, max = 16)
-    public int BaseVacuumRange = 3; //"Base range of the vacuum frame"
+    public int vacuumRange = 3;
 
-    public boolean DisableAutomaticItemTransfer = false; //"Makes the Item Teleport Module to not vacuum items"
+    @Override
+    public void validatePostLoad() throws ValidationException {
+        if (tankTransferRate > 1620) {
+            tankTransferRate = 1620;
+        }
+        if (tankFrameCapacity > 32) {
+            tankFrameCapacity = 32;
+        } else if (tankFrameCapacity < 1) {
+            tankFrameCapacity = 1;
+        }
+
+        if (teleportRange > 256) {
+            teleportRange = 256;
+        }
+
+        if (vacuumRange > 16) {
+            vacuumRange = 16;
+        }
+    }
 }

@@ -39,9 +39,9 @@ public class VacuumModule extends ModuleBase {
     private static final String NBT_RANGEZ = "rangez";
 
     private EnumMode mode = EnumMode.X;
-    private int rangeX = ModularItemFrame.getConfig().BaseVacuumRange;
-    private int rangeY = ModularItemFrame.getConfig().BaseVacuumRange;
-    private int rangeZ = ModularItemFrame.getConfig().BaseVacuumRange;
+    private int rangeX = ModularItemFrame.getConfig().vacuumRange;
+    private int rangeY = ModularItemFrame.getConfig().vacuumRange;
+    private int rangeZ = ModularItemFrame.getConfig().vacuumRange;
 
     @Override
     public Identifier getId() {
@@ -118,7 +118,7 @@ public class VacuumModule extends ModuleBase {
     public void onFrameUpgradesChanged() {
         super.onFrameUpgradesChanged();
 
-        int maxRange = ModularItemFrame.getConfig().BaseVacuumRange + blockEntity.getRangeUpCount();
+        int maxRange = ModularItemFrame.getConfig().vacuumRange + blockEntity.getRangeUpCount();
         rangeX = Math.min(rangeX, maxRange);
         rangeY = Math.min(rangeY, maxRange);
         rangeZ = Math.min(rangeZ, maxRange);
@@ -163,7 +163,7 @@ public class VacuumModule extends ModuleBase {
     }
 
     private void adjustRange(PlayerEntity player) {
-        int maxRange = ModularItemFrame.getConfig().BaseVacuumRange + blockEntity.getRangeUpCount();
+        int maxRange = ModularItemFrame.getConfig().vacuumRange + blockEntity.getRangeUpCount();
         if (maxRange > 1) {
             int r = 0;
             switch (mode) {

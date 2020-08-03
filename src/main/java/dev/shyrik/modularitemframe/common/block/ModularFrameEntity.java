@@ -64,7 +64,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     }
 
     public boolean acceptsUpgrade() {
-        return upgrades.size() <= ModularItemFrame.getConfig().MaxFrameUpgrades;
+        return upgrades.size() <= ModularItemFrame.getConfig().maxFrameUpgrades;
     }
 
     public void dropUpgrades(PlayerEntity player, Direction facing) {

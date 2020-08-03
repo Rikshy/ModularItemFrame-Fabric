@@ -79,7 +79,7 @@ public class TeleportModule extends ModuleBase {
         super.onFrameUpgradesChanged();
 
         if (linkedLoc != null) {
-            if (!blockEntity.getPos().isWithinDistance(linkedLoc, ModularItemFrame.getConfig().BaseTeleportRange + (blockEntity.getRangeUpCount() * 10))) {
+            if (!blockEntity.getPos().isWithinDistance(linkedLoc, ModularItemFrame.getConfig().teleportRange + (blockEntity.getRangeUpCount() * 10))) {
                 linkedLoc = null;
             }
         }
@@ -127,8 +127,8 @@ public class TeleportModule extends ModuleBase {
                 int countRange = blockEntity.getRangeUpCount();
                 if (!(targetTile instanceof ModularFrameEntity) || !((((ModularFrameEntity) targetTile).module instanceof TeleportModule)))
                     player.sendMessage(new TranslatableText("modularitemframe.message.invalid_target"), true);
-                else if (!blockEntity.getPos().isWithinDistance(tmp, ModularItemFrame.getConfig().BaseTeleportRange + (countRange * 10))) {
-                    player.sendMessage(new TranslatableText("modularitemframe.message.too_far", ModularItemFrame.getConfig().BaseTeleportRange + (countRange * 10)), true);
+                else if (!blockEntity.getPos().isWithinDistance(tmp, ModularItemFrame.getConfig().teleportRange + (countRange * 10))) {
+                    player.sendMessage(new TranslatableText("modularitemframe.message.too_far", ModularItemFrame.getConfig().teleportRange + (countRange * 10)), true);
                 } else {
                     linkedLoc = tmp;
                     ((TeleportModule) ((ModularFrameEntity) targetTile).module).linkedLoc = blockEntity.getPos();

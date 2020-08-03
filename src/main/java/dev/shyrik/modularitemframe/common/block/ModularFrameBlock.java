@@ -4,22 +4,17 @@ import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleItem;
 import dev.shyrik.modularitemframe.api.UpgradeBase;
 import dev.shyrik.modularitemframe.api.UpgradeItem;
-import dev.shyrik.modularitemframe.api.util.fake.FakePlayer;
 import dev.shyrik.modularitemframe.api.util.RegistryHelper;
 import dev.shyrik.modularitemframe.common.item.ScrewdriverItem;
 import dev.shyrik.modularitemframe.common.module.EmptyModule;
-import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
 import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
@@ -109,40 +104,38 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
     @Override
     @SuppressWarnings("deprecation")
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        ActionResult result = ActionResult.PASS;
-        if (!(player instanceof FakePlayer) || ModularItemFrame.getConfig().AllowFakePlayers) {
-            ModularFrameEntity blockEntity = getBE(world, pos);
-            ItemStack handItem = player.getStackInHand(hand);
-            Direction side = hit.getSide();
-            if (handItem.getItem() instanceof ScrewdriverItem) {
-                if (!world.isClient) {
-                    if (side == state.get(FACING)) {
-                        if (hitModule(side, pos, hit.getPos())) {
-                            if (ScrewdriverItem.getMode(handItem) == ScrewdriverItem.EnumMode.INTERACT) {
-                                blockEntity.module.screw(world, pos, player, handItem);
-                            } else blockEntity.dropModule(side, player);
-                        } else blockEntity.dropUpgrades(player, side);
-                        blockEntity.markDirty();
-                    }
+        ActionResult result;
+        ModularFrameEntity blockEntity = getBE(world, pos);
+        ItemStack handItem = player.getStackInHand(hand);
+        Direction side = hit.getSide();
+        if (handItem.getItem() instanceof ScrewdriverItem) {
+            if (!world.isClient) {
+                if (side == state.get(FACING)) {
+                    if (hitModule(side, pos, hit.getPos())) {
+                        if (ScrewdriverItem.getMode(handItem) == ScrewdriverItem.EnumMode.INTERACT) {
+                            blockEntity.module.screw(world, pos, player, handItem);
+                        } else blockEntity.dropModule(side, player);
+                    } else blockEntity.dropUpgrades(player, side);
+                    blockEntity.markDirty();
                 }
-                result = ActionResult.SUCCESS;
-            } else if (handItem.getItem() instanceof ModuleItem && blockEntity.acceptsModule()) {
-                if (!world.isClient) {
-                    blockEntity.setModule(RegistryHelper.getId(handItem));
+            }
+            result = ActionResult.SUCCESS;
+        } else if (handItem.getItem() instanceof ModuleItem && blockEntity.acceptsModule()) {
+            if (!world.isClient) {
+                blockEntity.setModule(RegistryHelper.getId(handItem));
+                if (!player.isCreative()) player.getStackInHand(hand).decrement(1);
+                blockEntity.markDirty();
+            }
+            result = ActionResult.SUCCESS;
+        } else if (handItem.getItem() instanceof UpgradeItem && blockEntity.acceptsUpgrade()) {
+            if (!world.isClient) {
+                if (blockEntity.tryAddUpgrade(RegistryHelper.getId(handItem))) {
                     if (!player.isCreative()) player.getStackInHand(hand).decrement(1);
                     blockEntity.markDirty();
                 }
-                result = ActionResult.SUCCESS;
-            } else if (handItem.getItem() instanceof UpgradeItem && blockEntity.acceptsUpgrade()) {
-                if (!world.isClient) {
-                    if (blockEntity.tryAddUpgrade(RegistryHelper.getId(handItem))) {
-                        if (!player.isCreative()) player.getStackInHand(hand).decrement(1);
-                        blockEntity.markDirty();
-                    }
-                }
-                result = ActionResult.SUCCESS;
-            } else result = blockEntity.module.onUse(world, pos, state, player, hand, side, hit);
-        }
+            }
+            result = ActionResult.SUCCESS;
+        } else result = blockEntity.module.onUse(world, pos, state, player, hand, side, hit);
         return result;
     }
 
