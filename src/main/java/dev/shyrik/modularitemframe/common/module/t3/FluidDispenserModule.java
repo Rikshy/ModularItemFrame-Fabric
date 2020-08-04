@@ -1,14 +1,21 @@
 package dev.shyrik.modularitemframe.common.module.t3;
 
+import alexiil.mc.lib.attributes.Simulation;
+import alexiil.mc.lib.attributes.fluid.FixedFluidInv;
+import alexiil.mc.lib.attributes.fluid.amount.FluidAmount;
+import alexiil.mc.lib.attributes.fluid.volume.FluidVolume;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.FluidFillable;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -20,8 +27,6 @@ import net.minecraft.world.World;
 public class FluidDispenserModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t3_fluid_dispenser");
     public static final Identifier BG_LOC = new Identifier(ModularItemFrame.MOD_ID, "block/module_t3_fluid_dispenser");
-
-    private static final int BUCKET_VOLUME = 1000;
 
     @Override
     public Identifier getId() {
@@ -57,14 +62,22 @@ public class FluidDispenserModule extends ModuleBase {
         Direction facing = blockEntity.blockFacing();
         if (!world.isAir(pos.offset(facing))) return;
 
-        BlockEntity neighbor = blockEntity.getAttachedTile();
+        FixedFluidInv neighbor = blockEntity.getAttachedTanks();
         if (neighbor == null) return;
 
-        //IFluidHandler handler = neighbor.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing.getOpposite()).orElse(null);
-        //if (handler == null) return;
+        FluidVolume attempt = neighbor.getExtractable().attemptAnyExtraction(FluidAmount.BUCKET, Simulation.SIMULATE);
+        if (attempt.amount().isLessThan(FluidAmount.BUCKET))
+            return;
 
-        //if (FluidUtil.tryPlaceFluid(null, world, Hand.MAIN_HAND, pos.offset(facing.getOpposite()), handler, handler.drain(BUCKET_VOLUME, IFluidHandler.FluidAction.SIMULATE)))
-        //    handler.drain(BUCKET_VOLUME, IFluidHandler.FluidAction.SIMULATE);
+        BlockPos target = pos.offset(blockEntity.blockFacing());
+        BlockState state = world.getBlockState(target);
+        Block block = state.getBlock();
+        Fluid fluid = attempt.getRawFluid();
+
+        if (state.canBucketPlace(fluid)) {
+            world.setBlockState(target, fluid.getDefaultState().getBlockState());
+        } else if (block instanceof FluidFillable) {
+            ((FluidFillable) block).tryFillWithFluid(world, pos, state, fluid.getDefaultState());
+        }
     }
-
 }
