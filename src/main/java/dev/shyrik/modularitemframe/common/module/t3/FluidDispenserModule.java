@@ -78,5 +78,7 @@ public class FluidDispenserModule extends ModuleBase {
         } else if (block instanceof FluidFillable) {
             ((FluidFillable) block).tryFillWithFluid(world, pos, state, fluid.getDefaultState());
         }
+
+        neighbor.getExtractable().extract(FluidAmount.BUCKET);
     }
 }
