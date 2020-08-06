@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 
 public class DispenseModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_dispense");
-    public static final Identifier BG_LOC = new Identifier(ModularItemFrame.MOD_ID, "block/module_t2_dispense");
+    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_t2_dispense");
     private static final String NBT_RANGE = "range";
 
     private int range = 1;
@@ -37,13 +37,13 @@ public class DispenseModule extends ModuleBase {
     @Override
     @Environment(EnvType.CLIENT)
     public Identifier frontTexture() {
-        return BG_LOC;
+        return BG;
     }
 
     @Override
     @Environment(EnvType.CLIENT)
     public Identifier innerTexture() {
-        return ModularFrameBlock.INNER_HARD_LOC;
+        return ModularFrameBlock.INNER_HARD;
     }
 
     @Override

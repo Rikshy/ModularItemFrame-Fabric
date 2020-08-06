@@ -34,7 +34,7 @@ import java.util.Collections;
 public class TankModule extends ModuleBase {
 
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t1_tank");
-    public static final Identifier BG_LOC = new Identifier(ModularItemFrame.MOD_ID, "block/module_t1_tank");
+    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_t1_tank");
     private static final String NBT_MODE = "tankmode";
     private static final String NBT_TANK = "tank";
 
@@ -48,12 +48,12 @@ public class TankModule extends ModuleBase {
 
     @Override
     public Identifier frontTexture() {
-        return BG_LOC;
+        return BG;
     }
 
     @Override
     public Identifier backTexture() {
-        return BG_LOC;
+        return BG;
     }
 
     @Override

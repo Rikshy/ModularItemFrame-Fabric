@@ -34,7 +34,7 @@ import java.util.Collections;
 
 public class NullifyModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t1_null");
-    public static final Identifier BG_LOC = new Identifier(ModularItemFrame.MOD_ID, "block/module_t1_null");
+    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_t1_null");
     private static final String NBT_LASTSTACK = "laststack";
 
     private ItemStack lastStack = ItemStack.EMPTY;
@@ -49,7 +49,7 @@ public class NullifyModule extends ModuleBase {
     @Override
     @Environment(EnvType.CLIENT)
     public Identifier frontTexture() {
-        return BG_LOC;
+        return BG;
     }
 
     @Override

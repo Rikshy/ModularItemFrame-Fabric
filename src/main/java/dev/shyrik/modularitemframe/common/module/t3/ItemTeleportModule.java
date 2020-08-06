@@ -72,7 +72,7 @@ public class ItemTeleportModule extends ModuleBase {
     @Override
     @Environment(EnvType.CLIENT)
     public Identifier innerTexture() {
-        return ModularFrameBlock.INNER_HARDEST_LOC;
+        return ModularFrameBlock.INNER_HARDEST;
     }
 
     @Override

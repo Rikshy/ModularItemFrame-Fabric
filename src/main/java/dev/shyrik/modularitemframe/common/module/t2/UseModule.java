@@ -36,7 +36,7 @@ import java.util.UUID;
 
 public class UseModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_use");
-    public static final Identifier BG_LOC = new Identifier(ModularItemFrame.MOD_ID, "block/module_nyi");
+    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_nyi");
 
     private static final GameProfile DEFAULT_CLICKER = new GameProfile(UUID.nameUUIDFromBytes("modularitemframe".getBytes()), "[Frame Clicker]");
 
@@ -58,7 +58,7 @@ public class UseModule extends ModuleBase {
 
     @Override
     public Identifier frontTexture() {
-        return BG_LOC;
+        return BG;
     }
 
     @Override
@@ -151,14 +151,14 @@ public class UseModule extends ModuleBase {
     private void hitIt(World world, BlockPos pos) {
         if (player == null) player = new WeakReference<>(FakePlayerHelper.getPlayer(world, DEFAULT_CLICKER));
 
-        Direction facing = blockEntity.blockFacing();
-        FakePlayerHelper.setupFakePlayerForUse(getPlayer(), pos, facing, displayItem, isSneaking);
-        ItemStack result;
-        if (rightClick)
-            result = FakePlayerHelper.rightClickInDirection(getPlayer(), world, pos.offset(facing), facing, world.getBlockState(pos), 2 + blockEntity.getRangeUpCount());
-        else
-            result = FakePlayerHelper.leftClickInDirection(getPlayer(), world, pos.offset(facing), facing, world.getBlockState(pos), 2 + blockEntity.getRangeUpCount());
-        FakePlayerHelper.cleanupFakePlayerFromUse(player.get(), result, displayItem, stack -> displayItem = stack);
+//        Direction facing = blockEntity.blockFacing();
+//        FakePlayerHelper.setupFakePlayerForUse(getPlayer(), pos, facing, displayItem, isSneaking);
+//        ItemStack result;
+//        if (rightClick)
+//            result = FakePlayerHelper.rightClickInDirection(getPlayer(), world, pos.offset(facing), facing, world.getBlockState(pos), 2 + blockEntity.getRangeUpCount());
+//        else
+//            result = FakePlayerHelper.leftClickInDirection(getPlayer(), world, pos.offset(facing), facing, world.getBlockState(pos), 2 + blockEntity.getRangeUpCount());
+//        FakePlayerHelper.cleanupFakePlayerFromUse(player.get(), result, displayItem, stack -> displayItem = stack);
 
         // moddev: call blockState.onUse on the given block
     }

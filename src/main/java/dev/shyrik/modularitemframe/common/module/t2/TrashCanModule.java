@@ -29,14 +29,14 @@ import java.util.List;
 public class TrashCanModule extends ModuleBase {
 
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_trashcan");
-    public static final Identifier BG_LOC1 = new Identifier(ModularItemFrame.MOD_ID, "block/module_t2_trashcan_1");
-    public static final Identifier BG_LOC2 = new Identifier(ModularItemFrame.MOD_ID, "block/module_t2_trashcan_2");
-    public static final Identifier BG_LOC3 = new Identifier(ModularItemFrame.MOD_ID, "block/module_t2_trashcan_3");
+    public static final Identifier BG1 = new Identifier(ModularItemFrame.MOD_ID, "block/module_t2_trashcan_1");
+    public static final Identifier BG2 = new Identifier(ModularItemFrame.MOD_ID, "block/module_t2_trashcan_2");
+    public static final Identifier BG3 = new Identifier(ModularItemFrame.MOD_ID, "block/module_t2_trashcan_3");
 
     private List<Identifier> frontTex = ImmutableList.of(
-            BG_LOC1,
-            BG_LOC2,
-            BG_LOC3
+            BG1,
+            BG2,
+            BG3
     );
     private int texIndex = 0;
 
@@ -54,7 +54,7 @@ public class TrashCanModule extends ModuleBase {
     @Override
     @Environment(EnvType.CLIENT)
     public Identifier innerTexture() {
-        return ModularFrameBlock.INNER_HARD_LOC;
+        return ModularFrameBlock.INNER_HARD;
     }
 
     @Override

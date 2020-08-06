@@ -12,7 +12,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidFillable;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
@@ -26,7 +25,7 @@ import net.minecraft.world.World;
 
 public class FluidDispenserModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t3_fluid_dispenser");
-    public static final Identifier BG_LOC = new Identifier(ModularItemFrame.MOD_ID, "block/module_t3_fluid_dispenser");
+    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_t3_fluid_dispenser");
 
     @Override
     public Identifier getId() {
@@ -36,13 +35,13 @@ public class FluidDispenserModule extends ModuleBase {
     @Override
     @Environment(EnvType.CLIENT)
     public Identifier frontTexture() {
-        return BG_LOC;
+        return BG;
     }
 
     @Override
     @Environment(EnvType.CLIENT)
     public Identifier innerTexture() {
-        return ModularFrameBlock.INNER_HARDEST_LOC;
+        return ModularFrameBlock.INNER_HARDEST;
     }
 
     @Override

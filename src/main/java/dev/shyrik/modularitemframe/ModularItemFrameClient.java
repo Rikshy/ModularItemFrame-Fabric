@@ -27,30 +27,30 @@ public class ModularItemFrameClient implements ClientModInitializer {
 
     public void stitch(ClientSpriteRegistryCallback.Registry registry) {
         Arrays.asList(
-                ModularFrameBlock.INNER_HARDEST_LOC,
-                ModularFrameBlock.INNER_HARD_LOC,
+                ModularFrameBlock.INNER_HARDEST,
+                ModularFrameBlock.INNER_HARD,
 
-                CraftingModule.BG_LOC,
-                IOModule.BG_LOC,
-                ItemModule.BG_LOC,
-                NullifyModule.BG_LOC,
-                StorageModule.BG_LOC,
-                TankModule.BG_LOC,
+                CraftingModule.BG,
+                IOModule.BG,
+                ItemModule.BG,
+                NullifyModule.BG,
+                StorageModule.BG,
+                TankModule.BG,
 
-                CraftingPlusModule.BG_LOC,
-                DispenseModule.BG_LOC,
-                TrashCanModule.BG_LOC1,
-                TrashCanModule.BG_LOC2,
-                TrashCanModule.BG_LOC3,
-                UseModule.BG_LOC,
-                VacuumModule.BG_LOC,
+                CraftingPlusModule.BG,
+                DispenseModule.BG,
+                TrashCanModule.BG1,
+                TrashCanModule.BG2,
+                TrashCanModule.BG3,
+                UseModule.BG,
+                VacuumModule.BG,
 
-                AutoCraftingModule.BG_LOC,
-                FluidDispenserModule.BG_LOC,
+                AutoCraftingModule.BG,
+                FluidDispenserModule.BG,
                 ItemTeleportModule.BG_IN,
                 ItemTeleportModule.BG_OUT,
                 ItemTeleportModule.BG_NONE,
-                XPModule.BG_LOC
+                XPModule.BG
         ).forEach(registry::register);
     }
 }

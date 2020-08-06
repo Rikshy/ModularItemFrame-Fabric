@@ -45,7 +45,7 @@ import java.util.Optional;
 public class CraftingModule extends ModuleBase implements IScreenHandlerCallback {
 
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t1_crafting");
-    public static final Identifier BG_LOC = new Identifier(ModularItemFrame.MOD_ID, "block/module_t1_crafting");
+    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_t1_crafting");
     private static final String NBT_GHOSTINVENTORY = "ghostinventory";
     private static final String NBT_DISPLAY = "display";
 
@@ -61,7 +61,7 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
     @Override
     @Environment(EnvType.CLIENT)
     public Identifier frontTexture() {
-        return BG_LOC;
+        return BG;
     }
 
     @Override

@@ -22,7 +22,7 @@ import java.util.Arrays;
 
 public class CraftingPlusModule extends CraftingModule {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_craft_plus");
-    public static final Identifier BG_LOC = new Identifier(ModularItemFrame.MOD_ID, "block/module_t2_craft_plus");
+    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_t2_craft_plus");
     private static final String NBT_MODE = "cpmode";
 
     public EnumMode mode = EnumMode.PLAYER;
@@ -41,12 +41,12 @@ public class CraftingPlusModule extends CraftingModule {
     @Override
     @Environment(EnvType.CLIENT)
     public Identifier frontTexture() {
-        return BG_LOC;
+        return BG;
     }
 
     @Override
     public Identifier innerTexture() {
-        return ModularFrameBlock.INNER_HARD_LOC;
+        return ModularFrameBlock.INNER_HARD;
     }
 
     @Override

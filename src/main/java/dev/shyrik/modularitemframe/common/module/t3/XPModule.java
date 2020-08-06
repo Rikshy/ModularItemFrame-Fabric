@@ -25,7 +25,7 @@ import java.util.List;
 
 public class XPModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID,"module_t3_xp");
-    public static final Identifier BG_LOC = new Identifier(ModularItemFrame.MOD_ID,"block/module_t3_xp");
+    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID,"block/module_t3_xp");
     private static final int MAX_XP = 21862;
 
     private static final String NBT_XP = "xp";
@@ -42,13 +42,13 @@ public class XPModule extends ModuleBase {
     @Override
     @Environment(EnvType.CLIENT)
     public Identifier frontTexture() {
-        return BG_LOC;
+        return BG;
     }
 
     @Override
     @Environment(EnvType.CLIENT)
     public Identifier innerTexture() {
-        return ModularFrameBlock.INNER_HARDEST_LOC;
+        return ModularFrameBlock.INNER_HARDEST;
     }
 
     @Override

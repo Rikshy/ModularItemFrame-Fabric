@@ -50,7 +50,7 @@ public abstract class ModuleBase {
      */
     @Environment(EnvType.CLIENT)
     public Identifier innerTexture() {
-        return ModularFrameBlock.INNER_DEF_LOC;
+        return ModularFrameBlock.INNER_DEF;
     }
 
     /**

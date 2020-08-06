@@ -29,7 +29,7 @@ import net.minecraft.world.World;
 public class StorageModule extends ModuleBase {
 
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t1_storage");
-    public static final Identifier BG_LOC = new Identifier(ModularItemFrame.MOD_ID, "block/module_t1_storage");
+    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_t1_storage");
 
     private static final String NBT_LAST = "lastclick";
     private static final String NBT_LASTSTACK = "laststack";
@@ -47,7 +47,7 @@ public class StorageModule extends ModuleBase {
 
     @Override
     public Identifier frontTexture() {
-        return BG_LOC;
+        return BG;
     }
 
     @Override
