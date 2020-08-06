@@ -33,7 +33,7 @@ public class IOModule extends ModuleBase {
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_t1_io");
 
     private static final String NBT_LAST = "lastclick";
-    private static final String NBT_LASTSTACK = "laststack";
+    private static final String NBT_LAST_STACK = "laststack";
     private static final String NBT_DISPLAY = "display";
 
     private long lastClick;
@@ -127,7 +127,7 @@ public class IOModule extends ModuleBase {
     public  CompoundTag toTag() {
         CompoundTag tag = new CompoundTag();
         tag.putLong(NBT_LAST, lastClick);
-        tag.put(NBT_LASTSTACK, lastStack.toTag(new CompoundTag()));
+        tag.put(NBT_LAST_STACK, lastStack.toTag(new CompoundTag()));
         tag.put(NBT_DISPLAY, displayItem.toTag(new CompoundTag()));
         return tag;
     }
@@ -135,7 +135,7 @@ public class IOModule extends ModuleBase {
     @Override
     public void fromTag(CompoundTag tag) {
         if (tag.contains(NBT_LAST)) lastClick = tag.getLong(NBT_LAST);
-        if (tag.contains(NBT_LASTSTACK)) lastStack = ItemStack.fromTag(tag.getCompound(NBT_LASTSTACK));
+        if (tag.contains(NBT_LAST_STACK)) lastStack = ItemStack.fromTag(tag.getCompound(NBT_LAST_STACK));
         if (tag.contains(NBT_DISPLAY)) displayItem = ItemStack.fromTag(tag.getCompound(NBT_DISPLAY));
     }
 }

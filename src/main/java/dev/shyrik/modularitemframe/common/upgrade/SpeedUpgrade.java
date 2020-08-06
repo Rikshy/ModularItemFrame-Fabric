@@ -5,7 +5,7 @@ import dev.shyrik.modularitemframe.api.UpgradeBase;
 import net.minecraft.util.Identifier;
 
 public class SpeedUpgrade extends UpgradeBase {
-    public static final Identifier LOC = new Identifier(ModularItemFrame.MOD_ID, "upgrade_speed");
+    public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "upgrade_speed");
 
     @Override
     public int getMaxCount() {
@@ -14,6 +14,6 @@ public class SpeedUpgrade extends UpgradeBase {
 
     @Override
     public Identifier getId() {
-        return LOC;
+        return ID;
     }
 }

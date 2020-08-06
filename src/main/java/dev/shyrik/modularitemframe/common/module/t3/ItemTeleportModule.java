@@ -42,9 +42,9 @@ public class ItemTeleportModule extends ModuleBase {
     public static final Identifier BG_NONE = new Identifier(ModularItemFrame.MOD_ID, "block/module_t3_itemtelenone");
 
     private static final String NBT_LINK = "item_linked_pos";
-    private static final String NBT_LINKX = "linked_posX";
-    private static final String NBT_LINKY = "linked_posY";
-    private static final String NBT_LINKZ = "linked_posZ";
+    private static final String NBT_LINK_X = "linked_posX";
+    private static final String NBT_LINK_Y = "linked_posY";
+    private static final String NBT_LINK_Z = "linked_posZ";
     private static final String NBT_DIR = "direction";
 
     private BlockPos linkedLoc = null;
@@ -234,9 +234,9 @@ public class ItemTeleportModule extends ModuleBase {
     public CompoundTag toTag() {
         CompoundTag tag = super.toTag();
         if (linkedLoc != null) {
-            tag.putInt(NBT_LINKX, linkedLoc.getX());
-            tag.putInt(NBT_LINKY, linkedLoc.getY());
-            tag.putInt(NBT_LINKZ, linkedLoc.getZ());
+            tag.putInt(NBT_LINK_X, linkedLoc.getX());
+            tag.putInt(NBT_LINK_Y, linkedLoc.getY());
+            tag.putInt(NBT_LINK_Z, linkedLoc.getZ());
             tag.putInt(NBT_DIR, direction.index);
         }
         return tag;
@@ -245,8 +245,8 @@ public class ItemTeleportModule extends ModuleBase {
     @Override
     public void fromTag(CompoundTag tag) {
         super.fromTag(tag);
-        if (tag.contains(NBT_LINKX))
-            linkedLoc = new BlockPos(tag.getInt(NBT_LINKX), tag.getInt(NBT_LINKY), tag.getInt(NBT_LINKZ));
+        if (tag.contains(NBT_LINK_X))
+            linkedLoc = new BlockPos(tag.getInt(NBT_LINK_X), tag.getInt(NBT_LINK_Y), tag.getInt(NBT_LINK_Z));
         if (tag.contains(NBT_DIR)) direction = EnumMode.values()[tag.getInt(NBT_DIR)];
     }
 

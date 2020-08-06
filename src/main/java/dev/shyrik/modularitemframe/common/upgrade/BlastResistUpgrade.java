@@ -10,7 +10,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 public class BlastResistUpgrade extends UpgradeBase {
-    public static final Identifier LOC = new Identifier(ModularItemFrame.MOD_ID, "upgrade_resist");
+    public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "upgrade_resist");
 
     private float oldAttached, oldMe;
 
@@ -21,7 +21,7 @@ public class BlastResistUpgrade extends UpgradeBase {
 
     @Override
     public Identifier getId() {
-        return LOC;
+        return ID;
     }
 
     public void onInsert(World world, BlockPos pos, Direction facing) {

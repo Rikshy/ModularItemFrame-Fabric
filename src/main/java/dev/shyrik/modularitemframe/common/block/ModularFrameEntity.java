@@ -33,9 +33,9 @@ import java.util.List;
 
 public class ModularFrameEntity extends BlockEntity implements BlockEntityClientSerializable, Tickable {
 
-    private static final String NBTMODULE = "framemodule";
-    private static final String NBTMODULEDATA = "framemoduledata";
-    private static final String NBTUPGRADES = "upgrades";
+    private static final String NBT_MODULE = "framemodule";
+    private static final String NBT_MODULE_DATA = "framemoduledata";
+    private static final String NBT_UPGRADES = "upgrades";
 
     public ModuleBase module;
     List<UpgradeBase> upgrades = new ArrayList<>();
@@ -110,20 +110,20 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         return world.getBlockState(pos).get(ModularFrameBlock.FACING);
     }
 
-    public boolean hasAttachedTile() {
-        return getAttachedTile() != null;
+    public boolean hasAttachedEntity() {
+        return getAttachedEntity() != null;
     }
 
-    public BlockEntity getAttachedTile() {
-        return world.getBlockEntity(pos.offset(blockFacing().getOpposite()));
+    public BlockEntity getAttachedEntity() {
+        return world.getBlockEntity(getAttachedPos());
     }
 
     public FixedItemInv getAttachedInventory() {
-        return ItemAttributes.FIXED_INV.getFirstOrNull(world, pos.offset(blockFacing().getOpposite()), SearchOptions.inDirection(blockFacing()));
+        return ItemAttributes.FIXED_INV.getFirstOrNull(world, getAttachedPos(), SearchOptions.inDirection(blockFacing()));
     }
 
-    public FixedFluidInv getAttachedTanks() {
-        return FluidAttributes.FIXED_INV.getFirstOrNull(world, pos.offset(blockFacing().getOpposite()), SearchOptions.inDirection(blockFacing()));
+    public FixedFluidInv getAttachedTank() {
+        return FluidAttributes.FIXED_INV.getFirstOrNull(world, getAttachedPos(), SearchOptions.inDirection(blockFacing()));
     }
 
     public BlockState getAttachedBlock() {
@@ -131,11 +131,11 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     }
 
     public BlockPos getAttachedPos() {
-        return pos.offset(blockFacing());
+        return pos.offset(blockFacing().getOpposite());
     }
 
     public boolean isPowered() { return world.getReceivedRedstonePower(pos) > 0; }
-    //rendregion
+    //endregion
 
     //region <module>
     public void setModule(Identifier moduleLoc) {
@@ -191,29 +191,29 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
 
     @Override
     public CompoundTag toClientTag(CompoundTag compound) {
-        compound.putString(NBTMODULE, module.getId().toString());
-        compound.put(NBTMODULEDATA, module.toTag());
+        compound.putString(NBT_MODULE, module.getId().toString());
+        compound.put(NBT_MODULE_DATA, module.toTag());
 
 
         ListTag upgradeList = new ListTag();
         for (UpgradeBase up : upgrades) {
             upgradeList.add(StringTag.of(up.getId().toString()));
         }
-        compound.put(NBTUPGRADES, upgradeList);
+        compound.put(NBT_UPGRADES, upgradeList);
         return compound;
     }
 
     @Override
     public void fromClientTag(CompoundTag cmp) {
-        if (module.getId().toString().equals(cmp.getString(NBTMODULE))) {
-            module.fromTag(cmp.getCompound(NBTMODULEDATA));
+        if (module.getId().toString().equals(cmp.getString(NBT_MODULE))) {
+            module.fromTag(cmp.getCompound(NBT_MODULE_DATA));
         } else {
-            setModule(new Identifier(cmp.getString(NBTMODULE)));
-            module.fromTag(cmp.getCompound(NBTMODULEDATA));
-            cmp.remove(NBTMODULEDATA);
+            setModule(new Identifier(cmp.getString(NBT_MODULE)));
+            module.fromTag(cmp.getCompound(NBT_MODULE_DATA));
+            cmp.remove(NBT_MODULE_DATA);
         }
         upgrades = new ArrayList<>();
-        for (Tag sub : cmp.getList(NBTUPGRADES, 8)) {
+        for (Tag sub : cmp.getList(NBT_UPGRADES, 8)) {
             tryAddUpgrade(new Identifier(sub.asString()), false);
         }
     }

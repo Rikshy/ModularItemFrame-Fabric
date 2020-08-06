@@ -61,7 +61,7 @@ public class FluidDispenserModule extends ModuleBase {
         Direction facing = blockEntity.blockFacing();
         if (!world.isAir(pos.offset(facing))) return;
 
-        FixedFluidInv neighbor = blockEntity.getAttachedTanks();
+        FixedFluidInv neighbor = blockEntity.getAttachedTank();
         if (neighbor == null) return;
 
         FluidVolume attempt = neighbor.getExtractable().attemptAnyExtraction(FluidAmount.BUCKET, Simulation.SIMULATE);

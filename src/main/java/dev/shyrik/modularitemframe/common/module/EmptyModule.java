@@ -17,8 +17,8 @@ import net.minecraft.world.World;
 
 public class EmptyModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_empty");
-    public static final Identifier FG_ID = new Identifier(ModularItemFrame.MOD_ID, "block/default_front");
-    private static final Identifier BG_ID = new Identifier(ModularItemFrame.MOD_ID, "block/default_back");
+    public static final Identifier FG = new Identifier(ModularItemFrame.MOD_ID, "block/default_front");
+    private static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/default_back");
 
     @Override
     public Identifier getId() {
@@ -28,13 +28,13 @@ public class EmptyModule extends ModuleBase {
     @Override
     @Environment(EnvType.CLIENT)
     public Identifier frontTexture() {
-        return FG_ID;
+        return FG;
     }
 
     @Override
     @Environment(EnvType.CLIENT)
     public Identifier backTexture() {
-        return BG_ID;
+        return BG;
     }
 
     @Override

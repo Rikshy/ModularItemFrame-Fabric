@@ -33,10 +33,11 @@ public class VacuumModule extends ModuleBase {
 
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_vacuum");
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_t2_vacuum");
+    
     private static final String NBT_MODE = "rangemode";
-    private static final String NBT_RANGEX = "rangex";
-    private static final String NBT_RANGEY = "rangey";
-    private static final String NBT_RANGEZ = "rangez";
+    private static final String NBT_RANGE_X = "rangex";
+    private static final String NBT_RANGE_Y = "rangey";
+    private static final String NBT_RANGE_Z = "rangez";
 
     private EnumMode mode = EnumMode.X;
     private int rangeX = ModularItemFrame.getConfig().vacuumRange;
@@ -129,9 +130,9 @@ public class VacuumModule extends ModuleBase {
     public CompoundTag toTag() {
         CompoundTag tag = super.toTag();
         tag.putInt(NBT_MODE, mode.getIndex());
-        tag.putInt(NBT_RANGEX, rangeX);
-        tag.putInt(NBT_RANGEY, rangeY);
-        tag.putInt(NBT_RANGEZ, rangeZ);
+        tag.putInt(NBT_RANGE_X, rangeX);
+        tag.putInt(NBT_RANGE_Y, rangeY);
+        tag.putInt(NBT_RANGE_Z, rangeZ);
         return tag;
     }
 
@@ -139,9 +140,9 @@ public class VacuumModule extends ModuleBase {
     public void fromTag(CompoundTag tag) {
         super.fromTag(tag);
         if (tag.contains(NBT_MODE)) mode = EnumMode.VALUES[tag.getInt(NBT_MODE)];
-        if (tag.contains(NBT_RANGEX)) rangeX = tag.getInt(NBT_RANGEX);
-        if (tag.contains(NBT_RANGEY)) rangeY = tag.getInt(NBT_RANGEY);
-        if (tag.contains(NBT_RANGEZ)) rangeZ = tag.getInt(NBT_RANGEZ);
+        if (tag.contains(NBT_RANGE_X)) rangeX = tag.getInt(NBT_RANGE_X);
+        if (tag.contains(NBT_RANGE_Y)) rangeY = tag.getInt(NBT_RANGE_Y);
+        if (tag.contains(NBT_RANGE_Z)) rangeZ = tag.getInt(NBT_RANGE_Z);
     }
 
     private Box getVacuumBox(BlockPos pos) {

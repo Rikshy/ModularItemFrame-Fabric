@@ -71,7 +71,7 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
             }
         });
 
-        models.put(EmptyModule.FG_ID,
+        models.put(EmptyModule.FG,
                 unbakedFrame.bake(modelLoader, mat ->
                                 bmMan.method_24153(mat.getAtlasId()).getSprite(mat.getTextureId()),
                                 ModelRotation.X0_Y0,

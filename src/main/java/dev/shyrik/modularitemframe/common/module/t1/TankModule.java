@@ -35,6 +35,7 @@ public class TankModule extends ModuleBase {
 
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t1_tank");
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_t1_tank");
+
     private static final String NBT_MODE = "tankmode";
     private static final String NBT_TANK = "tank";
 
@@ -118,7 +119,7 @@ public class TankModule extends ModuleBase {
         if (!world.isClient && mode != EnumMode.NONE && ModularItemFrame.getConfig().tankTransferRate > 0) {
             if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
 
-            FixedFluidInv neighbor = blockEntity.getAttachedTanks();
+            FixedFluidInv neighbor = blockEntity.getAttachedTank();
             if (neighbor != null) {
                 if (mode == EnumMode.DRAIN)
                     FluidVolumeUtil.move((FluidExtractable) neighbor, tank, FluidAmount.of1620(ModularItemFrame.getConfig().tankTransferRate));

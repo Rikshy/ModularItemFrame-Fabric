@@ -35,9 +35,9 @@ public class TeleportModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t3_tele");
 
     private static final String NBT_LINK = "linked_pos";
-    private static final String NBT_LINKX = "linked_posX";
-    private static final String NBT_LINKY = "linked_posY";
-    private static final String NBT_LINKZ = "linked_posZ";
+    private static final String NBT_LINK_X = "linked_posX";
+    private static final String NBT_LINK_Y = "linked_posY";
+    private static final String NBT_LINK_Z = "linked_posZ";
 
     private BlockPos linkedLoc = null;
 
@@ -177,9 +177,9 @@ public class TeleportModule extends ModuleBase {
     public CompoundTag toTag() {
         CompoundTag tag = super.toTag();
         if (linkedLoc != null) {
-            tag.putInt(NBT_LINKX, linkedLoc.getX());
-            tag.putInt(NBT_LINKY, linkedLoc.getY());
-            tag.putInt(NBT_LINKZ, linkedLoc.getZ());
+            tag.putInt(NBT_LINK_X, linkedLoc.getX());
+            tag.putInt(NBT_LINK_Y, linkedLoc.getY());
+            tag.putInt(NBT_LINK_Z, linkedLoc.getZ());
         }
         return tag;
     }
@@ -187,7 +187,7 @@ public class TeleportModule extends ModuleBase {
     @Override
     public void fromTag(CompoundTag tag) {
         super.fromTag(tag);
-        if (tag.contains(NBT_LINKX))
-            linkedLoc = new BlockPos(tag.getInt(NBT_LINKX), tag.getInt(NBT_LINKY), tag.getInt(NBT_LINKZ));
+        if (tag.contains(NBT_LINK_X))
+            linkedLoc = new BlockPos(tag.getInt(NBT_LINK_X), tag.getInt(NBT_LINK_Y), tag.getInt(NBT_LINK_Z));
     }
 }

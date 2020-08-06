@@ -35,7 +35,8 @@ import java.util.Collections;
 public class NullifyModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t1_null");
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_t1_null");
-    private static final String NBT_LASTSTACK = "laststack";
+
+    private static final String NBT_LAST_STACK = "laststack";
 
     private ItemStack lastStack = ItemStack.EMPTY;
 
@@ -120,13 +121,13 @@ public class NullifyModule extends ModuleBase {
     @Override
     public CompoundTag toTag() {
         CompoundTag tag = super.toTag();
-        tag.put(NBT_LASTSTACK, lastStack.toTag(new CompoundTag()));
+        tag.put(NBT_LAST_STACK, lastStack.toTag(new CompoundTag()));
         return tag;
     }
 
     @Override
     public void fromTag(CompoundTag tag) {
         super.fromTag(tag);
-        if (tag.contains(NBT_LASTSTACK)) lastStack = ItemStack.fromTag(tag.getCompound(NBT_LASTSTACK));
+        if (tag.contains(NBT_LAST_STACK)) lastStack = ItemStack.fromTag(tag.getCompound(NBT_LAST_STACK));
     }
 }

@@ -32,7 +32,7 @@ public class StorageModule extends ModuleBase {
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_t1_storage");
 
     private static final String NBT_LAST = "lastclick";
-    private static final String NBT_LASTSTACK = "laststack";
+    private static final String NBT_LAST_STACK = "laststack";
     private static final String NBT_INVENTORY= "inventory";
 
     private DirectFixedItemInv inventory = new DirectFixedItemInv(1);
@@ -129,7 +129,7 @@ public class StorageModule extends ModuleBase {
         CompoundTag tag = super.toTag();
         tag.put(NBT_INVENTORY, inventory.toTag());
         tag.putLong(NBT_LAST, lastClick);
-        tag.put(NBT_LASTSTACK, lastStack.toTag(new CompoundTag()));
+        tag.put(NBT_LAST_STACK, lastStack.toTag(new CompoundTag()));
         return tag;
     }
 
@@ -138,6 +138,6 @@ public class StorageModule extends ModuleBase {
         super.fromTag(tag);
         if (tag.contains(NBT_INVENTORY)) inventory.fromTag(tag.getCompound(NBT_INVENTORY));
         if (tag.contains(NBT_LAST)) lastClick = tag.getLong(NBT_LAST);
-        if (tag.contains(NBT_LASTSTACK)) lastStack = ItemStack.fromTag(tag.getCompound(NBT_LASTSTACK));
+        if (tag.contains(NBT_LAST_STACK)) lastStack = ItemStack.fromTag(tag.getCompound(NBT_LAST_STACK));
     }
 }

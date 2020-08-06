@@ -27,7 +27,6 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
-import net.minecraft.world.explosion.Explosion;
 
 import java.util.List;
 
@@ -84,7 +83,7 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
     }
     //endregion
 
-    //region <tile-entity>
+    //region <block-entity>
     @Override
     public BlockEntity createBlockEntity(BlockView world) {
         return new ModularFrameEntity();
@@ -227,23 +226,6 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
         }
         return drops;
     }
-
-//    public static void onExplosionDestroy(ExplosionEvent.Detonate event) {
-//        List<BlockPos> toRemove = new ArrayList<>();
-//        for (BlockPos pos : event.getAffectedBlocks()) {
-//            TileEntity tmp = event.getWorld().getTileEntity(pos);
-//            if (tmp instanceof TileModularFrame) {
-//                TileModularFrame tile = (TileModularFrame) tmp;
-//                if (tile.isBlastResist()) {
-//                    toRemove.add(tile.getAttachedPos());
-//                    toRemove.add(tile.getPos());
-//                }
-//            }
-//        }
-//        for (BlockPos pos : toRemove) {
-//            event.getAffectedBlocks().remove(pos);
-//        }
-//    }
     //endregion
 
     //region <other>

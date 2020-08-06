@@ -60,10 +60,10 @@ public class Registrar {
     public static final ModuleItem XP_MODULE = createMod(XPModule.ID, XPModule.class);
 
 
-    public static final UpgradeItem SPEED_UPGRADE = createUp(SpeedUpgrade.LOC, SpeedUpgrade.class);
-    public static final UpgradeItem RANGE_UPGRADE = createUp(RangeUpgrade.LOC, RangeUpgrade.class);
-    public static final UpgradeItem CAP_UPGRADE = createUp(CapacityUpgrade.LOC, CapacityUpgrade.class);
-    public static final UpgradeItem BLAST_RESIST_UPGRADE = createUp(BlastResistUpgrade.LOC, BlastResistUpgrade.class);
+    public static final UpgradeItem SPEED_UPGRADE = createUp(SpeedUpgrade.ID, SpeedUpgrade.class);
+    public static final UpgradeItem RANGE_UPGRADE = createUp(RangeUpgrade.ID, RangeUpgrade.class);
+    public static final UpgradeItem CAP_UPGRADE = createUp(CapacityUpgrade.ID, CapacityUpgrade.class);
+    public static final UpgradeItem BLAST_RESIST_UPGRADE = createUp(BlastResistUpgrade.ID, BlastResistUpgrade.class);
 
     public static void register() {
         ITEMS.keySet().forEach(item -> Registry.register(Registry.ITEM, ITEMS.get(item), item));

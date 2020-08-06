@@ -46,7 +46,8 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
 
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t1_crafting");
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_t1_crafting");
-    private static final String NBT_GHOSTINVENTORY = "ghostinventory";
+    
+    private static final String NBT_GHOST_INVENTORY = "ghostinventory";
     private static final String NBT_DISPLAY = "display";
 
     protected CraftingRecipe recipe;
@@ -158,7 +159,7 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
     public CompoundTag toTag() {
         CompoundTag tag = super.toTag();
         tag.put(NBT_DISPLAY, displayItem.toTag(new CompoundTag()));
-        tag.put(NBT_GHOSTINVENTORY, ghostInventory.toTag());
+        tag.put(NBT_GHOST_INVENTORY, ghostInventory.toTag());
         return tag;
     }
 
@@ -166,7 +167,7 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
     public void fromTag(CompoundTag tag) {
         super.fromTag(tag);
         if (tag.contains(NBT_DISPLAY)) displayItem = ItemStack.fromTag(tag.getCompound(NBT_DISPLAY));
-        if (tag.contains(NBT_GHOSTINVENTORY)) ghostInventory.fromTag(tag.getCompound(NBT_GHOSTINVENTORY));
+        if (tag.contains(NBT_GHOST_INVENTORY)) ghostInventory.fromTag(tag.getCompound(NBT_GHOST_INVENTORY));
     }
 
     @Override
