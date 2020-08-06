@@ -193,7 +193,9 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
 
     public boolean canAttachTo(BlockView world, BlockPos pos, Direction side) {
         BlockState state = world.getBlockState(pos);
-        return (state.isSideSolidFullSquare(world, pos, side) || state.getMaterial().isSolid()) && !RepeaterBlock.isRedstoneGate(state);
+        return (state.isSideSolidFullSquare(world, pos, side) || state.getMaterial().isSolid())
+                && !RepeaterBlock.isRedstoneGate(state)
+                && !(state.getBlock() instanceof ModularFrameBlock);
     }
 
     @Override
