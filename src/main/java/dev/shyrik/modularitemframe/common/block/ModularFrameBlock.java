@@ -27,6 +27,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
+import net.minecraft.world.explosion.Explosion;
 
 import java.util.List;
 
@@ -246,14 +247,9 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
     //endregion
 
     //region <other>
-    @SuppressWarnings("deprecation")
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
+    @Override
+    public boolean canMobSpawnInside() {
+        return false;
     }
-//    @Override
-//    @SuppressWarnings("deprecation")
-//    public boolean canEntitySpawn(BlockState state, @Nonnull IBlockReader world, @Nonnull BlockPos pos, EntityType<?> type) {
-//        return false;
-//    }
     //endregion
 }
