@@ -10,9 +10,9 @@ import java.util.Optional;
 import java.util.Set;
 
 public class ModuleItem extends Item {
-    private Identifier moduleId;
+    private final Identifier moduleId;
 
-    private static Map<Identifier, Pair<ModuleItem, Class<? extends ModuleBase>>> MODULES = new HashMap<>();
+    private static final Map<Identifier, Pair<ModuleItem, Class<? extends ModuleBase>>> MODULES = new HashMap<>();
 
     public ModuleItem(Settings props, Class<? extends ModuleBase> moduleClass, Identifier moduleId) {
         super(props);

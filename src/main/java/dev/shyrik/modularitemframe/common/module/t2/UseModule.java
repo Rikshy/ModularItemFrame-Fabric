@@ -43,7 +43,7 @@ public class UseModule extends ModuleBase {
     private static final String NBT_DISPLAY = "display";
     private static final String NBT_ROTATION = "rotation";
     private static final String NBT_SNEAK = "sneaking";
-    private static final String NBT_RIGHT = "rightclick";
+    private static final String NBT_RIGHT = "right_click";
 
     private boolean isSneaking = false;
     private boolean rightClick = false;

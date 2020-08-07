@@ -5,7 +5,7 @@ import net.minecraft.entity.player.PlayerEntity;
 public class ExperienceHelper {
 
     private static final int MAX_LEVEL = 21862;
-    private static final int[] xpmap = new int[MAX_LEVEL + 1];
+    private static final int[] xpLevels = new int[MAX_LEVEL + 1];
 
     public static int getExperienceForLevel(int level) {
         if (level <= 0) {
@@ -14,7 +14,7 @@ public class ExperienceHelper {
         if (level > MAX_LEVEL) {
             return Integer.MAX_VALUE;
         }
-        return xpmap[level];
+        return xpLevels[level];
     }
 
     static {
@@ -23,7 +23,7 @@ public class ExperienceHelper {
             if (res < 0) {
                 res = Integer.MAX_VALUE;
             }
-            xpmap[i] = res;
+            xpLevels[i] = res;
             res += getXpBarCapacity(i);
         }
     }
@@ -37,12 +37,12 @@ public class ExperienceHelper {
     }
 
     public static int getLevelForExperience(int experience) {
-        for (int i = 1; i < xpmap.length; i++) {
-            if (xpmap[i] > experience) {
+        for (int i = 1; i < xpLevels.length; i++) {
+            if (xpLevels[i] > experience) {
                 return i - 1;
             }
         }
-        return xpmap.length;
+        return xpLevels.length;
     }
 
     public static int getPlayerXP( PlayerEntity player) {

@@ -33,8 +33,8 @@ import java.util.List;
 
 public class ModularFrameEntity extends BlockEntity implements BlockEntityClientSerializable, Tickable {
 
-    private static final String NBT_MODULE = "framemodule";
-    private static final String NBT_MODULE_DATA = "framemoduledata";
+    private static final String NBT_MODULE = "frame_module";
+    private static final String NBT_MODULE_DATA = "frame_module_data";
     private static final String NBT_UPGRADES = "upgrades";
 
     public ModuleBase module;
@@ -107,6 +107,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
 
     //region <block>
     public Direction blockFacing() {
+        assert world != null;
         return world.getBlockState(pos).get(ModularFrameBlock.FACING);
     }
 
@@ -115,18 +116,22 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     }
 
     public BlockEntity getAttachedEntity() {
+        assert world != null;
         return world.getBlockEntity(getAttachedPos());
     }
 
     public FixedItemInv getAttachedInventory() {
+        assert world != null;
         return ItemAttributes.FIXED_INV.getFirstOrNull(world, getAttachedPos(), SearchOptions.inDirection(blockFacing()));
     }
 
     public FixedFluidInv getAttachedTank() {
+        assert world != null;
         return FluidAttributes.FIXED_INV.getFirstOrNull(world, getAttachedPos(), SearchOptions.inDirection(blockFacing()));
     }
 
     public BlockState getAttachedBlock() {
+        assert world != null;
         return world.getBlockState(getAttachedPos());
     }
 
@@ -134,7 +139,9 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         return pos.offset(blockFacing().getOpposite());
     }
 
-    public boolean isPowered() { return world.getReceivedRedstonePower(pos) > 0; }
+    public boolean isPowered() {
+        assert world != null;
+        return world.getReceivedRedstonePower(pos) > 0; }
     //endregion
 
     //region <module>
@@ -165,6 +172,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
 
     @Override
     public void tick() {
+        assert world != null;
         if (world.getBlockEntity(pos) != this || isPowered()) return;
         module.tick(world, pos);
     }

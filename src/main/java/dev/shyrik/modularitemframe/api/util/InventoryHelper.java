@@ -81,9 +81,9 @@ public class InventoryHelper {
         }
     }
 
-    public static void giveAllPossibleStacks(ItemInsertable target, Inventory source, ItemStack stack, ItemStack prioSourceStack) {
-        ItemStack remain = target.insert(prioSourceStack.copy());
-        prioSourceStack.setCount(remain.getCount());
+    public static void giveAllPossibleStacks(ItemInsertable target, Inventory source, ItemStack stack, ItemStack prioritySourceStack) {
+        ItemStack remain = target.insert(prioritySourceStack.copy());
+        prioritySourceStack.setCount(remain.getCount());
         if (!remain.isEmpty())
             return;
 
@@ -95,12 +95,5 @@ public class InventoryHelper {
                 if (!remain.isEmpty()) break;
             }
         }
-    }
-
-    public static ItemStack extract(FixedItemInv inventory, int slot, int amount) {
-        ItemStack invStack = inventory.getInvStack(slot);
-        ItemStack split = invStack.split(amount);
-        inventory.setInvStack(slot, invStack, Simulation.ACTION);
-        return split;
     }
 }

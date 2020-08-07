@@ -5,6 +5,7 @@ import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.ItemHelper;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
+import dev.shyrik.modularitemframe.client.helper.EnderRenderHelper;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.block.ModularFrameEntity;
 import dev.shyrik.modularitemframe.common.network.NetworkHandler;
@@ -83,51 +84,18 @@ public class ItemTeleportModule extends ModuleBase {
     @Override
     @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
-        BlockPos pos = blockEntity.getPos();
-
         if(direction == EnumMode.NONE) {
-//            FrameEnderRenderer.render(matrixStack, buffer, pos, renderer.getDispatcher().renderInfo.getProjectedView(), info -> {
-//                float x = pos.getX(), y = pos.getY(), z = pos.getZ();
-//                switch (blockEntity.blockFacing()) {
-//                    case DOWN:
-//                        info.buffer.pos(info.matrix, x + 0.7f, y + 0.08f, z + 0.7f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                        info.buffer.pos(info.matrix, x + 0.7f, y + 0.08f, z + 0.3f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                        info.buffer.pos(info.matrix, x + 0.3f, y + 0.08f, z + 0.3f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                        info.buffer.pos(info.matrix, x + 0.3f, y + 0.08f, z + 0.7f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                        break;
-//                    case UP:
-//                        info.buffer.pos(info.matrix, x + 0.7f, y + 0.92f, z + 0.3f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                        info.buffer.pos(info.matrix, x + 0.7f, y + 0.92f, z + 0.7f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                        info.buffer.pos(info.matrix, x + 0.3f, y + 0.92f, z + 0.7f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                        info.buffer.pos(info.matrix, x + 0.3f, y + 0.92f, z + 0.3f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                        break;
-//                    case NORTH:
-//                        info.buffer.pos(info.matrix, x + 0.7f, y + 0.7f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                        info.buffer.pos(info.matrix, x + 0.3f, y + 0.7f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                        info.buffer.pos(info.matrix, x + 0.3f, y + 0.3f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                        info.buffer.pos(info.matrix, x + 0.7f, y + 0.3f, z + 0.08f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                        break;
-//                    case SOUTH:
-//                        info.buffer.pos(info.matrix, x + 0.3f, y + 0.7f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                        info.buffer.pos(info.matrix, x + 0.7f, y + 0.7f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                        info.buffer.pos(info.matrix, x + 0.7f, y + 0.3f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                        info.buffer.pos(info.matrix, x + 0.3f, y + 0.3f, z + 0.92f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                        break;
-//                    case WEST:
-//                        info.buffer.pos(info.matrix, x + 0.08f, y + 0.7f, z + 0.3f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                        info.buffer.pos(info.matrix, x + 0.08f, y + 0.7f, z + 0.7f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                        info.buffer.pos(info.matrix, x + 0.08f, y + 0.3f, z + 0.7f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                        info.buffer.pos(info.matrix, x + 0.08f, y + 0.3f, z + 0.3f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                        break;
-//                    case EAST:
-//                        info.buffer.pos(info.matrix, x + 0.92f, y + 0.7f, z + 0.7f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                        info.buffer.pos(info.matrix, x + 0.92f, y + 0.7f, z + 0.3f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                        info.buffer.pos(info.matrix, x + 0.92f, y + 0.3f, z + 0.3f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                        info.buffer.pos(info.matrix, x + 0.92f, y + 0.3f, z + 0.7f).color(info.color1, info.color2, info.color3, 1.0F).endVertex();
-//                        break;
-//                }
-//                return true;
-//            });
+            ImmutableList<EnderRenderHelper.EndRenderFace> faces =
+                ImmutableList.of(
+                        new EnderRenderHelper.EndRenderFace(0.85f, 0.08f, 0.14f, Direction.UP),
+                        new EnderRenderHelper.EndRenderFace(0.85f, 0.92f, 0.14f, Direction.DOWN),
+                        new EnderRenderHelper.EndRenderFace(0.85f, 0.92f, 0.14f, Direction.NORTH),
+                        new EnderRenderHelper.EndRenderFace(0.85f, 0.08f, 0.14f, Direction.SOUTH),
+                        new EnderRenderHelper.EndRenderFace(0.85f, 0.08f, 0.14f, Direction.EAST),
+                        new EnderRenderHelper.EndRenderFace(0.85f, 0.92f, 0.14f, Direction.WEST)
+                );
+
+            EnderRenderHelper.render(blockEntity, matrixStack, buffer, renderer.getDispatcher().camera.getPos(), faces);
         }
     }
 
@@ -160,7 +128,7 @@ public class ItemTeleportModule extends ModuleBase {
         } else {
             if (nbt != null && nbt.contains(NBT_LINK)) {
                 BlockPos tmp = BlockPos.fromLong(nbt.getLong(NBT_LINK));
-                BlockEntity targetBlockEntity = blockEntity.getWorld().getBlockEntity(tmp);
+                BlockEntity targetBlockEntity = world.getBlockEntity(tmp);
                 int countRange = blockEntity.getRangeUpCount();
                 if (!(targetBlockEntity instanceof ModularFrameEntity) || !((((ModularFrameEntity) targetBlockEntity).module instanceof ItemTeleportModule)))
                     player.sendMessage(new TranslatableText("modularitemframe.message.invalid_target"), false);

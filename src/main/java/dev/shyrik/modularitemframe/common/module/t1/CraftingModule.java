@@ -47,7 +47,7 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t1_crafting");
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_t1_crafting");
     
-    private static final String NBT_GHOST_INVENTORY = "ghostinventory";
+    private static final String NBT_GHOST_INVENTORY = "ghost_inventory";
     private static final String NBT_DISPLAY = "display";
 
     protected CraftingRecipe recipe;
@@ -108,7 +108,7 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
 
         int craftAmount = fullStack ? Math.min(InventoryHelper.countPossibleCrafts(workingInv, recipe), 64) : 1;
         do {
-            ItemStack remain = InventoryHelper.givePlayer(player, recipe.getOutput()); //use playerinventory here!
+            ItemStack remain = InventoryHelper.givePlayer(player, recipe.getOutput());
             if (!remain.isEmpty()) ItemHelper.ejectStack(player.world, blockEntity.getPos(), blockEntity.blockFacing(), remain);
 
             InventoryHelper.removeIngredients(workingInv, recipe);

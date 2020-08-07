@@ -11,7 +11,6 @@ public class FrameCrafting extends CraftingInventory {
     private final int length;
     private final ScreenHandler eventHandler;
     private final FixedItemInv parent;
-    private boolean doNotCallUpdates;
 
     public FrameCrafting(ScreenHandler eventHandler, FixedItemInv parent, int width, int height) {
         super(eventHandler, width, height);
@@ -22,7 +21,6 @@ public class FrameCrafting extends CraftingInventory {
         this.parent = parent;
         this.length = k;
         this.eventHandler = eventHandler;
-        this.doNotCallUpdates = false;
     }
 
     @Override
@@ -37,31 +35,16 @@ public class FrameCrafting extends CraftingInventory {
     @Override
     public void setStack(int index, ItemStack stack) {
         parent.setInvStack(index, stack, Simulation.ACTION);
-        onCraftMatrixChanged();
+        markDirty();
     }
 
     @Override
     public void markDirty() {
-        onCraftMatrixChanged();
+        eventHandler.onContentChanged(this);
     }
 
     @Override
     public void clear() {
         // inventory can't clear the tile container
-    }
-
-    /**
-     * If set to true no eventhandler.onCraftMatrixChanged calls will be made.
-     * This is used to prevent recipe check when changing the item slots when something is crafted
-     * (since each slot with an item is reduced by 1, it changes -> callback)
-     */
-    public void setDoNotCallUpdates(boolean doNotCallUpdates) {
-        this.doNotCallUpdates = doNotCallUpdates;
-    }
-
-    public void onCraftMatrixChanged() {
-        if (!doNotCallUpdates) {
-            this.eventHandler.onContentChanged(this);
-        }
     }
 }

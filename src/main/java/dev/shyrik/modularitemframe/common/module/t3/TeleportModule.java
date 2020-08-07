@@ -124,7 +124,7 @@ public class TeleportModule extends ModuleBase {
             if (nbt != null && nbt.contains(NBT_LINK)) {
                 BlockPos tmp = BlockPos.fromLong(nbt.getLong(NBT_LINK));
                 if (blockEntity.getPos().isWithinDistance(tmp, 1)) return;
-                BlockEntity targetTile = blockEntity.getWorld().getBlockEntity(tmp);
+                BlockEntity targetTile = world.getBlockEntity(tmp);
                 int countRange = blockEntity.getRangeUpCount();
                 if (!(targetTile instanceof ModularFrameEntity) || !((((ModularFrameEntity) targetTile).module instanceof TeleportModule)))
                     player.sendMessage(new TranslatableText("modularitemframe.message.invalid_target"), true);

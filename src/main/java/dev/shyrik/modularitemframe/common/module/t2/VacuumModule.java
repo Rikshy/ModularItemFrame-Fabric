@@ -34,10 +34,10 @@ public class VacuumModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_vacuum");
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_t2_vacuum");
     
-    private static final String NBT_MODE = "rangemode";
-    private static final String NBT_RANGE_X = "rangex";
-    private static final String NBT_RANGE_Y = "rangey";
-    private static final String NBT_RANGE_Z = "rangez";
+    private static final String NBT_MODE = "range_mode";
+    private static final String NBT_RANGE_X = "range_x";
+    private static final String NBT_RANGE_Y = "range_y";
+    private static final String NBT_RANGE_Z = "range_z";
 
     private EnumMode mode = EnumMode.X;
     private int rangeX = ModularItemFrame.getConfig().vacuumRange;

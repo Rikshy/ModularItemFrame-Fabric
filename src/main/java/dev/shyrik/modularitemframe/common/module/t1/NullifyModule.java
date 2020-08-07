@@ -36,7 +36,7 @@ public class NullifyModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t1_null");
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_t1_null");
 
-    private static final String NBT_LAST_STACK = "laststack";
+    private static final String NBT_LAST_STACK = "last_stack";
 
     private ItemStack lastStack = ItemStack.EMPTY;
 

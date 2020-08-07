@@ -25,6 +25,7 @@ import net.minecraft.world.World;
 public class ItemModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t1_item");
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_t1_item");
+
     private static final String NBT_DISPLAY = "display";
     private static final String NBT_ROTATION = "rotation";
 

@@ -33,7 +33,7 @@ public class ModularItemFrameConfig implements ConfigData {
     public int vacuumRange = 3;
 
     @Override
-    public void validatePostLoad() throws ValidationException {
+    public void validatePostLoad() {
         if (tankTransferRate > 1620) {
             tankTransferRate = 1620;
         }

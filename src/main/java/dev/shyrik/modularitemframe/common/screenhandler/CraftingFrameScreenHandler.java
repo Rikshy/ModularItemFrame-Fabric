@@ -34,7 +34,7 @@ public class CraftingFrameScreenHandler extends ScreenHandler {
         this.callbacks = callbacks;
 
         matrix = new FrameCrafting(this, frameInventory, 3, 3);
-        matrix.onCraftMatrixChanged();
+        matrix.markDirty();
 
         addSlot(new CraftingResultSlot(player, this.matrix, this.craftResult, 0, 124, 35) {
             @Override
