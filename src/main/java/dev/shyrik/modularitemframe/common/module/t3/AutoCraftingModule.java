@@ -80,6 +80,6 @@ public class AutoCraftingModule extends CraftingPlusModule {
                 world,
                 blockEntity.getPos(),
                 32,
-                new PlaySoundPacket(pos, SoundEvents.BLOCK_LADDER_STEP, SoundCategory.BLOCKS, 0.3F, 0.7F));
+                new PlaySoundPacket(pos, SoundEvents.BLOCK_LADDER_STEP, SoundCategory.BLOCKS));
     }
 }

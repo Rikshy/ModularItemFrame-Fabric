@@ -38,6 +38,9 @@ public class PlaySoundPacket extends NetworkPacket {
         this.volume = volume;
         this.pitch = pitch;
     }
+    public PlaySoundPacket(BlockPos pos, SoundEvent sound, SoundCategory soundCategory) {
+        this(pos, sound, soundCategory, 0.4f, 0.7f);
+    }
 
     @Override
     public Identifier getId() {

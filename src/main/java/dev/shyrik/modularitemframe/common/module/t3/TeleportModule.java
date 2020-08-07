@@ -8,7 +8,7 @@ import dev.shyrik.modularitemframe.client.FrameRenderer;
 import dev.shyrik.modularitemframe.client.helper.EnderRenderHelper;
 import dev.shyrik.modularitemframe.common.block.ModularFrameEntity;
 import dev.shyrik.modularitemframe.common.network.NetworkHandler;
-import dev.shyrik.modularitemframe.common.network.packet.TeleportPacket;
+import dev.shyrik.modularitemframe.common.network.packet.PlaySoundPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -19,6 +19,8 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -103,8 +105,7 @@ public class TeleportModule extends ModuleBase {
                 player.stopRiding();
 
                 if (player.teleport(target.getX() + 0.5D, target.getY() + 0.5D, target.getZ() + 0.5D, true)) {
-                    NetworkHandler.sendAround(world, player.getBlockPos(), 32, new TeleportPacket(player.getBlockPos()));
-                    NetworkHandler.sendAround(world, target, 32, new TeleportPacket(target));
+                    NetworkHandler.sendAround(world, target, 32, new PlaySoundPacket(target, SoundEvents.BLOCK_PORTAL_TRAVEL, SoundCategory.AMBIENT));
                 }
             }
         }

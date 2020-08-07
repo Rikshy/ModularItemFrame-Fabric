@@ -12,10 +12,9 @@ import java.util.stream.Stream;
 
 public class NetworkHandler {
 
-    public static void register() {
+    public static void registerS2C() {
         ClientSidePacketRegistry.INSTANCE.register(PlaySoundPacket.ID, PlaySoundPacket::accept);
         ClientSidePacketRegistry.INSTANCE.register(SpawnParticlesPacket.ID, SpawnParticlesPacket::accept);
-        ClientSidePacketRegistry.INSTANCE.register(TeleportPacket.ID, TeleportPacket::accept);
     }
 
     public static void sendAround(World world, BlockPos pos, double radius, NetworkPacket packet) {

@@ -87,7 +87,7 @@ public class TrashCanModule extends ModuleBase {
                                 world,
                                 pos,
                                 32,
-                                new PlaySoundPacket(pos, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 0.4F, 0.7F));
+                                new PlaySoundPacket(pos, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS));
                         break;
                     }
                 }

@@ -117,7 +117,7 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
                 player.world,
                 blockEntity.getPos(),
                 32,
-                new PlaySoundPacket(blockEntity.getPos(), SoundEvents.BLOCK_LADDER_STEP, SoundCategory.BLOCKS, 0.4F, 0.7F));
+                new PlaySoundPacket(blockEntity.getPos(), SoundEvents.BLOCK_LADDER_STEP, SoundCategory.BLOCKS));
     }
 
     protected FixedItemInv getWorkingInventories(Inventory playerInventory) {

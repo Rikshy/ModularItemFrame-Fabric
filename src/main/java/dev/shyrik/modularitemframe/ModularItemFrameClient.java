@@ -18,7 +18,7 @@ import java.util.Arrays;
 public class ModularItemFrameClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        NetworkHandler.register();
+        NetworkHandler.registerS2C();
         ClientSpriteRegistryCallback.event(SpriteAtlasTexture.BLOCK_ATLAS_TEX)
                 .register((spriteAtlasTexture, registry) -> stitch(registry));
         ApplyModelLoaderCallback.EVENT.register(FrameRenderer::onApplyModelLoader);
