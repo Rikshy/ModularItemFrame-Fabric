@@ -1,5 +1,6 @@
 package dev.shyrik.modularitemframe.common.module.t2;
 
+import alexiil.mc.lib.attributes.item.FixedItemInv;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
@@ -23,6 +24,10 @@ public class BlockBreakModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_break");
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_nyi");
 
+    private int breakProgress = 0;
+    private BlockState lastTarget = null;
+    private BlockPos lastPos = null;
+    private int breakId = -1;
 
     @Override
     public Identifier getId() {
@@ -59,10 +64,9 @@ public class BlockBreakModule extends ModuleBase {
 
     @Override
     public void tick(World world, BlockPos pos) {
-        if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0 && world.isClient) return;
+        if (world.isClient) return;
         if (blockEntity.isPowered()) return;
 
-        //TODO implement tool usage and break progress?
         BlockPos target;
         BlockState state;
         int offset = 1;
@@ -72,9 +76,34 @@ public class BlockBreakModule extends ModuleBase {
             state = world.getBlockState(target);
         } while (state.isAir() && offset++ <= blockEntity.getRangeUpCount());
 
-        if (state.getHardness(world, target) >= 0) {
-            world.breakBlock(target, true);
+        float hardness = state.getHardness(world, target);
+
+        if (state.isAir() || hardness < 0) {
+            breakProgress = 0;
+            lastTarget = null;
+            lastPos = null;
+            return;
         }
-        //else unbreakable
+
+        if (state != lastTarget || !target.equals(lastPos)) {
+            breakProgress = 0;
+            lastTarget = state;
+            lastPos = target;
+            breakId = world.random.nextInt();
+        }
+
+        if (world.getTime() % Math.max(20 * hardness - 10 * blockEntity.getSpeedUpCount(), 1) != 0) return;
+
+        if (++breakProgress >= 10) {
+            FixedItemInv inv = blockEntity.getAttachedInventory();
+            boolean drop = true;
+            if (inv != null) {
+                drop = false;
+                //TODO implement into inventory
+            }
+            world.breakBlock(target, drop);
+        } else {
+            world.setBlockBreakingInfo(breakId, target, breakProgress);
+        }
     }
 }
