@@ -11,7 +11,7 @@ import dev.shyrik.modularitemframe.init.Registrar;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
-import net.minecraft.client.texture.SpriteAtlasTexture;
+import net.minecraft.screen.PlayerScreenHandler;
 
 import java.util.Arrays;
 
@@ -19,7 +19,7 @@ public class ModularItemFrameClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         NetworkHandler.registerS2C();
-        ClientSpriteRegistryCallback.event(SpriteAtlasTexture.BLOCK_ATLAS_TEX)
+        ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE)
                 .register((spriteAtlasTexture, registry) -> stitch(registry));
         ApplyModelLoaderCallback.EVENT.register(FrameRenderer::onApplyModelLoader);
         BlockEntityRendererRegistry.INSTANCE.register(Registrar.MODULAR_FRAME_ENTITY, FrameRenderer::new);
