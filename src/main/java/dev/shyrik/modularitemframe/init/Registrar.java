@@ -47,6 +47,7 @@ public class Registrar {
     public static final ModuleItem STORAGE_MODULE = createMod(StorageModule.ID, StorageModule.class);
     public static final ModuleItem TANK_MODULE = createMod(TankModule.ID, TankModule.class);
 
+    public static final ModuleItem BLOCK_BREAKER = createMod(BlockBreakModule.ID, BlockBreakModule.class);
     public static final ModuleItem CRAFTING_PLUS_MODULE = createMod(CraftingPlusModule.ID, CraftingPlusModule.class);
     public static final ModuleItem DISPENSE_MODULE = createMod(DispenseModule.ID, DispenseModule.class);
     public static final ModuleItem TRASH_CAN_MODULE = createMod(TrashCanModule.ID, TrashCanModule.class);

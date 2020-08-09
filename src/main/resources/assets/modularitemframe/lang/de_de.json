@@ -10,6 +10,8 @@
     "item.modularitemframe.module_t1_io": "I/O Modul",
     "item.modularitemframe.module_t1_storage": "Behälter Modul",
 
+    "item.modularitemframe.module_t2_break": "Block Brecher Modul",
+    "item.modularitemframe.module_t2_use": "Use Module",
     "item.modularitemframe.module_t2_dispense": "Spender Modul",
     "item.modularitemframe.module_t2_vacuum": "Vacuum Module",
     "item.modularitemframe.module_t2_trashcan": "Mülleimer Modul",
@@ -42,6 +44,9 @@
     "modularitemframe.mode.no": "kein",
     "modularitemframe.mode.in": "Einlass",
     "modularitemframe.mode.out": "Auslass",
+    "modularitemframe.mode.sn": "sneak",
+    "modularitemframe.mode.rc": "rightclick",
+    "modularitemframe.mode.lc": "leftclick",
     "modularitemframe.message.screw_mode_change": "[ModularItemFrame] Schraubendreher Modus verändert zu %s",
     "modularitemframe.message.screw_mode_change.rem": "entfernen",
     "modularitemframe.message.screw_mode_change.inter": "interagieren",
@@ -57,6 +62,8 @@
     "modularitemframe.module.null": "Nullify",
     "modularitemframe.module.storage": "Behälter",
 
+    "modularitemframe.module.block_breaker": "Block Brecher",
+    "modularitemframe.module.use": "Use",
     "modularitemframe.module.crafting_plus": "Crafting Plus",
     "modularitemframe.module.xp": "XP",
     "modularitemframe.module.dispense": "Spender",
