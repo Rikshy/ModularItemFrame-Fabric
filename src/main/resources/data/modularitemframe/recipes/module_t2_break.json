@@ -10,10 +10,10 @@
   ],
   "key": {
     "#": {
-      "item": "modularitemframe:module_t1_item"
+      "item": "modularitemframe:module_t1_io"
     },
     "A": {
-      "item": "minecraft:diamond_pickaxe"
+      "item": "minecraft:iron_pickaxe"
     },
     "C": {
       "item": "modularitemframe:canvas"
