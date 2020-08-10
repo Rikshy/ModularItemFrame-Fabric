@@ -3,15 +3,20 @@ package dev.shyrik.modularitemframe.common.module.t2;
 import alexiil.mc.lib.attributes.item.FixedItemInv;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
+import dev.shyrik.modularitemframe.api.util.ItemHelper;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -19,6 +24,8 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class BlockBreakModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_break");
@@ -67,28 +74,28 @@ public class BlockBreakModule extends ModuleBase {
         if (world.isClient) return;
         if (blockEntity.isPowered()) return;
 
-        BlockPos target;
-        BlockState state;
+        BlockPos targetPos;
+        BlockState targetState;
         int offset = 1;
 
         do {
-            target = pos.offset(blockEntity.blockFacing(), offset);
-            state = world.getBlockState(target);
-        } while (state.isAir() && offset++ <= blockEntity.getRangeUpCount());
+            targetPos = pos.offset(blockEntity.blockFacing(), offset);
+            targetState = world.getBlockState(targetPos);
+        } while (targetState.isAir() && offset++ <= blockEntity.getRangeUpCount());
 
-        float hardness = state.getHardness(world, target);
+        float hardness = targetState.getHardness(world, targetPos);
 
-        if (state.isAir() || hardness < 0) {
+        if (targetState.isAir() || hardness < 0) {
             breakProgress = 0;
             lastTarget = null;
             lastPos = null;
             return;
         }
 
-        if (state != lastTarget || !target.equals(lastPos)) {
+        if (targetState != lastTarget || !targetPos.equals(lastPos)) {
             breakProgress = 0;
-            lastTarget = state;
-            lastPos = target;
+            lastTarget = targetState;
+            lastPos = targetPos;
             breakId = world.random.nextInt();
         }
 
@@ -99,11 +106,20 @@ public class BlockBreakModule extends ModuleBase {
             boolean drop = true;
             if (inv != null) {
                 drop = false;
-                //TODO implement into inventory
+
+                BlockEntity targetEntity = targetState.getBlock().hasBlockEntity() ? world.getBlockEntity(pos) : null;
+                List<ItemStack> drops = Block.getDroppedStacks(targetState,(ServerWorld) world, targetPos, targetEntity);
+                for (ItemStack dropStack : drops) {
+                    ItemStack remain = inv.getInsertable().insert(dropStack);
+                    if (!remain.isEmpty()) {
+                        ItemHelper.ejectStack(world, pos, blockEntity.blockFacing(), remain);
+                    }
+                }
             }
-            world.breakBlock(target, drop);
+
+            world.breakBlock(targetPos, drop);
         } else {
-            world.setBlockBreakingInfo(breakId, target, breakProgress);
+            world.setBlockBreakingInfo(breakId, targetPos, breakProgress);
         }
     }
 }
