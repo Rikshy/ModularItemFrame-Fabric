@@ -7,13 +7,10 @@ import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.DispenserBlock;
-import net.minecraft.block.FurnaceBlock;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -21,14 +18,38 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-
-import java.util.Objects;
 
 public class BlockPlaceModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_place");
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_nyi");
 
+    public static class FrameItemPlacementContext extends ItemPlacementContext {
+
+        private final BlockPos placementPos;
+
+        public FrameItemPlacementContext(World world, ItemStack itemStack, BlockHitResult blockHitResult) {
+            super(world, null, null, itemStack, blockHitResult);
+            this.canReplaceExisting = true;
+            this.placementPos = blockHitResult.getBlockPos().offset(blockHitResult.getSide());
+            this.canReplaceExisting = world.getBlockState(blockHitResult.getBlockPos()).canReplace(this);
+        }
+
+//        public static FrameItemPlacementContext create(World world, ItemStack itemStack, BlockPos blockPos, Direction direction ) {
+//            return new FrameItemPlacementContext(world, null, null, itemStack, new BlockHitResult(
+//                    new Vec3d(blockPos.getX(), blockPos.getY(), blockPos.getZ()),
+//                    direction,
+//                    blockPos,
+//                    true)
+//            );
+//        }
+
+        public BlockPos getBlockPos() {
+            return this.canReplaceExisting ? super.getBlockPos() : this.placementPos;
+        }
+
+    }
 
 
     @Override
@@ -62,17 +83,27 @@ public class BlockPlaceModule extends ModuleBase {
     @Override
     public void tick(World world, BlockPos pos) {
         FixedItemInv attInventory = this.blockEntity.getAttachedInventory();
-        BlockPos placePos = this.blockEntity.getPos();
-        Item itemToPlace = attInventory.getExtractable().extract(1).getItem();
+        ItemStack itemToPlace = attInventory.getExtractable().extract(1);
 
-        if (itemToPlace != null ) {
+        if (itemToPlace.getItem() instanceof BlockItem ) {
 
-            placePos.offset(this.blockEntity.blockFacing(), 1);
-            if (world.canSetBlock(placePos) && itemToPlace instanceof BlockItem) {
-                world.setBlockState(placePos, ((BlockItem) itemToPlace).getBlock().getDefaultState());
-                
-            }
+            BlockPos placePos = pos.offset(this.blockEntity.blockFacing(), 1);
+
+            ActionResult placeResult = ((BlockItem) itemToPlace.getItem()).place( new FrameItemPlacementContext(
+                    world,
+                    itemToPlace,
+                    new BlockHitResult(
+                            new Vec3d(
+                                    placePos.getX(),
+                                    placePos.getY(),
+                                    placePos.getZ()),
+                            this.blockEntity.blockFacing(),
+                            placePos,
+                            true)
+                    )
+            );
 
         }
     }
 }
+
