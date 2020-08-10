@@ -38,6 +38,7 @@ public class ModularItemFrameClient implements ClientModInitializer {
                 TankModule.BG,
 
                 BlockBreakModule.BG,
+                BlockPlaceModule.BG,
                 CraftingPlusModule.BG,
                 DispenseModule.BG,
                 TrashCanModule.BG1,
