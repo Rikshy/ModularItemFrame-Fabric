@@ -1,10 +1,12 @@
 package dev.shyrik.modularitemframe.common.module.t2;
 
 import alexiil.mc.lib.attributes.item.FixedItemInv;
+import com.google.common.collect.ImmutableList;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.ItemHelper;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
+import dev.shyrik.modularitemframe.client.helper.ItemRenderHelper;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -12,10 +14,13 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -31,10 +36,28 @@ public class BlockBreakModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_break");
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_nyi");
 
+    private static final String NBT_PROGRESS = "progress";
+
+    private static final ItemStack displayItem = new ItemStack(Items.IRON_PICKAXE);
+    private static final List<Integer> rotation = ImmutableList.of(
+            10,
+            0,
+            -10,
+            -20,
+            -30,
+            -40,
+            -50,
+            -60,
+            -70,
+            -80,
+            -90
+    );
+
     private int breakProgress = 0;
     private BlockState lastTarget = null;
     private BlockPos lastPos = null;
-    private int breakId = -1;
+    private Integer breakId = null;
+
 
     @Override
     public Identifier getId() {
@@ -61,7 +84,7 @@ public class BlockBreakModule extends ModuleBase {
 
     @Override
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
-        //TODO implement fancy tool moving animation
+        ItemRenderHelper.renderOnFrame(displayItem, blockEntity.blockFacing(), rotation.get(breakProgress), 0.1F, ModelTransformation.Mode.FIXED, matrixStack, buffer, combinedLight, combinedOverlay);
     }
 
     @Override
@@ -86,20 +109,16 @@ public class BlockBreakModule extends ModuleBase {
         float hardness = targetState.getHardness(world, targetPos);
 
         if (targetState.isAir() || hardness < 0) {
-            breakProgress = 0;
-            lastTarget = null;
-            lastPos = null;
+            resetState(world, null, null,  null);
+            blockEntity.markDirty();
             return;
         }
 
         if (targetState != lastTarget || !targetPos.equals(lastPos)) {
-            breakProgress = 0;
-            lastTarget = targetState;
-            lastPos = targetPos;
-            breakId = world.random.nextInt();
+            resetState(world, targetState, targetPos,  world.random.nextInt());
         }
 
-        if (world.getTime() % Math.max(20 * hardness - 10 * blockEntity.getSpeedUpCount(), 1) != 0) return;
+        if (world.getTime() % Math.ceil((2 * hardness) / (blockEntity.getSpeedUpCount() + 1)) != 0) return;
 
         if (++breakProgress >= 10) {
             FixedItemInv inv = blockEntity.getAttachedInventory();
@@ -119,7 +138,29 @@ public class BlockBreakModule extends ModuleBase {
 
             world.breakBlock(targetPos, drop);
         } else {
+            blockEntity.markDirty();
             world.setBlockBreakingInfo(breakId, targetPos, breakProgress);
         }
+    }
+
+    private void resetState(World world, BlockState state, BlockPos pos, Integer newBreakId) {
+        if (breakId != null) world.setBlockBreakingInfo(breakId, lastPos, -1);
+        breakProgress = 0;
+        lastTarget = state;
+        lastPos = pos;
+        breakId = newBreakId;
+    }
+
+    @Override
+    public CompoundTag toTag() {
+        CompoundTag tag = new CompoundTag();
+        tag.putInt(NBT_PROGRESS, breakProgress);
+        return tag;
+    }
+
+    @Override
+    public void fromTag(CompoundTag tag) {
+        super.fromTag(tag);
+        if (tag.contains(NBT_PROGRESS)) breakProgress = tag.getInt(NBT_PROGRESS);
     }
 }
