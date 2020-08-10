@@ -36,7 +36,7 @@ public class ItemRenderHelper {
     private static void rotate(MatrixStack matrixStack, Direction facing, float rotation) {
         switch (facing) {
             case NORTH:
-                matrixStack.multiply(new Quaternion(0.0F, -180.0F, -rotation, true));
+                matrixStack.multiply(new Quaternion(0.0F, -180.0F, rotation, true));
                 break;
             case SOUTH:
                 matrixStack.multiply(new Quaternion(0.0F, 0.0F, rotation, true));
@@ -48,10 +48,10 @@ public class ItemRenderHelper {
                 matrixStack.multiply(new Quaternion(rotation, 90.0F, 0.0F, true));
                 break;
             case DOWN:
-                matrixStack.multiply(new Quaternion(90.0F, rotation, 0.0F, true));
+                matrixStack.multiply(new Quaternion(90.0F, 0.0F, rotation, true));
                 break;
             case UP:
-                matrixStack.multiply(new Quaternion(-90.0F, -rotation, 0.0F, true));
+                matrixStack.multiply(new Quaternion(-90.0F, 0.0F, rotation, true));
                 break;
         }
     }
