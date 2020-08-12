@@ -29,7 +29,7 @@ public class ModuleItem extends Item {
             Optional<Pair<ModuleItem, Class<? extends ModuleBase>>> set = MODULES.keySet().stream().filter(r -> r.toString().equals(id.toString())).findAny().map(MODULES::get);
             if (set.isPresent()) {
                 ModuleBase module = set.get().getRight().newInstance();
-                module.parent = set.get().getLeft();
+                module.item = set.get().getLeft();
                 return module;
             }
         } catch (InstantiationException | IllegalAccessException e) {

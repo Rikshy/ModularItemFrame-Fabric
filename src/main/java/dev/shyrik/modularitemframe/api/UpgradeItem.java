@@ -28,7 +28,7 @@ public class UpgradeItem extends Item {
             Optional<Pair<UpgradeItem, Class<? extends UpgradeBase>>> set = UPGRADES.keySet().stream().filter(r -> r.toString().equals(id.toString())).findAny().map(UPGRADES::get);
             if (set.isPresent()) {
                 UpgradeBase upgrade = set.get().getRight().newInstance();
-                upgrade.parent = set.get().getLeft();
+                upgrade.item = set.get().getLeft();
                 return upgrade;
             }
         } catch (InstantiationException | IllegalAccessException e) {

@@ -5,10 +5,7 @@ import alexiil.mc.lib.attributes.fluid.FixedFluidInv;
 import alexiil.mc.lib.attributes.fluid.FluidAttributes;
 import alexiil.mc.lib.attributes.item.*;
 import dev.shyrik.modularitemframe.ModularItemFrame;
-import dev.shyrik.modularitemframe.api.ModuleBase;
-import dev.shyrik.modularitemframe.api.ModuleItem;
-import dev.shyrik.modularitemframe.api.UpgradeBase;
-import dev.shyrik.modularitemframe.api.UpgradeItem;
+import dev.shyrik.modularitemframe.api.*;
 import dev.shyrik.modularitemframe.api.util.InventoryHelper;
 import dev.shyrik.modularitemframe.api.util.ItemHelper;
 import dev.shyrik.modularitemframe.common.module.EmptyModule;
@@ -46,12 +43,11 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     }
 
     //region <upgrade>
-    public boolean tryAddUpgrade(Identifier upgradeLoc) {
-        return tryAddUpgrade(upgradeLoc, true);
+    public boolean tryAddUpgrade(UpgradeBase up) {
+        return tryAddUpgrade(up, true);
     }
 
-    public boolean tryAddUpgrade(Identifier upgradeLoc, boolean fireInsert) {
-        UpgradeBase up = UpgradeItem.createUpgrade(upgradeLoc);
+    private boolean tryAddUpgrade(UpgradeBase up, boolean fireInsert) {
         if (up != null && countUpgradeOfType(up.getClass()) < up.getMaxCount()) {
             upgrades.add(up);
             if (fireInsert) {
@@ -71,7 +67,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         for (UpgradeBase up : upgrades) {
             up.onRemove(world, pos, facing);
 
-            ItemStack remain = new ItemStack(up.getParent());
+            ItemStack remain = new ItemStack(up.getItem());
             if (player != null) remain = InventoryHelper.givePlayer(player, remain);
             if (!remain.isEmpty()) ItemHelper.ejectStack(world, pos, facing, remain);
         }
@@ -111,10 +107,6 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         return world.getBlockState(pos).get(ModularFrameBlock.FACING);
     }
 
-    public boolean hasAttachedEntity() {
-        return getAttachedEntity() != null;
-    }
-
     public BlockEntity getAttachedEntity() {
         assert world != null;
         return world.getBlockEntity(getAttachedPos());
@@ -145,11 +137,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     //endregion
 
     //region <module>
-    public void setModule(Identifier moduleLoc) {
-        setModule(ModuleItem.createModule(moduleLoc));
-    }
-
-    private void setModule(ModuleBase mod) {
+    public void setModule(ModuleBase mod) {
         module = mod == null ? new EmptyModule() : mod;
         module.setTile(this);
     }
@@ -159,7 +147,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     }
 
     public void dropModule(Direction facing, PlayerEntity player) {
-        ItemStack remain = new ItemStack(module.getParent());
+        ItemStack remain = new ItemStack(module.getItem());
 
         if (player != null) remain = InventoryHelper.givePlayer(player, remain);
         if (!remain.isEmpty()) ItemHelper.ejectStack(world, pos, facing, remain);
@@ -216,13 +204,13 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         if (module.getId().toString().equals(cmp.getString(NBT_MODULE))) {
             module.fromTag(cmp.getCompound(NBT_MODULE_DATA));
         } else {
-            setModule(new Identifier(cmp.getString(NBT_MODULE)));
+            setModule(ModuleItem.createModule(new Identifier(cmp.getString(NBT_MODULE))));
             module.fromTag(cmp.getCompound(NBT_MODULE_DATA));
             cmp.remove(NBT_MODULE_DATA);
         }
         upgrades = new ArrayList<>();
         for (Tag sub : cmp.getList(NBT_UPGRADES, 8)) {
-            tryAddUpgrade(new Identifier(sub.asString()), false);
+            tryAddUpgrade(UpgradeItem.createUpgrade(new Identifier(sub.asString())), false);
         }
     }
     //endregion

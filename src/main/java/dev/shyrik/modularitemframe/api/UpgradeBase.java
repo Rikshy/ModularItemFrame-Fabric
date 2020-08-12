@@ -6,10 +6,10 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 public abstract class UpgradeBase {
-    UpgradeItem parent;
+    UpgradeItem item;
 
-    public UpgradeItem getParent() {
-        return parent;
+    public UpgradeItem getItem() {
+        return item;
     }
 
     public abstract int getMaxCount();

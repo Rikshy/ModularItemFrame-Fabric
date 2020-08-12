@@ -25,13 +25,13 @@ import java.util.List;
 
 public abstract class ModuleBase {
     protected ModularFrameEntity blockEntity;
-    ModuleItem parent;
+    ModuleItem item;
 
     public void setTile(ModularFrameEntity te) {
         blockEntity = te;
     }
 
-    public ModuleItem getParent() { return parent; }
+    public ModuleItem getItem() { return item; }
 
     public abstract Identifier getId();
 

@@ -4,12 +4,12 @@ import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleItem;
 import dev.shyrik.modularitemframe.api.UpgradeBase;
 import dev.shyrik.modularitemframe.api.UpgradeItem;
-import dev.shyrik.modularitemframe.api.util.RegistryHelper;
 import dev.shyrik.modularitemframe.common.item.ScrewdriverItem;
 import dev.shyrik.modularitemframe.common.module.EmptyModule;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
@@ -106,30 +106,31 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         ActionResult result;
         ModularFrameEntity blockEntity = getBE(world, pos);
-        ItemStack handItem = player.getStackInHand(hand);
+        ItemStack handStack = player.getStackInHand(hand);
+        Item handItem = handStack.getItem();
         Direction side = hit.getSide();
-        if (handItem.getItem() instanceof ScrewdriverItem) {
+        if (handItem instanceof ScrewdriverItem) {
             if (!world.isClient) {
                 if (side == state.get(FACING)) {
                     if (hitModule(side, pos, hit.getPos())) {
-                        if (ScrewdriverItem.getMode(handItem) == ScrewdriverItem.EnumMode.INTERACT) {
-                            blockEntity.module.screw(world, pos, player, handItem);
+                        if (ScrewdriverItem.getMode(handStack) == ScrewdriverItem.EnumMode.INTERACT) {
+                            blockEntity.module.screw(world, pos, player, handStack);
                         } else blockEntity.dropModule(side, player);
                     } else blockEntity.dropUpgrades(player, side);
                     blockEntity.markDirty();
                 }
             }
             result = ActionResult.SUCCESS;
-        } else if (handItem.getItem() instanceof ModuleItem && blockEntity.acceptsModule()) {
+        } else if (handItem instanceof ModuleItem && blockEntity.acceptsModule()) {
             if (!world.isClient) {
-                blockEntity.setModule(RegistryHelper.getId(handItem));
+                blockEntity.setModule(((ModuleItem) handItem).createModule());
                 if (!player.isCreative()) player.getStackInHand(hand).decrement(1);
                 blockEntity.markDirty();
             }
             result = ActionResult.SUCCESS;
-        } else if (handItem.getItem() instanceof UpgradeItem && blockEntity.acceptsUpgrade()) {
+        } else if (handItem instanceof UpgradeItem && blockEntity.acceptsUpgrade()) {
             if (!world.isClient) {
-                if (blockEntity.tryAddUpgrade(RegistryHelper.getId(handItem))) {
+                if (blockEntity.tryAddUpgrade(((UpgradeItem) handItem).createUpgrade())) {
                     if (!player.isCreative()) player.getStackInHand(hand).decrement(1);
                     blockEntity.markDirty();
                 }
@@ -218,11 +219,11 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
         ModularFrameEntity tile = (ModularFrameEntity)builder.get(LootContextParameters.BLOCK_ENTITY);
         if (tile != null) {
             if (!(tile.module instanceof EmptyModule)) {
-                drops.add(new ItemStack(tile.module.getParent()));
+                drops.add(new ItemStack(tile.module.getItem()));
                 tile.module.onRemove(builder.getWorld(), tile.getPos(), state.get(FACING), null);
             }
             for (UpgradeBase upgrade : tile.upgrades)
-                drops.add(new ItemStack(upgrade.getParent()));
+                drops.add(new ItemStack(upgrade.getItem()));
         }
         return drops;
     }
