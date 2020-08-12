@@ -3,6 +3,7 @@ package dev.shyrik.modularitemframe.client;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.ModuleItem;
+import dev.shyrik.modularitemframe.api.UpgradeBase;
 import dev.shyrik.modularitemframe.api.util.RegistryHelper;
 import dev.shyrik.modularitemframe.common.block.ModularFrameEntity;
 import dev.shyrik.modularitemframe.common.module.EmptyModule;
@@ -78,9 +79,9 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
                                 RegistryHelper.getId(Registrar.MODULAR_FRAME)));
     }
 
-    private BakedModel getBakedModel(ModularFrameEntity blockEntity) {
-        if (currentFront != blockEntity.module.frontTexture()) {
-            currentFront = blockEntity.module.frontTexture();
+    private BakedModel getBakedModel(ModuleBase module) {
+        if (currentFront != module.frontTexture()) {
+            currentFront = module.frontTexture();
             model = models.get(currentFront);
         }
 
@@ -88,11 +89,12 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
     }
 
     @Override
-    public void render(ModularFrameEntity entity, float tickDelta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+    public void render(ModularFrameEntity frame, float tickDelta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         matrixStack.push();
-        BakedModel modelFrame = getBakedModel(entity);
+        ModuleBase module = frame.getModule();
+        BakedModel modelFrame = getBakedModel(module);
 
-        rotateFrameOnFacing(entity.blockFacing(), matrixStack);
+        rotateFrameOnFacing(frame.blockFacing(), matrixStack);
 
         MinecraftClient.getInstance()
                 .getBlockRenderManager()
@@ -100,7 +102,7 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
                 .render(
                         matrixStack.peek(),
                         vertexConsumers.getBuffer(RenderLayer.getTranslucentNoCrumbling()),
-                        entity.getCachedState(),
+                        frame.getCachedState(),
                         modelFrame,
                         1,
                         1,
@@ -111,7 +113,13 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
 
         matrixStack.pop();
 
-        entity.module.specialRendering(this, matrixStack, tickDelta, vertexConsumers, light, overlay);
+        module.specialRendering(this, matrixStack, tickDelta, vertexConsumers, light, overlay);
+    }
+
+    private void renderUpgrades(ModularFrameEntity frame) {
+        for (UpgradeBase up : frame.getUpgrades()) {
+
+        }
     }
 
     private void rotateFrameOnFacing(Direction facing, MatrixStack matrixStack) {

@@ -130,7 +130,7 @@ public class ItemTeleportModule extends ModuleBase {
                 BlockPos tmp = BlockPos.fromLong(nbt.getLong(NBT_LINK));
                 BlockEntity targetBlockEntity = world.getBlockEntity(tmp);
                 int countRange = blockEntity.getRangeUpCount();
-                if (!(targetBlockEntity instanceof ModularFrameEntity) || !((((ModularFrameEntity) targetBlockEntity).module instanceof ItemTeleportModule)))
+                if (!(targetBlockEntity instanceof ModularFrameEntity) || !((((ModularFrameEntity) targetBlockEntity).getModule() instanceof ItemTeleportModule)))
                     player.sendMessage(new TranslatableText("modularitemframe.message.invalid_target"), false);
                 else if (!blockEntity.getPos().isWithinDistance(tmp, ModularItemFrame.getConfig().teleportRange + (countRange * 10))) {
                     player.sendMessage(new TranslatableText("modularitemframe.message.too_far", ModularItemFrame.getConfig().teleportRange + (countRange * 10)), false);
@@ -138,7 +138,7 @@ public class ItemTeleportModule extends ModuleBase {
                     linkedLoc = tmp;
                     direction = EnumMode.DISPENSE;
 
-                    ItemTeleportModule targetModule = (ItemTeleportModule) ((ModularFrameEntity) targetBlockEntity).module;
+                    ItemTeleportModule targetModule = (ItemTeleportModule) ((ModularFrameEntity) targetBlockEntity).getModule();
                     targetModule.linkedLoc = blockEntity.getPos();
                     targetModule.direction = EnumMode.VACUUM;
 
@@ -170,7 +170,7 @@ public class ItemTeleportModule extends ModuleBase {
     @Override
     public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player) {
         if (hasValidConnection(world)) {
-            ItemTeleportModule targetModule = (ItemTeleportModule) ((ModularFrameEntity) Objects.requireNonNull(world.getBlockEntity(linkedLoc))).module;
+            ItemTeleportModule targetModule = (ItemTeleportModule) ((ModularFrameEntity) Objects.requireNonNull(world.getBlockEntity(linkedLoc))).getModule();
             targetModule.linkedLoc = null;
             targetModule.direction = EnumMode.NONE;
         }
@@ -223,8 +223,8 @@ public class ItemTeleportModule extends ModuleBase {
         if (linkedLoc == null) return false;
         BlockEntity blockEntity = world.getBlockEntity(linkedLoc);
         if (!(blockEntity instanceof ModularFrameEntity)
-                || !(((ModularFrameEntity) blockEntity).module instanceof ItemTeleportModule)
-                || ((ItemTeleportModule) ((ModularFrameEntity) blockEntity).module).direction != EnumMode.DISPENSE)
+                || !(((ModularFrameEntity) blockEntity).getModule() instanceof ItemTeleportModule)
+                || ((ItemTeleportModule) ((ModularFrameEntity) blockEntity).getModule()).direction != EnumMode.DISPENSE)
             return false;
         return true;
     }

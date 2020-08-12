@@ -133,13 +133,13 @@ public class TeleportModule extends ModuleBase {
                 if (blockEntity.getPos().isWithinDistance(tmp, 1)) return;
                 BlockEntity targetTile = world.getBlockEntity(tmp);
                 int countRange = blockEntity.getRangeUpCount();
-                if (!(targetTile instanceof ModularFrameEntity) || !((((ModularFrameEntity) targetTile).module instanceof TeleportModule)))
+                if (!(targetTile instanceof ModularFrameEntity) || !((((ModularFrameEntity) targetTile).getModule() instanceof TeleportModule)))
                     player.sendMessage(new TranslatableText("modularitemframe.message.invalid_target"), true);
                 else if (!blockEntity.getPos().isWithinDistance(tmp, ModularItemFrame.getConfig().teleportRange + (countRange * 10))) {
                     player.sendMessage(new TranslatableText("modularitemframe.message.too_far", ModularItemFrame.getConfig().teleportRange + (countRange * 10)), true);
                 } else {
                     linkedLoc = tmp;
-                    ((TeleportModule) ((ModularFrameEntity) targetTile).module).linkedLoc = blockEntity.getPos();
+                    ((TeleportModule) ((ModularFrameEntity) targetTile).getModule()).linkedLoc = blockEntity.getPos();
                     player.sendMessage(new TranslatableText("modularitemframe.message.link_established"), false);
                     nbt.remove(NBT_LINK);
                     driver.setTag(nbt);
@@ -160,7 +160,7 @@ public class TeleportModule extends ModuleBase {
             return false;
         }
         BlockEntity targetTile = world.getBlockEntity(linkedLoc);
-        if (!(targetTile instanceof ModularFrameEntity) || !(((ModularFrameEntity) targetTile).module instanceof TeleportModule)) {
+        if (!(targetTile instanceof ModularFrameEntity) || !(((ModularFrameEntity) targetTile).getModule() instanceof TeleportModule)) {
             if (player != null)
                 player.sendMessage(new TranslatableText("modularitemframe.message.invalid_target"), false);
             return false;
@@ -176,7 +176,7 @@ public class TeleportModule extends ModuleBase {
     @Override
     public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player) {
         if (hasValidConnection(world, null)) {
-            ((TeleportModule) ((ModularFrameEntity) Objects.requireNonNull(world.getBlockEntity(linkedLoc))).module).linkedLoc = null;
+            ((TeleportModule) ((ModularFrameEntity) Objects.requireNonNull(world.getBlockEntity(linkedLoc))).getModule()).linkedLoc = null;
         }
         super.onRemove(world, pos, facing, player);
     }

@@ -34,7 +34,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     private static final String NBT_MODULE_DATA = "frame_module_data";
     private static final String NBT_UPGRADES = "upgrades";
 
-    public ModuleBase module;
+    ModuleBase module;
     List<UpgradeBase> upgrades = new ArrayList<>();
     
     public ModularFrameEntity() {
@@ -57,6 +57,10 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
             return true;
         }
         return false;
+    }
+
+    public Iterable<UpgradeBase> getUpgrades() {
+        return upgrades;
     }
 
     public boolean acceptsUpgrade() {
@@ -140,6 +144,10 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     public void setModule(ModuleBase mod) {
         module = mod == null ? new EmptyModule() : mod;
         module.setTile(this);
+    }
+
+    public ModuleBase getModule() {
+        return module;
     }
 
     public boolean acceptsModule() {

@@ -7,6 +7,7 @@ import net.minecraft.util.Pair;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public class UpgradeItem extends Item {
     private final Identifier upgradeId;
@@ -36,5 +37,9 @@ public class UpgradeItem extends Item {
         }
 
         return null;
+    }
+
+    public static Set<Identifier> getUpgradeIds() {
+        return UPGRADES.keySet();
     }
 }
