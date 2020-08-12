@@ -125,7 +125,7 @@ public class XPModule extends ModuleBase {
         if (experience >= MAX_XP) return;
         if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
 
-        List<ExperienceOrbEntity> entities = world.getEntities(ExperienceOrbEntity.class, getVacuumBox(pos), experienceOrbEntity -> true);
+        List<ExperienceOrbEntity> entities = world.getEntitiesByClass(ExperienceOrbEntity.class, getVacuumBox(pos), experienceOrbEntity -> true);
         for (ExperienceOrbEntity entity : entities) {
             if (!entity.isAlive()) continue;
 

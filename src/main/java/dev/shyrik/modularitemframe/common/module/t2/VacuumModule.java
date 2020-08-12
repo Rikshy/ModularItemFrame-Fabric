@@ -93,7 +93,7 @@ public class VacuumModule extends ModuleBase {
 
         FixedItemInv handler = blockEntity.getAttachedInventory();
         if (handler != null) {
-            List<ItemEntity> entities = world.getEntities(ItemEntity.class, getVacuumBox(pos), itemEntity -> true);
+            List<ItemEntity> entities = world.getEntitiesByClass(ItemEntity.class, getVacuumBox(pos), itemEntity -> true);
             for (ItemEntity entity : entities) {
                 ItemStack entityStack = entity.getStack();
                 ItemInsertable inserter = handler.getInsertable();

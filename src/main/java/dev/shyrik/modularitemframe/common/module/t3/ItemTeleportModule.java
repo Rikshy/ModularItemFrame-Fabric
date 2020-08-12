@@ -183,7 +183,7 @@ public class ItemTeleportModule extends ModuleBase {
         if (!hasValidConnection(world)) return;
         if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
 
-        List<ItemEntity> entities = world.getEntities(ItemEntity.class, getVacuumBox(pos), itemEntity -> true);
+        List<ItemEntity> entities = world.getEntitiesByClass(ItemEntity.class, getVacuumBox(pos), itemEntity -> true);
         for (ItemEntity entity : entities) {
             ItemStack entityStack = entity.getStack();
             if (!entity.isAlive() || entityStack.isEmpty()) continue;

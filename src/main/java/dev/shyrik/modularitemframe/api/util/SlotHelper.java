@@ -45,8 +45,8 @@ public class SlotHelper {
             stackSize = mouseButton == 0 ? stackSlot.getCount() - 1 : stackSlot.getCount() + 1;
         }
 
-        if (stackSize > slot.getMaxStackAmount()) {
-            stackSize = slot.getMaxStackAmount();
+        if (stackSize > slot.getMaxItemCount()) {
+            stackSize = slot.getMaxItemCount();
         }
 
         stackSlot.setCount(stackSize);
@@ -61,8 +61,8 @@ public class SlotHelper {
         }
 
         int stackSize = mouseButton == 0 ? stackHeld.getCount() : 1;
-        if (stackSize > slot.getMaxStackAmount()) {
-            stackSize = slot.getMaxStackAmount();
+        if (stackSize > slot.getMaxItemCount()) {
+            stackSize = slot.getMaxItemCount();
         }
         ItemStack phantomStack = stackHeld.copy();
         phantomStack.setCount(stackSize);
@@ -205,7 +205,7 @@ public class SlotHelper {
             Slot slot = inventorySlots.get(slotIndex);
             ItemStack stackInSlot = slot.getStack();
             if (stackInSlot.isEmpty()) {
-                int max = Math.min(stackToShift.getMaxCount(), slot.getMaxStackAmount());
+                int max = Math.min(stackToShift.getMaxCount(), slot.getMaxItemCount());
                 stackInSlot = stackToShift.copy();
                 stackInSlot.setCount(Math.min(stackToShift.getCount(), max));
                 stackToShift.decrement(stackInSlot.getCount());
@@ -229,7 +229,7 @@ public class SlotHelper {
             ItemStack stackInSlot = slot.getStack();
             if (!stackInSlot.isEmpty() && ItemHelper.simpleAreItemsEqual(stackInSlot, stackToShift)) {
                 int resultingStackSize = stackInSlot.getCount() + stackToShift.getCount();
-                int max = Math.min(stackToShift.getMaxCount(), slot.getMaxStackAmount());
+                int max = Math.min(stackToShift.getMaxCount(), slot.getMaxItemCount());
                 if (resultingStackSize <= max) {
                     stackToShift.setCount(0);
                     stackInSlot.setCount(resultingStackSize);

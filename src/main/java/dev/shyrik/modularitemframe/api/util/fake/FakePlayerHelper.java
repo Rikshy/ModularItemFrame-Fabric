@@ -192,11 +192,11 @@ public class FakePlayerHelper {
         HitResult result = null;
         Vec3d vec3d3 = null;
         Box search = new Box(base.x, base.y, base.z, target.x, target.y, target.z).expand(.5, .5, .5);
-        List<Entity> list = world.getEntities(player, search, entity -> EntityPredicates.EXCEPT_SPECTATOR.test(entity) && entity != null && entity.collides());
+        List<Entity> list = world.getOtherEntities(player, search, entity -> EntityPredicates.EXCEPT_SPECTATOR.test(entity) && entity != null && entity.collides());
         double d2 = 5;
 
         for (Entity entity1 : list) {
-            Box aabb = entity1.getBoundingBox().expand(entity1.getCollisionBox().getAverageSideLength());
+            Box aabb = entity1.getBoundingBox().expand(entity1.getBoundingBox().getAverageSideLength());
             Optional<Vec3d> hitVec = aabb.rayTrace(base, target);
 
             if (aabb.contains(base)) {
