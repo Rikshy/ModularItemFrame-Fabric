@@ -6,6 +6,7 @@ import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.fake.FakePlayer;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
 import dev.shyrik.modularitemframe.client.helper.EnderRenderHelper;
+import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.block.ModularFrameEntity;
 import dev.shyrik.modularitemframe.common.network.NetworkHandler;
 import dev.shyrik.modularitemframe.common.network.packet.PlaySoundPacket;
@@ -52,6 +53,12 @@ public class TeleportModule extends ModuleBase {
     @Environment(EnvType.CLIENT)
     public Identifier frontTexture() {
         return new Identifier(ModularItemFrame.MOD_ID, "block/module_t1_item");
+    }
+
+    @Override
+    @Environment(EnvType.CLIENT)
+    public Identifier innerTexture() {
+        return ModularFrameBlock.INNER_HARDEST;
     }
 
     @Override
