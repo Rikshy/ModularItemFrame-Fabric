@@ -63,6 +63,10 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         return upgrades;
     }
 
+    public int getUpgradeCount() {
+        return upgrades.size();
+    }
+
     public boolean acceptsUpgrade() {
         return upgrades.size() <= ModularItemFrame.getConfig().maxFrameUpgrades;
     }

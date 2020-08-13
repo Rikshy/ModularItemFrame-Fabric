@@ -56,26 +56,30 @@ public class ItemRenderHelper {
         }
     }
 
-    public static void renderOnFrame(ItemStack stack, Direction facing, float rotation, float offset, ModelTransformation.Mode transformType, MatrixStack matrixStack, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
-        if (!stack.isEmpty()) {
-            matrixStack.push();
+    public static void renderInside(ItemStack stack, Direction facing, float rotation, float offset, float scale, ModelTransformation.Mode transformType, MatrixStack matrixStack, VertexConsumerProvider buffer, int light, int overlay) {
+        if (stack.isEmpty())
+            return;
 
-            ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
+        matrixStack.push();
 
-            translate(matrixStack, facing, offset);
-            rotate(matrixStack, facing, rotation);
-            matrixStack.scale(0.5F, 0.5F, 0.5F);
+        ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
 
-            //RenderHelper.enableStandardItemLighting();
+        translate(matrixStack, facing, 0);
+        rotate(matrixStack, facing, rotation);
+        matrixStack.scale(scale, scale, scale);
 
-            BakedModel model = itemRenderer.getHeldItemModel(stack, null, null);
-            if (model.hasDepth()) {
-                matrixStack.multiply(new Quaternion(0F, 180.0F, 0.0F, true));
-            }
-            itemRenderer.renderItem(stack, transformType, combinedLight, combinedOverlay, matrixStack, buffer);
-            //RenderHelper.disableStandardItemLighting();
-
-            matrixStack.pop();
+        BakedModel model = itemRenderer.getHeldItemModel(stack, null, null);
+        if (model.hasDepth()) {
+            matrixStack.multiply(new Quaternion(0F, 180.0F, 0.0F, true));
         }
+        itemRenderer.renderItem(stack, transformType, light, overlay, matrixStack, buffer);
+
+        matrixStack.pop();
+    }
+
+    public static void renderOnFrame(ItemStack stack, Direction facing, float offset, float scale, ModelTransformation.Mode transformType, MatrixStack matrixStack, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
+        if (stack.isEmpty())
+            return;
+        matrixStack.pop();
     }
 }

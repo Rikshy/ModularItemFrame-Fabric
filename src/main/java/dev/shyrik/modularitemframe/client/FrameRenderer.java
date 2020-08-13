@@ -4,6 +4,7 @@ import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.ModuleItem;
 import dev.shyrik.modularitemframe.api.UpgradeBase;
+import dev.shyrik.modularitemframe.api.UpgradeItem;
 import dev.shyrik.modularitemframe.api.util.RegistryHelper;
 import dev.shyrik.modularitemframe.common.block.ModularFrameEntity;
 import dev.shyrik.modularitemframe.common.module.EmptyModule;
@@ -15,8 +16,11 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
+import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.*;
+import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Quaternion;
@@ -116,10 +120,37 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
         module.specialRendering(this, matrixStack, tickDelta, vertexConsumers, light, overlay);
     }
 
-    private void renderUpgrades(ModularFrameEntity frame) {
-        for (UpgradeBase up : frame.getUpgrades()) {
+    private void renderUpgrades(ModularFrameEntity frame, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+        if (frame.getUpgradeCount() == 0) return;
 
+        Map<UpgradeItem, Integer> ups = new HashMap<>();
+        for (UpgradeBase up : frame.getUpgrades()) {
+            int oldVal = ups.getOrDefault(up.getItem(), 0);
+            ups.put(up.getItem(), oldVal + 1);
         }
+
+        matrixStack.push();
+
+        ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
+
+        ups.forEach((item, integer) -> {
+            matrixStack.push();
+
+            rotateFrameOnFacing(frame.blockFacing(), matrixStack);
+            matrixStack.scale(0.2F, 0.2F, 0.2F);
+            ItemStack renderStack = item.getStackForRender();
+            BakedModel model = itemRenderer.getHeldItemModel(renderStack, null, null);
+
+            if (model.hasDepth()) {
+                matrixStack.multiply(new Quaternion(0F, 180.0F, 0.0F, true));
+            }
+            itemRenderer.renderItem(renderStack, ModelTransformation.Mode.GUI, light, overlay, matrixStack, vertexConsumers);
+        });
+        //translate(matrixStack, facing, offset);
+        //rotate(matrixStack, facing, rotation);
+
+
+        matrixStack.pop();
     }
 
     private void rotateFrameOnFacing(Direction facing, MatrixStack matrixStack) {

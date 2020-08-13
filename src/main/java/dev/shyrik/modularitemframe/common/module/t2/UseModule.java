@@ -4,7 +4,6 @@ import alexiil.mc.lib.attributes.item.FixedItemInv;
 import com.mojang.authlib.GameProfile;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
-import dev.shyrik.modularitemframe.api.util.InventoryHelper;
 import dev.shyrik.modularitemframe.api.util.ItemHelper;
 import dev.shyrik.modularitemframe.api.util.fake.FakePlayer;
 import dev.shyrik.modularitemframe.api.util.fake.FakePlayerHelper;
@@ -18,7 +17,6 @@ import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.text.TranslatableText;
@@ -68,21 +66,21 @@ public class UseModule extends ModuleBase {
         switch (facing) {
             case DOWN:
             case NORTH:
-                ItemRenderHelper.renderOnFrame(displayItem, Direction.WEST, rotation, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
+                ItemRenderHelper.renderInside(displayItem, Direction.WEST, rotation, 0.5F, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
                 break;
             case UP:
             case SOUTH:
-                ItemRenderHelper.renderOnFrame(displayItem, Direction.EAST, rotation, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
+                ItemRenderHelper.renderInside(displayItem, Direction.EAST, rotation, 0.5F, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
                 break;
             case WEST:
                 matrixStack.multiply(new Quaternion(0, 90.0F, 0.0F, true));
                 matrixStack.translate(-1, 0 ,0);
-                ItemRenderHelper.renderOnFrame(displayItem, Direction.WEST, rotation, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
+                ItemRenderHelper.renderInside(displayItem, Direction.WEST, rotation, 0.5F, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
                 break;
             case EAST:
                 matrixStack.multiply(new Quaternion(0, 90.0F, 0.0F, true));
                 matrixStack.translate(-1, 0 ,0);
-                ItemRenderHelper.renderOnFrame(displayItem, Direction.EAST, rotation, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
+                ItemRenderHelper.renderInside(displayItem, Direction.EAST, rotation, 0.5F, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
                 break;
         }
     }
