@@ -87,16 +87,14 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
 
     @Override
     public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
-        if (!hasValidRecipe())
-            player.openHandledScreen(getScreenHandler(state, world, pos));
-        else {
-            if (!world.isClient) {
-                if (player.isSneaking()) craft(player, true);
-                else craft(player, false);
-            }
+        if (!world.isClient) {
+            if (!hasValidRecipe()) {
+                player.openHandledScreen(getScreenHandler(state, world, pos));
+                markDirty();
+            } else
+                craft(player, player.isSneaking());
         }
 
-        markDirty();
         return ActionResult.SUCCESS;
     }
 
@@ -145,14 +143,16 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
     public ItemStack onScreenHandlerMatrixChanged(FrameCrafting matrix) {
         World world = blockEntity.getWorld();
         displayItem = ItemStack.EMPTY;
-        recipe = null;
-        Optional<CraftingRecipe> optional = world.getServer().getRecipeManager().getFirstMatch(RecipeType.CRAFTING, matrix, world);
-        if (optional.isPresent()) {
-            recipe = optional.get();
-            displayItem = recipe.getOutput();
-        }
+        if (world != null) {
+            recipe = null;
+            Optional<CraftingRecipe> optional = world.getRecipeManager().getFirstMatch(RecipeType.CRAFTING, matrix, world);
+            if (optional.isPresent()) {
+                recipe = optional.get();
+                displayItem = recipe.getOutput();
+            }
 
-        markDirty();
+            markDirty();
+        }
         return displayItem;
     }
 

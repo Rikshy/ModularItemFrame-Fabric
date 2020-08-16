@@ -220,28 +220,26 @@ public class ItemTeleportModule extends ModuleBase {
     private boolean hasValidConnection(World world) {
         if (linkedLoc == null) return false;
         BlockEntity blockEntity = world.getBlockEntity(linkedLoc);
-        if (!(blockEntity instanceof ModularFrameEntity)
-                || !(((ModularFrameEntity) blockEntity).getModule() instanceof ItemTeleportModule)
-                || ((ItemTeleportModule) ((ModularFrameEntity) blockEntity).getModule()).direction != EnumMode.DISPENSE)
-            return false;
-        return true;
+        return blockEntity instanceof ModularFrameEntity
+                && ((ModularFrameEntity) blockEntity).getModule() instanceof ItemTeleportModule
+                && ((ItemTeleportModule) ((ModularFrameEntity) blockEntity).getModule()).direction == EnumMode.DISPENSE;
     }
 
     private Box getVacuumBox(BlockPos pos) {
         int range = ModularItemFrame.getConfig().vacuumRange + blockEntity.getRangeUpCount();
         switch (blockEntity.getFacing()) {
             case DOWN:
-                return new Box(pos.add(-5, 0, -5), pos.add(5, -5, 5));
+                return new Box(pos.add(-range, 0, -range), pos.add(range, -range, range));
             case UP:
-                return new Box(pos.add(-5, 0, -5), pos.add(5, 5, 5));
+                return new Box(pos.add(-range, 0, -range), pos.add(range, range, range));
             case NORTH:
-                return new Box(pos.add(-5, -5, 0), pos.add(5, 5, -5));
+                return new Box(pos.add(-range, -range, 0), pos.add(range, range, -range));
             case SOUTH:
-                return new Box(pos.add(-5, -5, 0), pos.add(5, 5, 5));
+                return new Box(pos.add(-range, -range, 0), pos.add(range, range, range));
             case WEST:
-                return new Box(pos.add(0, -5, -5), pos.add(5, 5, 5));
+                return new Box(pos.add(0, -range, -range), pos.add(range, range, range));
             case EAST:
-                return new Box(pos.add(0, -5, -5), pos.add(-5, 5, 5));
+                return new Box(pos.add(0, -range, -range), pos.add(-range, range, range));
         }
         return new Box(pos, pos.add(1, 1, 1));
     }
@@ -258,10 +256,6 @@ public class ItemTeleportModule extends ModuleBase {
         EnumMode(int indexIn, String nameIn) {
             index = indexIn;
             name = nameIn;
-        }
-
-        public int getIndex() {
-            return this.index;
         }
 
         @Environment(EnvType.CLIENT)

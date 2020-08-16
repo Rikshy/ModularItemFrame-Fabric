@@ -26,6 +26,7 @@ import net.minecraft.util.registry.Registry;
 import java.util.LinkedHashMap;
 import java.util.function.Supplier;
 
+@SuppressWarnings({"unused", "SameParameterValue"})
 public class Registrar {
     public static final LinkedHashMap<Item, Identifier> ITEMS = new LinkedHashMap<>();
     public static final LinkedHashMap<Block, Identifier> BLOCKS = new LinkedHashMap<>();

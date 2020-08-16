@@ -73,6 +73,8 @@ public class FluidDispenserModule extends ModuleBase {
         Block block = state.getBlock();
         Fluid fluid = attempt.getRawFluid();
 
+        if (fluid == null) return;
+
         if (state.canBucketPlace(fluid)) {
             world.setBlockState(target, fluid.getDefaultState().getBlockState());
         } else if (block instanceof FluidFillable) {

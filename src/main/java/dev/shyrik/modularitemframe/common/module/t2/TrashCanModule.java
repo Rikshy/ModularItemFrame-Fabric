@@ -33,7 +33,7 @@ public class TrashCanModule extends ModuleBase {
     public static final Identifier BG2 = new Identifier(ModularItemFrame.MOD_ID, "block/module_t2_trashcan_2");
     public static final Identifier BG3 = new Identifier(ModularItemFrame.MOD_ID, "block/module_t2_trashcan_3");
 
-    private List<Identifier> frontTex = ImmutableList.of(
+    private final List<Identifier> frontTex = ImmutableList.of(
             BG1,
             BG2,
             BG3

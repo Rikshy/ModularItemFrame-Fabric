@@ -52,11 +52,12 @@ public class SpawnParticlesPacket extends NetworkPacket {
         SpawnParticlesPacket packet = decode(packetByteBuf);
 
         packetContext.getTaskQueue().execute(() -> {
+            MinecraftClient mc = MinecraftClient.getInstance();
+            if (mc.world == null) return;
 
             ParticleType<?> particle = RegistryHelper.getParticle(packet.particleId);
             if (particle != null) {
                 for (int i = 0; i < packet.amount; i++) {
-                    MinecraftClient mc = MinecraftClient.getInstance();
                     mc.particleManager.addParticle(
                             (ParticleEffect)particle,
                             packet.pos.getX(),

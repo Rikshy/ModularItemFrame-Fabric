@@ -115,6 +115,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         return world.getBlockState(pos).get(ModularFrameBlock.FACING);
     }
 
+    @SuppressWarnings("unused")
     public BlockEntity getAttachedEntity() {
         assert world != null;
         return world.getBlockEntity(getAttachedPos());
@@ -135,6 +136,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         return FluidAttributes.FIXED_INV.getFirstOrNull(world, getAttachedPos(), SearchOptions.inDirection(getFacing()));
     }
 
+    @SuppressWarnings("unused")
     public BlockState getAttachedBlock() {
         assert world != null;
         return world.getBlockState(getAttachedPos());

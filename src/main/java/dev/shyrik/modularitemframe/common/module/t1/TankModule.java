@@ -109,7 +109,7 @@ public class TankModule extends ModuleBase {
 
     @Override
     public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
-        ActionResult result = FluidInvUtil.interactHandWithTank((FixedFluidInv) tank, player, hand).asActionResult();
+        FluidInvUtil.interactHandWithTank((FixedFluidInv) tank, player, hand);
         markDirty();
         return ActionResult.SUCCESS;
     }
@@ -144,7 +144,9 @@ public class TankModule extends ModuleBase {
             return;
         Fluid fluid = tank.getInvFluid(0).getRawFluid();
 
-        for ( Direction dir : Direction.values()) {
+        if (fluid == null) return;
+
+        for (Direction dir : Direction.values()) {
             if (dir == facing.getOpposite()) continue;
             BlockState state = world.getBlockState(pos.offset(dir));
             Block block = state.getBlock();

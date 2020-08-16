@@ -30,6 +30,7 @@ public class InventoryHelper {
         return copy;
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean canCraft(FixedItemInv inventory, CraftingRecipe recipe) {
         FixedItemInv copy = copyItemHandler(inventory);
         for (Ingredient ingredient : recipe.getPreviewInputs()) {

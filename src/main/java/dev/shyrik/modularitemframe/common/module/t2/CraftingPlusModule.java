@@ -58,11 +58,11 @@ public class CraftingPlusModule extends CraftingModule {
                 if (modeIdx == EnumMode.values().length) modeIdx = 0;
                 mode = EnumMode.values()[modeIdx];
                 player.sendMessage(new TranslatableText(mode.getName()), false);
-                markDirty();
             } else {
                 player.openHandledScreen(getScreenHandler(blockEntity.getCachedState(), world, pos));
-                markDirty();
             }
+
+            markDirty();
         }
     }
 
