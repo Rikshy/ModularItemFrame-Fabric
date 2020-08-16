@@ -76,7 +76,7 @@ public class IOModule extends ModuleBase {
                     extract = InventoryHelper.givePlayer(player, extract);
                     if (!extract.isEmpty()) ItemHelper.ejectStack(world, pos, blockEntity.getFacing(), extract);
                     lastStack = extractor.attemptAnyExtraction(1, Simulation.SIMULATE);
-                    blockEntity.markDirty();
+                    markDirty();
                 }
             }
         }
@@ -102,7 +102,8 @@ public class IOModule extends ModuleBase {
                         lastClick = time;
                     }
                 }
-                blockEntity.markDirty();
+
+                markDirty();
                 return ActionResult.SUCCESS;
             }
         }
@@ -117,7 +118,7 @@ public class IOModule extends ModuleBase {
                 ItemStack attempt = handler.getExtractable().attemptAnyExtraction(1, Simulation.SIMULATE);
                 if (!ItemStack.areItemsEqual(attempt, displayItem)) {
                     displayItem = attempt;
-                    blockEntity.markDirty();
+                    markDirty();
                 }
             }
         }

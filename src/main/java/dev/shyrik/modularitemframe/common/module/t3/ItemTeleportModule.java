@@ -147,7 +147,7 @@ public class ItemTeleportModule extends ModuleBase {
                     driver.setTag(nbt);
 
                     targetBlockEntity.markDirty();
-                    blockEntity.markDirty();
+                    markDirty();
                 }
             }
         }

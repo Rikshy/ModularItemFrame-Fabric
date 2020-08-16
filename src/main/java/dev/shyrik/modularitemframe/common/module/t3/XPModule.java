@@ -63,7 +63,7 @@ public class XPModule extends ModuleBase {
         if (!world.isClient) {
             if (player.isSneaking()) drainContainerXpToReachPlayerLevel(player, 0);
             else drainContainerXpToReachPlayerLevel(player, player.experienceLevel + 1);
-            blockEntity.markDirty();
+            markDirty();
         }
     }
 
@@ -74,7 +74,7 @@ public class XPModule extends ModuleBase {
         if (!world.isClient) {
             if (player.isSneaking()) drainPlayerXpToReachPlayerLevel(player, 0);
             else drainPlayerXpToReachPlayerLevel(player, player.experienceLevel - 1);
-            blockEntity.markDirty();
+            markDirty();
         }
         return ActionResult.SUCCESS;
     }

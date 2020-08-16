@@ -61,7 +61,7 @@ public class DispenseModule extends ModuleBase {
             if (range < 1) range = countRange;
             if (range > countRange) range = 1;
             player.sendMessage(new TranslatableText("modularitemframe.message.range_change", range + 1), false);
-            blockEntity.markDirty();
+            markDirty();
         }
     }
 

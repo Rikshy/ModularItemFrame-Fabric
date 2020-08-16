@@ -144,6 +144,13 @@ public abstract class ModuleBase {
     }
 
     /**
+     * Forwarded from blockEntity
+     */
+    public void markDirty() {
+        blockEntity.markDirty();
+    }
+
+    /**
      * Tag serialization in case there are some data to be saved!
      * this gets synced automatically
      */

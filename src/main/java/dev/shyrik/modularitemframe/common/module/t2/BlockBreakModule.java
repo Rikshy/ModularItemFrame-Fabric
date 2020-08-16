@@ -110,7 +110,7 @@ public class BlockBreakModule extends ModuleBase {
 
         if (targetState.isAir() || hardness < 0) {
             resetState(world, null, null,  null);
-            blockEntity.markDirty();
+            markDirty();
             return;
         }
 
@@ -138,7 +138,7 @@ public class BlockBreakModule extends ModuleBase {
 
             world.breakBlock(targetPos, drop);
         } else {
-            blockEntity.markDirty();
+            markDirty();
             world.setBlockBreakingInfo(breakId, targetPos, breakProgress);
         }
     }

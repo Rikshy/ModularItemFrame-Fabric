@@ -110,7 +110,7 @@ public class TankModule extends ModuleBase {
     @Override
     public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
         ActionResult result = FluidInvUtil.interactHandWithTank((FixedFluidInv) tank, player, hand).asActionResult();
-        blockEntity.markDirty();
+        markDirty();
         return ActionResult.SUCCESS;
     }
 
@@ -134,7 +134,7 @@ public class TankModule extends ModuleBase {
         SimpleFixedFluidInv tmp = new SimpleFixedFluidInv(1, FluidAmount.of1620(newCapacity));
         tmp.insert(tank.extract(tmp.getMaxAmount_F(0).min(tank.getMaxAmount_F(0))));
         tank = tmp;
-        blockEntity.markDirty();
+        markDirty();
     }
 
     @Override

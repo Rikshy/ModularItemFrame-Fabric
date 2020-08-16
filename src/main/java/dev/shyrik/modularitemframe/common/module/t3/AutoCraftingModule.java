@@ -51,7 +51,7 @@ public class AutoCraftingModule extends CraftingPlusModule {
     public void screw(World world, BlockPos pos, PlayerEntity player, ItemStack driver) {
         if (!world.isClient) {
             player.openHandledScreen(getScreenHandler(blockEntity.getCachedState(), world, pos));
-            blockEntity.markDirty();
+            markDirty();
         }
     }
 

@@ -81,7 +81,7 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
     public void screw(World world, BlockPos pos, PlayerEntity player, ItemStack driver) {
         if (!world.isClient) {
             player.openHandledScreen(getScreenHandler(blockEntity.getCachedState(), world, pos));
-            blockEntity.markDirty();
+            markDirty();
         }
     }
 
@@ -95,7 +95,8 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
                 else craft(player, false);
             }
         }
-        blockEntity.markDirty();
+
+        markDirty();
         return ActionResult.SUCCESS;
     }
 
@@ -132,7 +133,7 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
     protected void reloadRecipe() {
         recipe = ItemHelper.getRecipe(ghostInventory, blockEntity.getWorld());
         displayItem = recipe != null ? recipe.getOutput().copy() : ItemStack.EMPTY;
-        blockEntity.markDirty();
+        markDirty();
     }
 
     @Override
@@ -151,7 +152,7 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
             displayItem = recipe.getOutput();
         }
 
-        blockEntity.markDirty();
+        markDirty();
         return displayItem;
     }
 

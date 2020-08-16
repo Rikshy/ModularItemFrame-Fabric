@@ -55,7 +55,7 @@ public class ItemModule extends ModuleBase {
             rotation -= 20;
         }
         if (rotation >= 360 || rotation <= -360) rotation = 0;
-        blockEntity.markDirty();
+        markDirty();
     }
 
     @Override
@@ -67,7 +67,7 @@ public class ItemModule extends ModuleBase {
     public void screw(World world, BlockPos pos, PlayerEntity player, ItemStack driver) {
         if (!world.isClient) {
             rotate(player);
-            blockEntity.markDirty();
+            markDirty();
         }
     }
 
@@ -77,7 +77,7 @@ public class ItemModule extends ModuleBase {
             ItemStack copy = player.getStackInHand(hand).copy();
             copy.setCount(1);
             displayItem = copy;
-            blockEntity.markDirty();
+            markDirty();
         }
         return ActionResult.SUCCESS;
     }

@@ -79,7 +79,8 @@ public class VacuumModule extends ModuleBase {
         } else {
             adjustRange(player);
         }
-        blockEntity.markDirty();
+
+        markDirty();
     }
 
     @Override

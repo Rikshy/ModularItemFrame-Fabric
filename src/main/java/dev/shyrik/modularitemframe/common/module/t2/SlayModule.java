@@ -109,7 +109,7 @@ public class SlayModule extends ModuleBase {
                 }
             }
 
-            blockEntity.markDirty();
+            markDirty();
         }
         return ActionResult.SUCCESS;
     }
@@ -128,7 +128,7 @@ public class SlayModule extends ModuleBase {
                 rotation += 15 * (blockEntity.getSpeedUpCount() + 1);
             }
 
-            blockEntity.markDirty();
+            markDirty();
         }
     }
 

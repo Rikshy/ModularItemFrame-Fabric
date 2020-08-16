@@ -72,7 +72,7 @@ public class StorageModule extends ModuleBase {
                 extract = InventoryHelper.givePlayer(player, extract);
                 if (!extract.isEmpty()) ItemHelper.ejectStack(world, pos, blockEntity.getFacing(), extract);
                 lastStack = inventory.attemptAnyExtraction(1, Simulation.SIMULATE);
-                blockEntity.markDirty();
+                markDirty();
             }
         }
     }
@@ -96,7 +96,8 @@ public class StorageModule extends ModuleBase {
                         lastClick = time;
                     }
                 }
-                blockEntity.markDirty();
+
+                markDirty();
             }
         }
         return ActionResult.SUCCESS;
@@ -113,7 +114,7 @@ public class StorageModule extends ModuleBase {
                 ItemHelper.ejectStack(blockEntity.getWorld(), blockEntity.getPos(), blockEntity.getFacing(), inventory.getInvStack(slot));
         }
         inventory = tmp;
-        blockEntity.markDirty();
+        markDirty();
     }
 
     @Override
