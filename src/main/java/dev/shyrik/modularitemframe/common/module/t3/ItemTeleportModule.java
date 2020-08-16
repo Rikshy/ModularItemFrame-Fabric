@@ -178,10 +178,8 @@ public class ItemTeleportModule extends ModuleBase {
 
     @Override
     public void tick(World world, BlockPos pos) {
-        if (world.isClient) return;
-        if (direction != EnumMode.VACUUM) return;
-        if (!hasValidConnection(world)) return;
-        if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
+        if (world.isClient || !canTick(world,60, 10)) return;
+        if (direction != EnumMode.VACUUM || !hasValidConnection(world)) return;
 
         List<ItemEntity> entities = world.getEntitiesByClass(ItemEntity.class, getVacuumBox(pos), itemEntity -> true);
         for (ItemEntity entity : entities) {

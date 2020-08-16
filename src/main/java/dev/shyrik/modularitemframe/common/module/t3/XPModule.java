@@ -123,7 +123,7 @@ public class XPModule extends ModuleBase {
     @Override
     public void tick(World world, BlockPos pos) {
         if (experience >= MAX_XP) return;
-        if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
+        if (world.isClient || !canTick(world,60, 10)) return;
 
         List<ExperienceOrbEntity> entities = world.getEntitiesByClass(ExperienceOrbEntity.class, getVacuumBox(pos), experienceOrbEntity -> true);
         for (ExperienceOrbEntity entity : entities) {

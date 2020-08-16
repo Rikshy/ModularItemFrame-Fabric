@@ -116,16 +116,15 @@ public class TankModule extends ModuleBase {
 
     @Override
     public void tick(World world, BlockPos pos) {
-        if (!world.isClient && mode != EnumMode.NONE && ModularItemFrame.getConfig().tankTransferRate > 0) {
-            if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
+        if (world.isClient || !canTick(world,60, 10)) return;
+        if (mode == EnumMode.NONE || ModularItemFrame.getConfig().tankTransferRate <= 0) return;
 
-            FixedFluidInv neighbor = blockEntity.getAttachedTank();
-            if (neighbor != null) {
-                if (mode == EnumMode.DRAIN)
-                    FluidVolumeUtil.move((FluidExtractable) neighbor, tank, FluidAmount.of1620(ModularItemFrame.getConfig().tankTransferRate));
-                else
-                    FluidVolumeUtil.move(tank, (FluidInsertable) neighbor, FluidAmount.of1620(ModularItemFrame.getConfig().tankTransferRate));
-            }
+        FixedFluidInv neighbor = blockEntity.getAttachedTank();
+        if (neighbor != null) {
+            if (mode == EnumMode.DRAIN)
+                FluidVolumeUtil.move((FluidExtractable) neighbor, tank, FluidAmount.of1620(ModularItemFrame.getConfig().tankTransferRate));
+            else
+                FluidVolumeUtil.move(tank, (FluidInsertable) neighbor, FluidAmount.of1620(ModularItemFrame.getConfig().tankTransferRate));
         }
     }
 

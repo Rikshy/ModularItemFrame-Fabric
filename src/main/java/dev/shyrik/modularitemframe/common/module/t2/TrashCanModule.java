@@ -76,7 +76,7 @@ public class TrashCanModule extends ModuleBase {
     @Override
     public void tick(World world, BlockPos pos) {
         if (!world.isClient) {
-            if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
+            if (!canTick(world,60, 10)) return;
 
             FixedItemInv trash = blockEntity.getAttachedInventory();
             if (trash != null) {

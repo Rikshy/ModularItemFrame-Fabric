@@ -86,8 +86,7 @@ public class DispenseModule extends ModuleBase {
 
     @Override
     public void tick(World world, BlockPos pos) {
-        if (!world.isClient) {
-            if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
+        if (world.isClient || !canTick(world,60, 10)) return;
 
             Direction facing = blockEntity.getFacing();
             BlockEntity targetTile = world.getBlockEntity(pos.offset(facing.getOpposite(), range));

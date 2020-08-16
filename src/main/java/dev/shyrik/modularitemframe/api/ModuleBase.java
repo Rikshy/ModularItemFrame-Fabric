@@ -137,6 +137,13 @@ public abstract class ModuleBase {
     }
 
     /**
+     * Helper method which safe checks ticks
+     */
+    public boolean canTick(World world, int base, int mod) {
+        return world.getTime() % Math.max(base - mod * blockEntity.getSpeedUpCount(), 10) == 0;
+    }
+
+    /**
      * Tag serialization in case there are some data to be saved!
      * this gets synced automatically
      */

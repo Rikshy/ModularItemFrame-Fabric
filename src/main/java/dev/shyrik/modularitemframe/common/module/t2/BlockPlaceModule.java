@@ -70,7 +70,7 @@ public class BlockPlaceModule extends ModuleBase {
 
     @Override
     public void tick(World world, BlockPos pos) {
-        if (world.isClient || world.getTime() % Math.max(60 - 10 * blockEntity.getSpeedUpCount(), 10) != 0) return;
+        if (world.isClient || !canTick(world,60, 10)) return;
         FixedItemInv inventory = blockEntity.getAttachedInventory();
         if (inventory == null) return;
 

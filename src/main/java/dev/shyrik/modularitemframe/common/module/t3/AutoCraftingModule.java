@@ -57,8 +57,7 @@ public class AutoCraftingModule extends CraftingPlusModule {
 
     @Override
     public void tick(World world,  BlockPos pos) {
-        if (world.isClient) return;
-        if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
+        if (world.isClient || !canTick(world,60, 10)) return;
 
         FixedItemInv handler = blockEntity.getAttachedInventory();
         if (handler != null) {
