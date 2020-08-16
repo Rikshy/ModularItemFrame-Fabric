@@ -52,7 +52,7 @@ public class Registrar {
     public static final ModuleItem CRAFTING_PLUS_MODULE = createMod(CraftingPlusModule.ID, CraftingPlusModule.class);
     public static final ModuleItem DISPENSE_MODULE = createMod(DispenseModule.ID, DispenseModule.class);
     public static final ModuleItem TRASH_CAN_MODULE = createMod(TrashCanModule.ID, TrashCanModule.class);
-    public static final ModuleItem USE_MODULE = createMod(UseModule.ID, UseModule.class);
+    public static final ModuleItem SLAY_MODULE = createMod(SlayModule.ID, SlayModule.class);
     public static final ModuleItem VACUUM_MODULE = createMod(VacuumModule.ID, VacuumModule.class);
 
     public static final ModuleItem AUTO_CRAFTING_MODULE = createMod(AutoCraftingModule.ID, AutoCraftingModule.class);

@@ -10,12 +10,13 @@
     "item.modularitemframe.module_t1_io": "I/O Modul",
     "item.modularitemframe.module_t1_storage": "Behälter Modul",
 
-    "item.modularitemframe.module_t2_break": "Block Brecher Modul",
-    "item.modularitemframe.module_t2_use": "Use Module",
     "item.modularitemframe.module_t2_dispense": "Spender Modul",
     "item.modularitemframe.module_t2_vacuum": "Vacuum Module",
     "item.modularitemframe.module_t2_trashcan": "Mülleimer Modul",
     "item.modularitemframe.module_t2_craft_plus": "Crafting Plus Modul",
+    "item.modularitemframe.module_t2_slay": "Slay Module",
+    "item.modularitemframe.module_t2_break": "Block Brecher Modul",
+    "item.modularitemframe.module_t2_place": "Block Plazierer Modul",
 
     "item.modularitemframe.module_t3_xp": "XP Modul",
     "item.modularitemframe.module_t3_tele": "Teleport Modul",
@@ -44,9 +45,6 @@
     "modularitemframe.mode.no": "kein",
     "modularitemframe.mode.in": "Einlass",
     "modularitemframe.mode.out": "Auslass",
-    "modularitemframe.mode.sn": "sneak",
-    "modularitemframe.mode.rc": "rightclick",
-    "modularitemframe.mode.lc": "leftclick",
     "modularitemframe.message.screw_mode_change": "[ModularItemFrame] Schraubendreher Modus verändert zu %s",
     "modularitemframe.message.screw_mode_change.rem": "entfernen",
     "modularitemframe.message.screw_mode_change.inter": "interagieren",
@@ -63,17 +61,18 @@
     "modularitemframe.module.storage": "Behälter",
 
     "modularitemframe.module.block_breaker": "Block Brecher",
-    "modularitemframe.module.use": "Use",
+    "modularitemframe.module.block_placer": "Block Plazierer",
     "modularitemframe.module.crafting_plus": "Crafting Plus",
-    "modularitemframe.module.xp": "XP",
     "modularitemframe.module.dispense": "Spender",
     "modularitemframe.module.vacuum": "Vacuum",
     "modularitemframe.module.trash_can": "Mülleimer",
+    "modularitemframe.module.slay": "Slay",
 
     "modularitemframe.module.auto_crafting": "Auto Crafting",
     "modularitemframe.module.tele": "Teleport",
     "modularitemframe.module.fluid_dispenser": "Flüssigkeit Spender",
     "modularitemframe.module.itemtele": "Item Teleport",
+    "modularitemframe.module.xp": "XP",
 
     "modularitemframe.tooltip.module": "Modul: %s",
     "modularitemframe.tooltip.capacity": "%dmb / %dmb",
@@ -83,5 +82,5 @@
 
     "gui.modularitemframe.crafting.name": "",
 
-    "itemGroup.modularitemframe": "ModularItemFrame"
+    "itemGroup.modularitemframe": "ModularItemFrame",
 }
