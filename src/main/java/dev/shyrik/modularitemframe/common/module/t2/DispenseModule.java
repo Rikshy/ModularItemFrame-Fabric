@@ -1,5 +1,6 @@
 package dev.shyrik.modularitemframe.common.module.t2;
 
+import alexiil.mc.lib.attributes.item.FixedItemInv;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.ItemHelper;
@@ -7,10 +8,8 @@ import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.text.TranslatableText;
@@ -88,20 +87,11 @@ public class DispenseModule extends ModuleBase {
     public void tick(World world, BlockPos pos) {
         if (world.isClient || !canTick(world,60, 10)) return;
 
-            Direction facing = blockEntity.getFacing();
-            BlockEntity targetTile = world.getBlockEntity(pos.offset(facing.getOpposite(), range));
-            if (targetTile != null) {
-                if (targetTile instanceof Inventory) { //TODO? sided inventory?
-                    Inventory inv = (Inventory)targetTile;
-                    for (int slot = 0; slot < inv.size(); slot++) {
-                        if (!inv.getStack(slot).isEmpty()) {
-                            ItemHelper.ejectStack(world, pos, facing, inv.getStack(slot));
-                            inv.setStack(slot, ItemStack.EMPTY);
-                            break;
-                        }
-                    }
-                }
-            }
+        FixedItemInv inventory = blockEntity.getAttachedInventory(range);
+        if (inventory != null) {
+            ItemStack extracted = inventory.getExtractable().extract(1);
+            if (!extracted.isEmpty())
+                ItemHelper.ejectStack(world, pos, blockEntity.getFacing(), extracted);
         }
     }
 
