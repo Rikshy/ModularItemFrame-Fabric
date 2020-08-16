@@ -1,6 +1,8 @@
 package dev.shyrik.modularitemframe.common.module.t2;
 
+import alexiil.mc.lib.attributes.Simulation;
 import alexiil.mc.lib.attributes.item.FixedItemInv;
+import alexiil.mc.lib.attributes.item.filter.ItemClassFilter;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
@@ -26,31 +28,17 @@ public class BlockPlaceModule extends ModuleBase {
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_nyi");
 
     public static class FrameItemPlacementContext extends ItemPlacementContext {
-
-        private final BlockPos placementPos;
-
-        public FrameItemPlacementContext(World world, ItemStack itemStack, BlockHitResult blockHitResult) {
-            super(world, null, null, itemStack, blockHitResult);
-            this.canReplaceExisting = true;
-            this.placementPos = blockHitResult.getBlockPos().offset(blockHitResult.getSide());
-            this.canReplaceExisting = world.getBlockState(blockHitResult.getBlockPos()).canReplace(this);
+        public FrameItemPlacementContext(World world, ItemStack itemStack, BlockPos placePos, Direction direction) {
+            super(world, null, null, itemStack, new BlockHitResult(
+                    new Vec3d(
+                            placePos.getX(),
+                            placePos.getY(),
+                            placePos.getZ()),
+                    direction,
+                    placePos,
+                    true));
         }
-
-//        public static FrameItemPlacementContext create(World world, ItemStack itemStack, BlockPos blockPos, Direction direction ) {
-//            return new FrameItemPlacementContext(world, null, null, itemStack, new BlockHitResult(
-//                    new Vec3d(blockPos.getX(), blockPos.getY(), blockPos.getZ()),
-//                    direction,
-//                    blockPos,
-//                    true)
-//            );
-//        }
-
-        public BlockPos getBlockPos() {
-            return this.canReplaceExisting ? super.getBlockPos() : this.placementPos;
-        }
-
     }
-
 
     @Override
     public Identifier getId() {
@@ -82,27 +70,28 @@ public class BlockPlaceModule extends ModuleBase {
 
     @Override
     public void tick(World world, BlockPos pos) {
-        FixedItemInv attInventory = this.blockEntity.getAttachedInventory();
-        ItemStack itemToPlace = attInventory.getExtractable().extract(1);
+        if (world.isClient || world.getTime() % Math.max(60 - 10 * blockEntity.getSpeedUpCount(), 10) != 0) return;
+        FixedItemInv inventory = blockEntity.getAttachedInventory();
+        if (inventory == null) return;
 
-        if (itemToPlace.getItem() instanceof BlockItem ) {
+        ItemStack itemToPlace = inventory.getExtractable().attemptExtraction(
+                new ItemClassFilter(BlockItem.class), 1, Simulation.SIMULATE);
 
-            BlockPos placePos = pos.offset(this.blockEntity.getFacing(), 1);
+        if (!itemToPlace.isEmpty()) {
+            Direction facing = blockEntity.getFacing();
 
-            ActionResult placeResult = ((BlockItem) itemToPlace.getItem()).place( new FrameItemPlacementContext(
-                    world,
-                    itemToPlace,
-                    new BlockHitResult(
-                            new Vec3d(
-                                    placePos.getX(),
-                                    placePos.getY(),
-                                    placePos.getZ()),
-                            this.blockEntity.getFacing(),
-                            placePos,
-                            true)
-                    )
-            );
+            for (int offset = blockEntity.getRangeUpCount() + 1; offset > 0; offset--) {
+                BlockPos placePos = pos.offset(facing, offset);
 
+                ActionResult placeResult = ((BlockItem) itemToPlace.getItem()).place(
+                        new FrameItemPlacementContext(world, itemToPlace, placePos, facing)
+                );
+
+                if (placeResult.isAccepted()) {
+                    inventory.getExtractable().extract(1);
+                    break;
+                }
+            }
         }
     }
 }
