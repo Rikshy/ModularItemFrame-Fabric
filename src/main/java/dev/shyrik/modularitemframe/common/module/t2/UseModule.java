@@ -62,7 +62,7 @@ public class UseModule extends ModuleBase {
     @Override
     @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
-        Direction facing = blockEntity.blockFacing();
+        Direction facing = blockEntity.getFacing();
         switch (facing) {
             case DOWN:
             case NORTH:

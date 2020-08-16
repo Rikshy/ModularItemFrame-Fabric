@@ -98,7 +98,7 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
         ModuleBase module = frame.getModule();
         BakedModel modelFrame = getBakedModel(module);
 
-        rotateFrameOnFacing(frame.blockFacing(), matrixStack);
+        rotateFrameOnFacing(frame.getFacing(), matrixStack);
 
         MinecraftClient.getInstance()
                 .getBlockRenderManager()
@@ -136,7 +136,7 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
         ups.forEach((item, integer) -> {
             matrixStack.push();
 
-            rotateFrameOnFacing(frame.blockFacing(), matrixStack);
+            rotateFrameOnFacing(frame.getFacing(), matrixStack);
             matrixStack.scale(0.2F, 0.2F, 0.2F);
             ItemStack renderStack = item.getStackForRender();
             BakedModel model = itemRenderer.getHeldItemModel(renderStack, null, null);

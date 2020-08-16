@@ -59,7 +59,7 @@ public class StorageModule extends ModuleBase {
     @Override
     @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
-        ItemRenderHelper.renderInside(lastStack, blockEntity.blockFacing(), 0, 0.1F, 0.5F, ModelTransformation.Mode.FIXED, matrixStack, buffer, combinedLight, combinedOverlay);
+        ItemRenderHelper.renderInside(lastStack, blockEntity.getFacing(), 0, 0.1F, 0.5F, ModelTransformation.Mode.FIXED, matrixStack, buffer, combinedLight, combinedOverlay);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class StorageModule extends ModuleBase {
                 int amount = player.isSneaking() ? attempt.getMaxCount() : 1;
                 ItemStack extract = inventory.extract(amount);
                 extract = InventoryHelper.givePlayer(player, extract);
-                if (!extract.isEmpty()) ItemHelper.ejectStack(world, pos, blockEntity.blockFacing(), extract);
+                if (!extract.isEmpty()) ItemHelper.ejectStack(world, pos, blockEntity.getFacing(), extract);
                 lastStack = inventory.attemptAnyExtraction(1, Simulation.SIMULATE);
                 blockEntity.markDirty();
             }
@@ -110,7 +110,7 @@ public class StorageModule extends ModuleBase {
             if (slot < tmp.getSlotCount())
                 tmp.setInvStack(slot, inventory.getInvStack(slot), Simulation.ACTION);
             else
-                ItemHelper.ejectStack(blockEntity.getWorld(), blockEntity.getPos(), blockEntity.blockFacing(), inventory.getInvStack(slot));
+                ItemHelper.ejectStack(blockEntity.getWorld(), blockEntity.getPos(), blockEntity.getFacing(), inventory.getInvStack(slot));
         }
         inventory = tmp;
         blockEntity.markDirty();
@@ -120,7 +120,7 @@ public class StorageModule extends ModuleBase {
     public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player) {
         super.onRemove(world, pos, facing, player);
         for( int slot = 0; slot < inventory.getSlotCount(); slot++) {
-            ItemHelper.ejectStack(world, pos, blockEntity.blockFacing(), inventory.getInvStack(slot));
+            ItemHelper.ejectStack(world, pos, blockEntity.getFacing(), inventory.getInvStack(slot));
         }
     }
 

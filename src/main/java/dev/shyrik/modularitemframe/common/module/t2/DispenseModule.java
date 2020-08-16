@@ -89,7 +89,7 @@ public class DispenseModule extends ModuleBase {
         if (!world.isClient) {
             if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) != 0) return;
 
-            Direction facing = blockEntity.blockFacing();
+            Direction facing = blockEntity.getFacing();
             BlockEntity targetTile = world.getBlockEntity(pos.offset(facing.getOpposite(), range));
             if (targetTile != null) {
                 if (targetTile instanceof Inventory) { //TODO? sided inventory?

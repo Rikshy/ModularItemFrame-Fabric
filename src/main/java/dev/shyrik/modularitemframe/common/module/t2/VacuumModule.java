@@ -146,7 +146,7 @@ public class VacuumModule extends ModuleBase {
     }
 
     private Box getVacuumBox(BlockPos pos) {
-        switch (blockEntity.blockFacing()) {
+        switch (blockEntity.getFacing()) {
             case DOWN:
                 return new Box(pos.add(-rangeX, 0, -rangeZ), pos.add(rangeX, -rangeY, rangeZ));
             case UP:

@@ -84,7 +84,7 @@ public class BlockBreakModule extends ModuleBase {
 
     @Override
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
-        ItemRenderHelper.renderInside(displayItem, blockEntity.blockFacing(), rotation.get(breakProgress), 0.1F, 0.5F, ModelTransformation.Mode.FIXED, matrixStack, buffer, combinedLight, combinedOverlay);
+        ItemRenderHelper.renderInside(displayItem, blockEntity.getFacing(), rotation.get(breakProgress), 0.1F, 0.5F, ModelTransformation.Mode.FIXED, matrixStack, buffer, combinedLight, combinedOverlay);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class BlockBreakModule extends ModuleBase {
         int offset = 1;
 
         do {
-            targetPos = pos.offset(blockEntity.blockFacing(), offset);
+            targetPos = pos.offset(blockEntity.getFacing(), offset);
             targetState = world.getBlockState(targetPos);
         } while (targetState.isAir() && offset++ <= blockEntity.getRangeUpCount());
 
@@ -131,7 +131,7 @@ public class BlockBreakModule extends ModuleBase {
                 for (ItemStack dropStack : drops) {
                     ItemStack remain = inv.getInsertable().insert(dropStack);
                     if (!remain.isEmpty()) {
-                        ItemHelper.ejectStack(world, pos, blockEntity.blockFacing(), remain);
+                        ItemHelper.ejectStack(world, pos, blockEntity.getFacing(), remain);
                     }
                 }
             }

@@ -231,7 +231,7 @@ public class ItemTeleportModule extends ModuleBase {
 
     private Box getVacuumBox(BlockPos pos) {
         int range = ModularItemFrame.getConfig().vacuumRange + blockEntity.getRangeUpCount();
-        switch (blockEntity.blockFacing()) {
+        switch (blockEntity.getFacing()) {
             case DOWN:
                 return new Box(pos.add(-5, 0, -5), pos.add(5, -5, 5));
             case UP:

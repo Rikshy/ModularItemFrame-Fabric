@@ -63,24 +63,24 @@ public class NullifyModule extends ModuleBase {
     @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
         FluidRenderFace face = null;
-        switch (blockEntity.blockFacing()) {
+        switch (blockEntity.getFacing()) {
             case UP:
-                face = FluidRenderFace.createFlatFace(0.3f, 0.07f, 0.3f, 0.7f, 0.07f, 0.7f, 1, blockEntity.blockFacing());
+                face = FluidRenderFace.createFlatFace(0.3f, 0.07f, 0.3f, 0.7f, 0.07f, 0.7f, 1, blockEntity.getFacing());
                 break;
             case DOWN:
-                face = FluidRenderFace.createFlatFace(0.3f, 0.93f, 0.3f, 0.7f, 0.93f, 0.7f, 1, blockEntity.blockFacing());
+                face = FluidRenderFace.createFlatFace(0.3f, 0.93f, 0.3f, 0.7f, 0.93f, 0.7f, 1, blockEntity.getFacing());
                 break;
             case NORTH:
-                face = FluidRenderFace.createFlatFace(0.3f, 0.3f, 0.93f, 0.7f, 0.7f, 0.93f, 1, blockEntity.blockFacing());
+                face = FluidRenderFace.createFlatFace(0.3f, 0.3f, 0.93f, 0.7f, 0.7f, 0.93f, 1, blockEntity.getFacing());
                 break;
             case EAST:
-                face = FluidRenderFace.createFlatFace(0.07f, 0.3f, 0.3f, 0.07f, 0.7f, 0.7f, 1, blockEntity.blockFacing());
+                face = FluidRenderFace.createFlatFace(0.07f, 0.3f, 0.3f, 0.07f, 0.7f, 0.7f, 1, blockEntity.getFacing());
                 break;
             case WEST:
-                face = FluidRenderFace.createFlatFace(0.93f, 0.3f, 0.3f, 0.93f, 0.7f, 0.7f, 1, blockEntity.blockFacing());
+                face = FluidRenderFace.createFlatFace(0.93f, 0.3f, 0.3f, 0.93f, 0.7f, 0.7f, 1, blockEntity.getFacing());
                 break;
             case SOUTH:
-                face = FluidRenderFace.createFlatFace(0.3f, 0.3f, 0.07f, 0.7f, 0.7f, 0.07f, 1, blockEntity.blockFacing());
+                face = FluidRenderFace.createFlatFace(0.3f, 0.3f, 0.07f, 0.7f, 0.7f, 0.07f, 1, blockEntity.getFacing());
                 break;
         }
 

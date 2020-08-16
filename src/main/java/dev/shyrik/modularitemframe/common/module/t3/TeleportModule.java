@@ -101,7 +101,7 @@ public class TeleportModule extends ModuleBase {
         if (!world.isClient) {
             if (hasValidConnection(world, player)) {
                 BlockPos target;
-                if (blockEntity.blockFacing().getAxis().isHorizontal() || blockEntity.blockFacing() == Direction.UP)
+                if (blockEntity.getFacing().getAxis().isHorizontal() || blockEntity.getFacing() == Direction.UP)
                     target = linkedLoc.offset(Direction.DOWN);
                 else target = linkedLoc;
 
@@ -149,7 +149,7 @@ public class TeleportModule extends ModuleBase {
     }
 
     private boolean isTargetLocationValid(World world) {
-        if (blockEntity.blockFacing().getAxis().isHorizontal() || blockEntity.blockFacing() == Direction.UP)
+        if (blockEntity.getFacing().getAxis().isHorizontal() || blockEntity.getFacing() == Direction.UP)
             return world.isAir(linkedLoc.offset(Direction.DOWN));
         else return world.isAir(linkedLoc.offset(Direction.UP));
     }

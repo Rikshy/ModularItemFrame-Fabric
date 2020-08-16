@@ -51,7 +51,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         if (up != null && countUpgradeOfType(up.getClass()) < up.getMaxCount()) {
             upgrades.add(up);
             if (fireInsert) {
-                up.onInsert(world, pos, blockFacing());
+                up.onInsert(world, pos, getFacing());
                 module.onFrameUpgradesChanged();
             }
             return true;
@@ -110,7 +110,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     //endregion
 
     //region <block>
-    public Direction blockFacing() {
+    public Direction getFacing() {
         assert world != null;
         return world.getBlockState(pos).get(ModularFrameBlock.FACING);
     }
@@ -122,12 +122,12 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
 
     public FixedItemInv getAttachedInventory() {
         assert world != null;
-        return ItemAttributes.FIXED_INV.getFirstOrNull(world, getAttachedPos(), SearchOptions.inDirection(blockFacing()));
+        return ItemAttributes.FIXED_INV.getFirstOrNull(world, getAttachedPos(), SearchOptions.inDirection(getFacing()));
     }
 
     public FixedFluidInv getAttachedTank() {
         assert world != null;
-        return FluidAttributes.FIXED_INV.getFirstOrNull(world, getAttachedPos(), SearchOptions.inDirection(blockFacing()));
+        return FluidAttributes.FIXED_INV.getFirstOrNull(world, getAttachedPos(), SearchOptions.inDirection(getFacing()));
     }
 
     public BlockState getAttachedBlock() {
@@ -136,7 +136,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     }
 
     public BlockPos getAttachedPos() {
-        return pos.offset(blockFacing().getOpposite());
+        return pos.offset(getFacing().getOpposite());
     }
 
     public boolean isPowered() {

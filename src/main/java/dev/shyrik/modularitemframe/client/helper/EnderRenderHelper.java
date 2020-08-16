@@ -34,7 +34,7 @@ public class EnderRenderHelper {
     }
 
     public static void render(ModularFrameEntity frame, MatrixStack matrixStack, VertexConsumerProvider bufferBuilder, Vec3d projectedView, List<EndRenderFace> faces) {
-        EndRenderFace face = faces.stream().filter(endRenderFace -> endRenderFace.side == frame.blockFacing()).findFirst().orElse(null);
+        EndRenderFace face = faces.stream().filter(endRenderFace -> endRenderFace.side == frame.getFacing()).findFirst().orElse(null);
         if (face == null)
             return;
 

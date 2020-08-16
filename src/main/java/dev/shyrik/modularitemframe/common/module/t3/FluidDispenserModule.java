@@ -58,7 +58,7 @@ public class FluidDispenserModule extends ModuleBase {
     @Override
     public void tick(World world, BlockPos pos) {
         if (world.getTime() % (60 - 10 * blockEntity.getSpeedUpCount()) == 0) return;
-        Direction facing = blockEntity.blockFacing();
+        Direction facing = blockEntity.getFacing();
         if (!world.isAir(pos.offset(facing))) return;
 
         FixedFluidInv neighbor = blockEntity.getAttachedTank();
@@ -68,7 +68,7 @@ public class FluidDispenserModule extends ModuleBase {
         if (attempt.amount().isLessThan(FluidAmount.BUCKET))
             return;
 
-        BlockPos target = pos.offset(blockEntity.blockFacing());
+        BlockPos target = pos.offset(blockEntity.getFacing());
         BlockState state = world.getBlockState(target);
         Block block = state.getBlock();
         Fluid fluid = attempt.getRawFluid();

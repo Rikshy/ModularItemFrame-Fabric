@@ -74,7 +74,7 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
     @Override
     @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
-        ItemRenderHelper.renderInside(displayItem, blockEntity.blockFacing(), 0, 0.1F, 0.5F, ModelTransformation.Mode.FIXED, matrixStack, buffer, combinedLight, combinedOverlay);
+        ItemRenderHelper.renderInside(displayItem, blockEntity.getFacing(), 0, 0.1F, 0.5F, ModelTransformation.Mode.FIXED, matrixStack, buffer, combinedLight, combinedOverlay);
     }
 
     @Override
@@ -109,7 +109,7 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
         int craftAmount = fullStack ? Math.min(InventoryHelper.countPossibleCrafts(workingInv, recipe), 64) : 1;
         do {
             ItemStack remain = InventoryHelper.givePlayer(player, recipe.getOutput());
-            if (!remain.isEmpty()) ItemHelper.ejectStack(player.world, blockEntity.getPos(), blockEntity.blockFacing(), remain);
+            if (!remain.isEmpty()) ItemHelper.ejectStack(player.world, blockEntity.getPos(), blockEntity.getFacing(), remain);
 
             InventoryHelper.removeIngredients(workingInv, recipe);
         } while (--craftAmount > 0);

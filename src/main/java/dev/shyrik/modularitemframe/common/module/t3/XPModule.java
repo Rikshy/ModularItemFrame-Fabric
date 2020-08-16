@@ -135,7 +135,7 @@ public class XPModule extends ModuleBase {
 
     private Box getVacuumBox(BlockPos pos) {
         int range = ModularItemFrame.getConfig().vacuumRange + blockEntity.getRangeUpCount();
-        switch (blockEntity.blockFacing()) {
+        switch (blockEntity.getFacing()) {
             case DOWN:
                 return new Box(pos.add(-range, 0, -range), pos.add(range, -range, range));
             case UP:

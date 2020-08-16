@@ -72,7 +72,7 @@ public class AutoCraftingModule extends CraftingPlusModule {
         if (recipe == null || recipe.getOutput().isEmpty() || !InventoryHelper.canCraft(inventory, recipe))
             return;
 
-        ItemHelper.ejectStack(world, pos, blockEntity.blockFacing(), recipe.getOutput().copy());
+        ItemHelper.ejectStack(world, pos, blockEntity.getFacing(), recipe.getOutput().copy());
 
         InventoryHelper.removeIngredients(inventory, recipe);
 

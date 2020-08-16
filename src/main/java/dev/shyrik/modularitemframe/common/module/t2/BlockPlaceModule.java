@@ -87,7 +87,7 @@ public class BlockPlaceModule extends ModuleBase {
 
         if (itemToPlace.getItem() instanceof BlockItem ) {
 
-            BlockPos placePos = pos.offset(this.blockEntity.blockFacing(), 1);
+            BlockPos placePos = pos.offset(this.blockEntity.getFacing(), 1);
 
             ActionResult placeResult = ((BlockItem) itemToPlace.getItem()).place( new FrameItemPlacementContext(
                     world,
@@ -97,7 +97,7 @@ public class BlockPlaceModule extends ModuleBase {
                                     placePos.getX(),
                                     placePos.getY(),
                                     placePos.getZ()),
-                            this.blockEntity.blockFacing(),
+                            this.blockEntity.getFacing(),
                             placePos,
                             true)
                     )

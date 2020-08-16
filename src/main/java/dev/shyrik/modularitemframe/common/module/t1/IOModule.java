@@ -54,7 +54,7 @@ public class IOModule extends ModuleBase {
     @Override
     @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
-        ItemRenderHelper.renderInside(displayItem, blockEntity.blockFacing(), 0F, 0.1F, 0.5F, ModelTransformation.Mode.FIXED, matrixStack, buffer, combinedLight, combinedOverlay);
+        ItemRenderHelper.renderInside(displayItem, blockEntity.getFacing(), 0F, 0.1F, 0.5F, ModelTransformation.Mode.FIXED, matrixStack, buffer, combinedLight, combinedOverlay);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class IOModule extends ModuleBase {
                     int amount = player.isSneaking() ? attempt.getMaxCount() : 1;
                     ItemStack extract = extractor.extract(amount);
                     extract = InventoryHelper.givePlayer(player, extract);
-                    if (!extract.isEmpty()) ItemHelper.ejectStack(world, pos, blockEntity.blockFacing(), extract);
+                    if (!extract.isEmpty()) ItemHelper.ejectStack(world, pos, blockEntity.getFacing(), extract);
                     lastStack = extractor.attemptAnyExtraction(1, Simulation.SIMULATE);
                     blockEntity.markDirty();
                 }

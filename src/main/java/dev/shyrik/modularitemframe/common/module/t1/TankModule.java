@@ -70,24 +70,24 @@ public class TankModule extends ModuleBase {
         if (!vol.amount().isZero()) {
             double amount = (float) vol.getAmount_F().as1620() / (float) tank.getMaxAmount_F(0).as1620();
             FluidRenderFace face = null;
-            switch (blockEntity.blockFacing()) {
+            switch (blockEntity.getFacing()) {
                 case UP:
-                    face = FluidRenderFace.createFlatFace(0.2d, 0.08d, 0.2d, 0.8d, 0.08d, 0.2d + amount * 0.6d, 1, blockEntity.blockFacing());
+                    face = FluidRenderFace.createFlatFace(0.2d, 0.08d, 0.2d, 0.8d, 0.08d, 0.2d + amount * 0.6d, 1, blockEntity.getFacing());
                     break;
                 case DOWN:
-                    face = FluidRenderFace.createFlatFace(0.2f, 0.92f, 0.2f, 0.8f, 0.92f, 0.2f + amount * 0.6f, 1, blockEntity.blockFacing());
+                    face = FluidRenderFace.createFlatFace(0.2f, 0.92f, 0.2f, 0.8f, 0.92f, 0.2f + amount * 0.6f, 1, blockEntity.getFacing());
                     break;
                 case NORTH:
-                    face = FluidRenderFace.createFlatFace(0.2f, 0.2f, 0.92f, 0.8f, 0.2f + amount * 0.6f, 0.92f, 1, blockEntity.blockFacing());
+                    face = FluidRenderFace.createFlatFace(0.2f, 0.2f, 0.92f, 0.8f, 0.2f + amount * 0.6f, 0.92f, 1, blockEntity.getFacing());
                     break;
                 case EAST:
-                    face = FluidRenderFace.createFlatFace(0.08f, 0.2f, 0.2f, 0.08f, 0.2f + amount * 0.6f, 0.8f, 1, blockEntity.blockFacing());
+                    face = FluidRenderFace.createFlatFace(0.08f, 0.2f, 0.2f, 0.08f, 0.2f + amount * 0.6f, 0.8f, 1, blockEntity.getFacing());
                     break;
                 case WEST:
-                    face = FluidRenderFace.createFlatFace(0.92f, 0.2f, 0.2f, 0.92f, 0.2f + amount * 0.6f, 0.8f, 1, blockEntity.blockFacing());
+                    face = FluidRenderFace.createFlatFace(0.92f, 0.2f, 0.2f, 0.92f, 0.2f + amount * 0.6f, 0.8f, 1, blockEntity.getFacing());
                     break;
                 case SOUTH:
-                    face = FluidRenderFace.createFlatFace(0.2f, 0.2f, 0.08f, 0.8f, 0.2f + amount * 0.6f, 0.08f, 1, blockEntity.blockFacing());
+                    face = FluidRenderFace.createFlatFace(0.2f, 0.2f, 0.08f, 0.8f, 0.2f + amount * 0.6f, 0.08f, 1, blockEntity.getFacing());
                     break;
             }
 
