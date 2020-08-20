@@ -94,7 +94,7 @@ public class ItemTeleportModule extends ModuleBase {
                         new FrameRenderer.EndRenderFace(0.85f, 0.92f, 0.14f, Direction.WEST)
                 );
 
-            renderer.renderEnder(frame.getPos(), frame.getFacing(), matrixStack, buffer, renderer.getDispatcher().camera.getPos(), faces);
+            renderer.renderEnder(frame, matrixStack, buffer, faces);
         }
     }
 

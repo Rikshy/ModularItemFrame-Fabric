@@ -46,7 +46,6 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
     public FrameRenderer(BlockEntityRenderDispatcher dispatcher) {
         super(dispatcher);
     }
-    public BlockEntityRenderDispatcher getDispatcher() { return dispatcher; }
 
     //region <modelLoading>
     public static void onApplyModelLoader(ModelLoader modelLoader) {
@@ -237,12 +236,12 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
         public Direction side;
     }
 
-    public void renderEnder(BlockPos pos, Direction facing, MatrixStack matrixStack, VertexConsumerProvider bufferBuilder, Vec3d projectedView, List<EndRenderFace> faces) {
-        EndRenderFace face = faces.stream().filter(endRenderFace -> endRenderFace.side == facing).findFirst().orElse(null);
+    public void renderEnder(ModularFrameEntity frame, MatrixStack matrixStack, VertexConsumerProvider bufferBuilder, List<EndRenderFace> faces) {
+        EndRenderFace face = faces.stream().filter(endRenderFace -> endRenderFace.side == frame.getFacing()).findFirst().orElse(null);
         if (face == null)
             return;
 
-        double distance = pos.getSquaredDistance(projectedView, true);
+        double distance = frame.getPos().getSquaredDistance(dispatcher.camera.getPos(), true);
         int val = getPasses(distance);
         Matrix4f matrix4f = matrixStack.peek().getModel();
 
