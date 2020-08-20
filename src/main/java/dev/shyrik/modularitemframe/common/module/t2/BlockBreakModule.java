@@ -83,8 +83,8 @@ public class BlockBreakModule extends ModuleBase {
     }
 
     @Override
-    public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
-        ItemRenderHelper.renderInside(displayItem, blockEntity.getFacing(), rotation.get(breakProgress), 0.1F, 0.5F, ModelTransformation.Mode.FIXED, matrixStack, buffer, combinedLight, combinedOverlay);
+    public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float ticks, VertexConsumerProvider buffer, int light, int overlay) {
+        ItemRenderHelper.renderInside(displayItem, blockEntity.getFacing(), rotation.get(breakProgress), matrixStack, buffer, light, overlay);
     }
 
     @Override

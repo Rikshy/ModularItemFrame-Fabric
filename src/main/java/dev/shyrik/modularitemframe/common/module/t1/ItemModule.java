@@ -60,8 +60,8 @@ public class ItemModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
-        ItemRenderHelper.renderInside(displayItem, blockEntity.getFacing(), rotation, 0.1F, 0.5F, ModelTransformation.Mode.FIXED, matrixStack, buffer, combinedLight, combinedOverlay);
+    public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float ticks, VertexConsumerProvider buffer, int light, int overlay) {
+        ItemRenderHelper.renderInside(displayItem, blockEntity.getFacing(), rotation, matrixStack, buffer, light, overlay);
     }
 
     public void screw(World world, BlockPos pos, PlayerEntity player, ItemStack driver) {

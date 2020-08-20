@@ -59,26 +59,26 @@ public class SlayModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
+    public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float ticks, VertexConsumerProvider buffer, int light, int overlay) {
         Direction facing = blockEntity.getFacing();
         switch (facing) {
             case DOWN:
             case NORTH:
-                ItemRenderHelper.renderInside(weapon, Direction.WEST, rotation, 0.5F, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
+                ItemRenderHelper.renderInside(weapon, Direction.WEST, rotation, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, light, overlay);
                 break;
             case UP:
             case SOUTH:
-                ItemRenderHelper.renderInside(weapon, Direction.EAST, rotation, 0.5F, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
+                ItemRenderHelper.renderInside(weapon, Direction.EAST, rotation, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, light, overlay);
                 break;
             case WEST:
                 matrixStack.multiply(new Quaternion(0, 90.0F, 0.0F, true));
                 matrixStack.translate(-1, 0 ,0);
-                ItemRenderHelper.renderInside(weapon, Direction.WEST, rotation, 0.5F, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
+                ItemRenderHelper.renderInside(weapon, Direction.WEST, rotation, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, light, overlay);
                 break;
             case EAST:
                 matrixStack.multiply(new Quaternion(0, 90.0F, 0.0F, true));
                 matrixStack.translate(-1, 0 ,0);
-                ItemRenderHelper.renderInside(weapon, Direction.EAST, rotation, 0.5F, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, combinedLight, combinedOverlay);
+                ItemRenderHelper.renderInside(weapon, Direction.EAST, rotation, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, light, overlay);
                 break;
         }
     }

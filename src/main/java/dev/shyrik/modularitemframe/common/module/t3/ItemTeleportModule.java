@@ -83,7 +83,7 @@ public class ItemTeleportModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
+    public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float ticks, VertexConsumerProvider buffer, int light, int overlay) {
         if(direction == EnumMode.NONE) {
             ImmutableList<EnderRenderHelper.EndRenderFace> faces =
                 ImmutableList.of(

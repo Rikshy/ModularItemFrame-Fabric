@@ -88,7 +88,7 @@ public abstract class ModuleBase {
      * @param renderer instance of the current {@link FrameRenderer}
      */
     @Environment(EnvType.CLIENT)
-    public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
+    public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float ticks, VertexConsumerProvider buffer, int light, int overlay) {
     }
 
     /**
@@ -104,11 +104,9 @@ public abstract class ModuleBase {
      * @param driver the driver who was used
      */
     public void screw(World world, BlockPos pos, PlayerEntity player, ItemStack driver) {
-
     }
 
     public void onFrameUpgradesChanged() {
-
     }
 
     /**
@@ -161,6 +159,6 @@ public abstract class ModuleBase {
     /**
      * Tag deserialization in case there are some data to be saved!
      */
-    public void fromTag(CompoundTag cmp) {
+    public void fromTag(CompoundTag tag) {
     }
 }

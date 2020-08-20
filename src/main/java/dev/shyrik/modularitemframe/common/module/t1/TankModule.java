@@ -65,7 +65,7 @@ public class TankModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
+    public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float ticks, VertexConsumerProvider buffer, int light, int overlay) {
         FluidVolume vol = tank.getInvFluid(0);
         if (!vol.amount().isZero()) {
             double amount = (float) vol.getAmount_F().as1620() / (float) tank.getMaxAmount_F(0).as1620();

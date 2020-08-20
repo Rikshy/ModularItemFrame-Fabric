@@ -69,7 +69,7 @@ public class TeleportModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float partialTicks, VertexConsumerProvider buffer, int combinedLight, int combinedOverlay) {
+    public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float ticks, VertexConsumerProvider buffer, int light, int overlay) {
         ImmutableList<EnderRenderHelper.EndRenderFace> faces =
                 ImmutableList.of(
                         new EnderRenderHelper.EndRenderFace(0.85f, 0.08f, 0.14f, Direction.UP),
