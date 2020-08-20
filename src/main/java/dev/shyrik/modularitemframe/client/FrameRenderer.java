@@ -4,7 +4,6 @@ import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.ModuleItem;
 import dev.shyrik.modularitemframe.api.UpgradeBase;
-import dev.shyrik.modularitemframe.api.UpgradeItem;
 import dev.shyrik.modularitemframe.api.util.RegistryHelper;
 import dev.shyrik.modularitemframe.common.block.ModularFrameEntity;
 import dev.shyrik.modularitemframe.common.module.EmptyModule;
@@ -116,39 +115,42 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
                 );
 
         matrixStack.pop();
-
         module.specialRendering(this, matrixStack, tickDelta, vertexConsumers, light, overlay);
+        renderUpgrades(frame, matrixStack, vertexConsumers, light, overlay);
     }
 
     private void renderUpgrades(ModularFrameEntity frame, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         if (frame.getUpgradeCount() == 0) return;
 
-        Map<UpgradeItem, Integer> ups = new HashMap<>();
-        for (UpgradeBase up : frame.getUpgrades()) {
-            int oldVal = ups.getOrDefault(up.getItem(), 0);
-            ups.put(up.getItem(), oldVal + 1);
-        }
-
         matrixStack.push();
 
         ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
 
-        ups.forEach((item, integer) -> {
+        rotateFrameOnFacing(frame.getFacing(), matrixStack);
+
+        int i = 0;
+        for (UpgradeBase up : frame.getUpgrades()) {
             matrixStack.push();
 
-            rotateFrameOnFacing(frame.getFacing(), matrixStack);
-            matrixStack.scale(0.2F, 0.2F, 0.2F);
-            ItemStack renderStack = item.getStackForRender();
-            BakedModel model = itemRenderer.getHeldItemModel(renderStack, null, null);
+            int side = i == 0 ? 0 : i / 5;
+            int pos = i % 5;
 
-            if (model.hasDepth()) {
-                matrixStack.multiply(new Quaternion(0F, 180.0F, 0.0F, true));
+            float sideOffset = side == 0 ? 0.85F : 0.15F;
+            float posOffset = pos * 0.05F;
+
+            if (side == 0 || side == 1) {
+                matrixStack.translate(0.4F + posOffset, sideOffset, 0.11F);
+            } else {
+                matrixStack.translate(sideOffset, 0.6F - posOffset, 0.11F);
             }
-            itemRenderer.renderItem(renderStack, ModelTransformation.Mode.GUI, light, overlay, matrixStack, vertexConsumers);
-        });
-        //translate(matrixStack, facing, offset);
-        //rotate(matrixStack, facing, rotation);
+            matrixStack.scale(0.05F, 0.05F, 0.05F);
 
+            ItemStack renderStack = up.getItem().getStackForRender();
+            itemRenderer.renderItem(renderStack, ModelTransformation.Mode.GUI, light, overlay, matrixStack, vertexConsumers);
+
+            i++;
+            matrixStack.pop();
+        }
 
         matrixStack.pop();
     }
