@@ -1,5 +1,6 @@
 package dev.shyrik.modularitemframe.client;
 
+import com.google.common.collect.ImmutableList;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.ModuleItem;
@@ -12,6 +13,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
@@ -21,17 +23,24 @@ import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Quaternion;
+import net.minecraft.util.math.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.stream.IntStream;
 
 @Environment(EnvType.CLIENT)
 public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
 
     private BakedModel model = null;
     private Identifier currentFront = null;
+
+    private final Random RANDOM = new Random(31100L);
+    private final List<RenderLayer> layers =
+            IntStream.range(0, 16).mapToObj((i) -> RenderLayer.getEndPortal(i + 1)).collect(ImmutableList.toImmutableList());
+
     private static final Map<Identifier, BakedModel> models = new HashMap<>();
 
     public FrameRenderer(BlockEntityRenderDispatcher dispatcher) {
@@ -39,6 +48,7 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
     }
     public BlockEntityRenderDispatcher getDispatcher() { return dispatcher; }
 
+    //region <modelLoading>
     public static void onApplyModelLoader(ModelLoader modelLoader) {
         UnbakedModel unbakedFrame = modelLoader.getOrLoadModel(new Identifier(ModularItemFrame.MOD_ID, "block/modular_frame"));
         BakedModelManager bmMan = MinecraftClient.getInstance().getBakedModelManager();
@@ -90,6 +100,7 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
 
         return model;
     }
+    //endregion <modelLoading>
 
     @Override
     public void render(ModularFrameEntity frame, float tickDelta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light, int overlay) {
@@ -114,43 +125,11 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
                         overlay
                 );
 
-        matrixStack.pop();
-        module.specialRendering(this, matrixStack, tickDelta, vertexConsumers, light, overlay);
-        renderUpgrades(frame, matrixStack, vertexConsumers, light, overlay);
-    }
-
-    private void renderUpgrades(ModularFrameEntity frame, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        if (frame.getUpgradeCount() == 0) return;
-
         matrixStack.push();
+        module.specialRendering(this, matrixStack, tickDelta, vertexConsumers, light, overlay);
+        matrixStack.pop();
 
-        ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
-
-        rotateFrameOnFacing(frame.getFacing(), matrixStack);
-
-        int i = 0;
-        for (UpgradeBase up : frame.getUpgrades()) {
-            matrixStack.push();
-
-            int side = i == 0 ? 0 : i / 5;
-            int pos = i % 5;
-
-            float sideOffset = side == 0 ? 0.85F : 0.15F;
-            float posOffset = pos * 0.05F;
-
-            if (side == 0 || side == 1) {
-                matrixStack.translate(0.4F + posOffset, sideOffset, 0.11F);
-            } else {
-                matrixStack.translate(sideOffset, 0.6F - posOffset, 0.11F);
-            }
-            matrixStack.scale(0.05F, 0.05F, 0.05F);
-
-            ItemStack renderStack = up.getItem().getStackForRender();
-            itemRenderer.renderItem(renderStack, ModelTransformation.Mode.GUI, light, overlay, matrixStack, vertexConsumers);
-
-            i++;
-            matrixStack.pop();
-        }
+        renderUpgrades(frame, matrixStack, vertexConsumers, light, overlay);
 
         matrixStack.pop();
     }
@@ -181,4 +160,162 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
                 break;
         }
     }
+
+    private void renderUpgrades(ModularFrameEntity frame, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light, int overlay) {
+        if (frame.getUpgradeCount() == 0) return;
+
+        matrixStack.push();
+
+        ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
+
+        int i = 0;
+        for (UpgradeBase up : frame.getUpgrades()) {
+            matrixStack.push();
+
+            int side = i == 0 ? 0 : i / 5;
+            int pos = i % 5;
+
+            float sideOffset = side == 0 ? 0.85F : 0.15F;
+            float posOffset = pos * 0.05F;
+
+            if (side == 0 || side == 1) {
+                matrixStack.translate(0.4F + posOffset, sideOffset, 0.11F);
+            } else {
+                matrixStack.translate(sideOffset, 0.6F - posOffset, 0.11F);
+            }
+            matrixStack.scale(0.05F, 0.05F, 0.05F);
+
+            ItemStack renderStack = up.getItem().getStackForRender();
+            itemRenderer.renderItem(renderStack, ModelTransformation.Mode.GUI, light, overlay, matrixStack, vertexConsumers);
+
+            i++;
+            matrixStack.pop();
+        }
+
+        matrixStack.pop();
+    }
+
+    //region <itemRender>
+    public void renderInside(ItemStack stack, MatrixStack matrixStack, VertexConsumerProvider buffer, int light, int overlay) {
+        renderInside(stack, 0, 0.5F, ModelTransformation.Mode.FIXED, matrixStack, buffer, light, overlay);
+    }
+    public void renderInside(ItemStack stack, int rotation, MatrixStack matrixStack, VertexConsumerProvider buffer, int light, int overlay) {
+        renderInside(stack, rotation, 0.5F, ModelTransformation.Mode.FIXED, matrixStack, buffer, light, overlay);
+    }
+
+    public void renderInside(ItemStack stack, float rotation, float scale, ModelTransformation.Mode transformType, MatrixStack matrixStack, VertexConsumerProvider buffer, int light, int overlay) {
+        if (stack.isEmpty())
+            return;
+
+        matrixStack.push();
+
+        ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
+
+        matrixStack.translate(0.5F, 0.5F, 0.1F);
+        matrixStack.multiply(new Quaternion(0.0F, 0.0F, rotation, true));
+        matrixStack.scale(scale, scale, scale);
+
+        BakedModel model = itemRenderer.getHeldItemModel(stack, null, null);
+        if (model.hasDepth()) {
+            matrixStack.multiply(new Quaternion(0F, 180.0F, 0.0F, true));
+        }
+        itemRenderer.renderItem(stack, transformType, light, overlay, matrixStack, buffer);
+
+        matrixStack.pop();
+    }
+    //endregion <itemRender>
+
+    //region <ender>
+    public static class EndRenderFace {
+        public EndRenderFace(float offset1, float offset2, float offset3, Direction side) {
+            this.offset1 = offset1;
+            this.offset2 = offset2;
+            this.offset3 = offset3;
+            this.side = side;
+        }
+        public float offset1, offset2, offset3;
+        public Direction side;
+    }
+
+    public void renderEnder(BlockPos pos, Direction facing, MatrixStack matrixStack, VertexConsumerProvider bufferBuilder, Vec3d projectedView, List<EndRenderFace> faces) {
+        EndRenderFace face = faces.stream().filter(endRenderFace -> endRenderFace.side == facing).findFirst().orElse(null);
+        if (face == null)
+            return;
+
+        double distance = pos.getSquaredDistance(projectedView, true);
+        int val = getPasses(distance);
+        Matrix4f matrix4f = matrixStack.peek().getModel();
+
+        enderMagic(0.15F, matrix4f, bufferBuilder.getBuffer(layers.get(0)), face);
+
+        for (int i = 1; i < val; ++i) {
+            enderMagic(2.0F / (float) (18 - i), matrix4f, bufferBuilder.getBuffer(layers.get(i)), face);
+        }
+    }
+
+    private void enderMagic(float colorMultiplier, Matrix4f matrix, VertexConsumer buffer, EndRenderFace face) {
+        float red = (RANDOM.nextFloat() * 0.5F + 0.1F) * colorMultiplier;
+        float blue = (RANDOM.nextFloat() * 0.5F + 0.4F) * colorMultiplier;
+        float green = (RANDOM.nextFloat() * 0.5F + 0.5F) * colorMultiplier;
+
+        switch (face.side){
+            case DOWN:
+                buffer.vertex(matrix, face.offset1, face.offset2, face.offset3).color(red, blue, green, 1.0F).next();
+                buffer.vertex(matrix, face.offset1, face.offset2, face.offset1).color(red, blue, green, 1.0F).next();
+                buffer.vertex(matrix, face.offset3, face.offset2, face.offset1).color(red, blue, green, 1.0F).next();
+                buffer.vertex(matrix, face.offset3, face.offset2, face.offset3).color(red, blue, green, 1.0F).next();
+                break;
+            case UP:
+                buffer.vertex(matrix, face.offset1, face.offset2, face.offset1).color(red, blue, green, 1.0F).next();
+                buffer.vertex(matrix, face.offset1, face.offset2, face.offset3).color(red, blue, green, 1.0F).next();
+                buffer.vertex(matrix, face.offset3, face.offset2, face.offset3).color(red, blue, green, 1.0F).next();
+                buffer.vertex(matrix, face.offset3, face.offset2, face.offset1).color(red, blue, green, 1.0F).next();
+                break;
+            case NORTH:
+                buffer.vertex(matrix, face.offset3, face.offset1, face.offset2).color(red, blue, green, 1.0F).next();
+                buffer.vertex(matrix, face.offset1, face.offset1, face.offset2).color(red, blue, green, 1.0F).next();
+                buffer.vertex(matrix, face.offset1, face.offset3, face.offset2).color(red, blue, green, 1.0F).next();
+                buffer.vertex(matrix, face.offset3, face.offset3, face.offset2).color(red, blue, green, 1.0F).next();
+                break;
+            case SOUTH:
+                buffer.vertex(matrix, face.offset1, face.offset1, face.offset2).color(red, blue, green, 1.0F).next();
+                buffer.vertex(matrix, face.offset3, face.offset1, face.offset2).color(red, blue, green, 1.0F).next();
+                buffer.vertex(matrix, face.offset3, face.offset3, face.offset2).color(red, blue, green, 1.0F).next();
+                buffer.vertex(matrix, face.offset1, face.offset3, face.offset2).color(red, blue, green, 1.0F).next();
+                break;
+            case WEST:
+                buffer.vertex(matrix, face.offset2, face.offset1, face.offset1).color(red, blue, green, 1.0F).next();
+                buffer.vertex(matrix, face.offset2, face.offset1, face.offset3).color(red, blue, green, 1.0F).next();
+                buffer.vertex(matrix, face.offset2, face.offset3, face.offset3).color(red, blue, green, 1.0F).next();
+                buffer.vertex(matrix, face.offset2, face.offset3, face.offset1).color(red, blue, green, 1.0F).next();
+                break;
+            case EAST:
+                buffer.vertex(matrix, face.offset2, face.offset1, face.offset3).color(red, blue, green, 1.0F).next();
+                buffer.vertex(matrix, face.offset2, face.offset1, face.offset1).color(red, blue, green, 1.0F).next();
+                buffer.vertex(matrix, face.offset2, face.offset3, face.offset1).color(red, blue, green, 1.0F).next();
+                buffer.vertex(matrix, face.offset2, face.offset3, face.offset2).color(red, blue, green, 1.0F).next();
+                break;
+        }
+    }
+
+    private int getPasses(double d) {
+        if (d > 36864.0D) {
+            return 1;
+        } else if (d > 25600.0D) {
+            return 3;
+        } else if (d > 16384.0D) {
+            return 5;
+        } else if (d > 9216.0D) {
+            return 7;
+        } else if (d > 4096.0D) {
+            return 9;
+        } else if (d > 1024.0D) {
+            return 11;
+        } else if (d > 576.0D) {
+            return 13;
+        } else {
+            return d > 256.0D ? 14 : 15;
+        }
+    }
+    //endregion <ender>
 }

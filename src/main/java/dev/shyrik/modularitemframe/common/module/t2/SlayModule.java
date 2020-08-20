@@ -9,7 +9,6 @@ import dev.shyrik.modularitemframe.api.util.ItemHelper;
 import dev.shyrik.modularitemframe.api.util.fake.FakePlayer;
 import dev.shyrik.modularitemframe.api.util.fake.FakePlayerFactory;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
-import dev.shyrik.modularitemframe.client.helper.ItemRenderHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -64,21 +63,15 @@ public class SlayModule extends ModuleBase {
         switch (facing) {
             case DOWN:
             case NORTH:
-                ItemRenderHelper.renderInside(weapon, Direction.WEST, rotation, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, light, overlay);
-                break;
             case UP:
             case SOUTH:
-                ItemRenderHelper.renderInside(weapon, Direction.EAST, rotation, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, light, overlay);
+                renderer.renderInside(weapon, rotation, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, light, overlay);
                 break;
             case WEST:
-                matrixStack.multiply(new Quaternion(0, 90.0F, 0.0F, true));
-                matrixStack.translate(-1, 0 ,0);
-                ItemRenderHelper.renderInside(weapon, Direction.WEST, rotation, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, light, overlay);
-                break;
             case EAST:
                 matrixStack.multiply(new Quaternion(0, 90.0F, 0.0F, true));
                 matrixStack.translate(-1, 0 ,0);
-                ItemRenderHelper.renderInside(weapon, Direction.EAST, rotation, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, light, overlay);
+                renderer.renderInside(weapon, rotation, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, light, overlay);
                 break;
         }
     }

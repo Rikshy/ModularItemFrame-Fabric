@@ -5,7 +5,6 @@ import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.fake.FakePlayer;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
-import dev.shyrik.modularitemframe.client.helper.EnderRenderHelper;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.block.ModularFrameEntity;
 import dev.shyrik.modularitemframe.common.network.NetworkHandler;
@@ -70,17 +69,17 @@ public class TeleportModule extends ModuleBase {
     @Override
     @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float ticks, VertexConsumerProvider buffer, int light, int overlay) {
-        ImmutableList<EnderRenderHelper.EndRenderFace> faces =
+        ImmutableList<FrameRenderer.EndRenderFace> faces =
                 ImmutableList.of(
-                        new EnderRenderHelper.EndRenderFace(0.85f, 0.08f, 0.14f, Direction.UP),
-                        new EnderRenderHelper.EndRenderFace(0.85f, 0.92f, 0.14f, Direction.DOWN),
-                        new EnderRenderHelper.EndRenderFace(0.85f, 0.92f, 0.14f, Direction.NORTH),
-                        new EnderRenderHelper.EndRenderFace(0.85f, 0.08f, 0.14f, Direction.SOUTH),
-                        new EnderRenderHelper.EndRenderFace(0.85f, 0.08f, 0.14f, Direction.EAST),
-                        new EnderRenderHelper.EndRenderFace(0.85f, 0.92f, 0.14f, Direction.WEST)
+                        new FrameRenderer.EndRenderFace(0.85f, 0.08f, 0.14f, Direction.UP),
+                        new FrameRenderer.EndRenderFace(0.85f, 0.92f, 0.14f, Direction.DOWN),
+                        new FrameRenderer.EndRenderFace(0.85f, 0.92f, 0.14f, Direction.NORTH),
+                        new FrameRenderer.EndRenderFace(0.85f, 0.08f, 0.14f, Direction.SOUTH),
+                        new FrameRenderer.EndRenderFace(0.85f, 0.08f, 0.14f, Direction.EAST),
+                        new FrameRenderer.EndRenderFace(0.85f, 0.92f, 0.14f, Direction.WEST)
                 );
 
-        EnderRenderHelper.render(blockEntity, matrixStack, buffer, renderer.getDispatcher().camera.getPos(), faces);
+        renderer.renderEnder(blockEntity.getPos(), blockEntity.getFacing(), matrixStack, buffer, renderer.getDispatcher().camera.getPos(), faces);
     }
 
     @Override

@@ -3,12 +3,10 @@ package dev.shyrik.modularitemframe.common.module.t1;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
-import dev.shyrik.modularitemframe.client.helper.ItemRenderHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
@@ -61,7 +59,7 @@ public class ItemModule extends ModuleBase {
     @Override
     @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float ticks, VertexConsumerProvider buffer, int light, int overlay) {
-        ItemRenderHelper.renderInside(displayItem, blockEntity.getFacing(), rotation, matrixStack, buffer, light, overlay);
+        renderer.renderInside(displayItem, rotation, matrixStack, buffer, light, overlay);
     }
 
     public void screw(World world, BlockPos pos, PlayerEntity player, ItemStack driver) {
