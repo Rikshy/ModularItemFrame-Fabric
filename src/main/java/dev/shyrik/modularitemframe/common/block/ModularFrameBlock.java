@@ -113,11 +113,20 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
             if (!world.isClient) {
                 if (side == state.get(FACING)) {
                     if (hitModule(side, pos, hit.getPos())) {
-                        if (ScrewdriverItem.getMode(handStack) == ScrewdriverItem.EnumMode.INTERACT) {
-                            blockEntity.module.screw(world, pos, player, handStack);
-                        } else blockEntity.dropModule(side, player);
-                    } else blockEntity.dropUpgrades(player, side);
-                    blockEntity.markDirty();
+                        switch (ScrewdriverItem.getMode(handStack)) {
+                            case REMOVE_MOD:
+                                blockEntity.dropModule(player, side);
+                                break;
+                            case REMOVE_UP:
+                                blockEntity.dropUpgrades(player, side);
+                                break;
+                            case INTERACT:
+                                blockEntity.module.screw(world, pos, player, handStack);
+                                break;
+                        }
+
+                        blockEntity.markDirty();
+                    }
                 }
             }
             result = ActionResult.SUCCESS;

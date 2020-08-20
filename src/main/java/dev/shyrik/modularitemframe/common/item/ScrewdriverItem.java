@@ -55,15 +55,16 @@ public class ScrewdriverItem extends ToolItem {
 
     private static EnumMode readModeFromTag(ItemStack stack) {
         CompoundTag nbt = stack.getTag();
-        EnumMode mode = EnumMode.REMOVE;
+        EnumMode mode = EnumMode.REMOVE_MOD;
         if (nbt == null) writeModeToTag(stack, mode);
         else if (nbt.contains(NBT_MODE)) mode = EnumMode.VALUES[nbt.getInt(NBT_MODE)];
         return mode;
     }
 
     public enum EnumMode {
-        REMOVE(0, "modularitemframe.message.screw_mode_change.rem"),
-        INTERACT(1, "modularitemframe.message.screw_mode_change.inter");
+        REMOVE_MOD(0, "modularitemframe.message.screw_mode_change.rem_mod"),
+        REMOVE_UP(1, "modularitemframe.message.screw_mode_change.rem_up"),
+        INTERACT(2, "modularitemframe.message.screw_mode_change.inter");
         //ROTATE(2, "modularitemframe.message.screw_mode_change.rot");
 
         public static final EnumMode[] VALUES = new EnumMode[3];

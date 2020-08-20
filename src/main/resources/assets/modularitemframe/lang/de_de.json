@@ -46,7 +46,8 @@
     "modularitemframe.mode.in": "Einlass",
     "modularitemframe.mode.out": "Auslass",
     "modularitemframe.message.screw_mode_change": "[ModularItemFrame] Schraubendreher Modus verändert zu %s",
-    "modularitemframe.message.screw_mode_change.rem": "entfernen",
+    "modularitemframe.message.screw_mode_change.rem_mod": "Modul entfernen",
+    "modularitemframe.message.screw_mode_change.rem_up": "Aufwertung entfernen",
     "modularitemframe.message.screw_mode_change.inter": "interagieren",
     "modularitemframe.message.screw_mode_change.rot": "rotieren",
     "modularitemframe.message.vacuum_mode_change": "[ModularItemFrame] Vacuum Modus verändert jetzt die %s Reichweite",
@@ -82,5 +83,5 @@
 
     "gui.modularitemframe.crafting.name": "",
 
-    "itemGroup.modularitemframe": "ModularItemFrame",
+    "itemGroup.modularitemframe": "ModularItemFrame"
 }

@@ -165,7 +165,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         return module instanceof EmptyModule;
     }
 
-    public void dropModule(Direction facing, PlayerEntity player) {
+    public void dropModule(PlayerEntity player, Direction facing) {
         ItemStack remain = new ItemStack(module.getItem());
 
         if (player != null) remain = InventoryHelper.givePlayer(player, remain);
