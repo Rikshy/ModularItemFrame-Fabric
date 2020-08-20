@@ -58,17 +58,17 @@ public class FluidDispenserModule extends ModuleBase {
     @Override
     public void tick(World world, BlockPos pos) {
         if (world.isClient || !canTick(world,60, 10)) return;
-        Direction facing = blockEntity.getFacing();
+        Direction facing = frame.getFacing();
         if (!world.isAir(pos.offset(facing))) return;
 
-        FixedFluidInv neighbor = blockEntity.getAttachedTank();
+        FixedFluidInv neighbor = frame.getAttachedTank();
         if (neighbor == null) return;
 
         FluidVolume attempt = neighbor.getExtractable().attemptAnyExtraction(FluidAmount.BUCKET, Simulation.SIMULATE);
         if (attempt.amount().isLessThan(FluidAmount.BUCKET))
             return;
 
-        BlockPos target = pos.offset(blockEntity.getFacing());
+        BlockPos target = pos.offset(frame.getFacing());
         BlockState state = world.getBlockState(target);
         Block block = state.getBlock();
         Fluid fluid = attempt.getRawFluid();

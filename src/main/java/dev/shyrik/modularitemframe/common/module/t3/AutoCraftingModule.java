@@ -50,7 +50,7 @@ public class AutoCraftingModule extends CraftingPlusModule {
     @Override
     public void screw(World world, BlockPos pos, PlayerEntity player, ItemStack driver) {
         if (!world.isClient) {
-            player.openHandledScreen(getScreenHandler(blockEntity.getCachedState(), world, pos));
+            player.openHandledScreen(getScreenHandler(frame.getCachedState(), world, pos));
             markDirty();
         }
     }
@@ -59,7 +59,7 @@ public class AutoCraftingModule extends CraftingPlusModule {
     public void tick(World world,  BlockPos pos) {
         if (world.isClient || !canTick(world,60, 10)) return;
 
-        FixedItemInv handler = blockEntity.getAttachedInventory();
+        FixedItemInv handler = frame.getAttachedInventory();
         if (handler != null) {
             autoCraft(handler, world, pos);
         }
@@ -71,13 +71,13 @@ public class AutoCraftingModule extends CraftingPlusModule {
         if (recipe == null || recipe.getOutput().isEmpty() || !InventoryHelper.canCraft(inventory, recipe))
             return;
 
-        ItemHelper.ejectStack(world, pos, blockEntity.getFacing(), recipe.getOutput().copy());
+        ItemHelper.ejectStack(world, pos, frame.getFacing(), recipe.getOutput().copy());
 
         InventoryHelper.removeIngredients(inventory, recipe);
 
         NetworkHandler.sendAround(
                 world,
-                blockEntity.getPos(),
+                frame.getPos(),
                 32,
                 new PlaySoundPacket(pos, SoundEvents.BLOCK_LADDER_STEP, SoundCategory.BLOCKS));
     }

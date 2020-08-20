@@ -59,7 +59,7 @@ public class SlayModule extends ModuleBase {
     @Override
     @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float ticks, VertexConsumerProvider buffer, int light, int overlay) {
-        Direction facing = blockEntity.getFacing();
+        Direction facing = frame.getFacing();
         switch (facing) {
             case DOWN:
             case NORTH:
@@ -118,7 +118,7 @@ public class SlayModule extends ModuleBase {
                     rotation -= 360;
                     hitIt(world, pos);
                 }
-                rotation += 15 * (blockEntity.getSpeedUpCount() + 1);
+                rotation += 15 * (frame.getSpeedUpCount() + 1);
             }
 
             markDirty();
@@ -138,8 +138,8 @@ public class SlayModule extends ModuleBase {
     }
 
     private Box getAttackBox(BlockPos pos) {
-        int range = 1 + blockEntity.getRangeUpCount();
-        switch (blockEntity.getFacing()) {
+        int range = 1 + frame.getRangeUpCount();
+        switch (frame.getFacing()) {
             case DOWN:
             case UP:
                 return new Box(pos.add(-range, 0, -range), pos.add(range, 0, range));
@@ -154,7 +154,7 @@ public class SlayModule extends ModuleBase {
     }
 
     private ItemStack getNextStack() {
-        FixedItemInv handler = blockEntity.getAttachedInventory();
+        FixedItemInv handler = frame.getAttachedInventory();
         if (handler != null) {
             return handler.getExtractable().extract(new ItemClassFilter(SwordItem.class), 1);
         }

@@ -93,16 +93,16 @@ public class BlockBreakModule extends ModuleBase {
     @Override
     public void tick(World world, BlockPos pos) {
         if (world.isClient) return;
-        if (blockEntity.isPowered()) return;
+        if (frame.isPowered()) return;
 
         BlockPos targetPos;
         BlockState targetState;
         int offset = 1;
 
         do {
-            targetPos = pos.offset(blockEntity.getFacing(), offset);
+            targetPos = pos.offset(frame.getFacing(), offset);
             targetState = world.getBlockState(targetPos);
-        } while (targetState.isAir() && offset++ <= blockEntity.getRangeUpCount());
+        } while (targetState.isAir() && offset++ <= frame.getRangeUpCount());
 
         float hardness = targetState.getHardness(world, targetPos);
 
@@ -116,10 +116,10 @@ public class BlockBreakModule extends ModuleBase {
             resetState(world, targetState, targetPos,  world.random.nextInt());
         }
 
-        if (world.getTime() % Math.ceil((2 * hardness) / (blockEntity.getSpeedUpCount() + 1)) != 0) return;
+        if (world.getTime() % Math.ceil((2 * hardness) / (frame.getSpeedUpCount() + 1)) != 0) return;
 
         if (++breakProgress >= 10) {
-            FixedItemInv inv = blockEntity.getAttachedInventory();
+            FixedItemInv inv = frame.getAttachedInventory();
             boolean drop = true;
             if (inv != null) {
                 drop = false;
@@ -129,7 +129,7 @@ public class BlockBreakModule extends ModuleBase {
                 for (ItemStack dropStack : drops) {
                     ItemStack remain = inv.getInsertable().insert(dropStack);
                     if (!remain.isEmpty()) {
-                        ItemHelper.ejectStack(world, pos, blockEntity.getFacing(), remain);
+                        ItemHelper.ejectStack(world, pos, frame.getFacing(), remain);
                     }
                 }
             }

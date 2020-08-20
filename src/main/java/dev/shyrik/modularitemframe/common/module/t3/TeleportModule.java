@@ -79,7 +79,7 @@ public class TeleportModule extends ModuleBase {
                         new FrameRenderer.EndRenderFace(0.85f, 0.92f, 0.14f, Direction.WEST)
                 );
 
-        renderer.renderEnder(blockEntity.getPos(), blockEntity.getFacing(), matrixStack, buffer, renderer.getDispatcher().camera.getPos(), faces);
+        renderer.renderEnder(frame.getPos(), frame.getFacing(), matrixStack, buffer, renderer.getDispatcher().camera.getPos(), faces);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class TeleportModule extends ModuleBase {
         super.onFrameUpgradesChanged();
 
         if (linkedLoc != null) {
-            if (!blockEntity.getPos().isWithinDistance(linkedLoc, ModularItemFrame.getConfig().teleportRange + (blockEntity.getRangeUpCount() * 10))) {
+            if (!frame.getPos().isWithinDistance(linkedLoc, ModularItemFrame.getConfig().teleportRange + (frame.getRangeUpCount() * 10))) {
                 linkedLoc = null;
             }
         }
@@ -100,7 +100,7 @@ public class TeleportModule extends ModuleBase {
         if (!world.isClient) {
             if (hasValidConnection(world, player)) {
                 BlockPos target;
-                if (blockEntity.getFacing().getAxis().isHorizontal() || blockEntity.getFacing() == Direction.UP)
+                if (frame.getFacing().getAxis().isHorizontal() || frame.getFacing() == Direction.UP)
                     target = linkedLoc.offset(Direction.DOWN);
                 else target = linkedLoc;
 
@@ -123,22 +123,22 @@ public class TeleportModule extends ModuleBase {
         CompoundTag nbt = driver.getTag();
         if (player.isSneaking()) {
             if (nbt == null) nbt = new CompoundTag();
-            nbt.putLong(NBT_LINK, blockEntity.getPos().asLong());
+            nbt.putLong(NBT_LINK, frame.getPos().asLong());
             driver.setTag(nbt);
             player.sendMessage(new TranslatableText("modularitemframe.message.loc_saved"), false);
         } else {
             if (nbt != null && nbt.contains(NBT_LINK)) {
                 BlockPos tmp = BlockPos.fromLong(nbt.getLong(NBT_LINK));
-                if (blockEntity.getPos().isWithinDistance(tmp, 1)) return;
+                if (frame.getPos().isWithinDistance(tmp, 1)) return;
                 BlockEntity targetTile = world.getBlockEntity(tmp);
-                int countRange = blockEntity.getRangeUpCount();
+                int countRange = frame.getRangeUpCount();
                 if (!(targetTile instanceof ModularFrameEntity) || !((((ModularFrameEntity) targetTile).getModule() instanceof TeleportModule)))
                     player.sendMessage(new TranslatableText("modularitemframe.message.invalid_target"), true);
-                else if (!blockEntity.getPos().isWithinDistance(tmp, ModularItemFrame.getConfig().teleportRange + (countRange * 10))) {
+                else if (!frame.getPos().isWithinDistance(tmp, ModularItemFrame.getConfig().teleportRange + (countRange * 10))) {
                     player.sendMessage(new TranslatableText("modularitemframe.message.too_far", ModularItemFrame.getConfig().teleportRange + (countRange * 10)), true);
                 } else {
                     linkedLoc = tmp;
-                    ((TeleportModule) ((ModularFrameEntity) targetTile).getModule()).linkedLoc = blockEntity.getPos();
+                    ((TeleportModule) ((ModularFrameEntity) targetTile).getModule()).linkedLoc = frame.getPos();
                     player.sendMessage(new TranslatableText("modularitemframe.message.link_established"), false);
                     nbt.remove(NBT_LINK);
                     driver.setTag(nbt);
@@ -148,7 +148,7 @@ public class TeleportModule extends ModuleBase {
     }
 
     private boolean isTargetLocationValid(World world) {
-        if (blockEntity.getFacing().getAxis().isHorizontal() || blockEntity.getFacing() == Direction.UP)
+        if (frame.getFacing().getAxis().isHorizontal() || frame.getFacing() == Direction.UP)
             return world.isAir(linkedLoc.offset(Direction.DOWN));
         else return world.isAir(linkedLoc.offset(Direction.UP));
     }

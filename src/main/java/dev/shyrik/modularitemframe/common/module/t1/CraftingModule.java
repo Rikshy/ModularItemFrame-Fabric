@@ -78,7 +78,7 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
     @Override
     public void screw(World world, BlockPos pos, PlayerEntity player, ItemStack driver) {
         if (!world.isClient) {
-            player.openHandledScreen(getScreenHandler(blockEntity.getCachedState(), world, pos));
+            player.openHandledScreen(getScreenHandler(frame.getCachedState(), world, pos));
             markDirty();
         }
     }
@@ -106,15 +106,15 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
         int craftAmount = fullStack ? Math.min(InventoryHelper.countPossibleCrafts(workingInv, recipe), 64) : 1;
         do {
             ItemStack remain = InventoryHelper.givePlayer(player, recipe.getOutput());
-            if (!remain.isEmpty()) ItemHelper.ejectStack(player.world, blockEntity.getPos(), blockEntity.getFacing(), remain);
+            if (!remain.isEmpty()) ItemHelper.ejectStack(player.world, frame.getPos(), frame.getFacing(), remain);
 
             InventoryHelper.removeIngredients(workingInv, recipe);
         } while (--craftAmount > 0);
         NetworkHandler.sendAround(
                 player.world,
-                blockEntity.getPos(),
+                frame.getPos(),
                 32,
-                new PlaySoundPacket(blockEntity.getPos(), SoundEvents.BLOCK_LADDER_STEP, SoundCategory.BLOCKS));
+                new PlaySoundPacket(frame.getPos(), SoundEvents.BLOCK_LADDER_STEP, SoundCategory.BLOCKS));
     }
 
     protected FixedItemInv getWorkingInventories(Inventory playerInventory) {
@@ -127,19 +127,19 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
     }
 
     protected void reloadRecipe() {
-        recipe = ItemHelper.getRecipe(ghostInventory, blockEntity.getWorld());
+        recipe = ItemHelper.getRecipe(ghostInventory, frame.getWorld());
         displayItem = recipe != null ? recipe.getOutput().copy() : ItemStack.EMPTY;
         markDirty();
     }
 
     @Override
     public boolean isUsableByPlayer(PlayerEntity player) {
-        return blockEntity.getPos().isWithinDistance(player.getPos(), 64);
+        return frame.getPos().isWithinDistance(player.getPos(), 64);
     }
 
     @Override
     public ItemStack onScreenHandlerMatrixChanged(FrameCrafting matrix) {
-        World world = blockEntity.getWorld();
+        World world = frame.getWorld();
         displayItem = ItemStack.EMPTY;
         if (world != null) {
             recipe = null;

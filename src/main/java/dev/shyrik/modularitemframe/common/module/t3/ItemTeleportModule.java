@@ -94,7 +94,7 @@ public class ItemTeleportModule extends ModuleBase {
                         new FrameRenderer.EndRenderFace(0.85f, 0.92f, 0.14f, Direction.WEST)
                 );
 
-            renderer.renderEnder(blockEntity.getPos(), blockEntity.getFacing(), matrixStack, buffer, renderer.getDispatcher().camera.getPos(), faces);
+            renderer.renderEnder(frame.getPos(), frame.getFacing(), matrixStack, buffer, renderer.getDispatcher().camera.getPos(), faces);
         }
     }
 
@@ -109,7 +109,7 @@ public class ItemTeleportModule extends ModuleBase {
         super.onFrameUpgradesChanged();
 
         if (linkedLoc != null) {
-            if (!blockEntity.getPos().isWithinDistance(linkedLoc, ModularItemFrame.getConfig().teleportRange + (blockEntity.getRangeUpCount() * 10))) {
+            if (!frame.getPos().isWithinDistance(linkedLoc, ModularItemFrame.getConfig().teleportRange + (frame.getRangeUpCount() * 10))) {
                 linkedLoc = null;
                 direction = EnumMode.NONE;
             }
@@ -121,24 +121,24 @@ public class ItemTeleportModule extends ModuleBase {
         CompoundTag nbt = driver.getTag();
         if (player.isSneaking()) {
             if (nbt == null) nbt = new CompoundTag();
-            nbt.putLong(NBT_LINK, blockEntity.getPos().asLong());
+            nbt.putLong(NBT_LINK, frame.getPos().asLong());
             driver.setTag(nbt);
             player.sendMessage(new TranslatableText("modularitemframe.message.loc_saved"), false);
         } else {
             if (nbt != null && nbt.contains(NBT_LINK)) {
                 BlockPos tmp = BlockPos.fromLong(nbt.getLong(NBT_LINK));
                 BlockEntity targetBlockEntity = world.getBlockEntity(tmp);
-                int countRange = blockEntity.getRangeUpCount();
+                int countRange = frame.getRangeUpCount();
                 if (!(targetBlockEntity instanceof ModularFrameEntity) || !((((ModularFrameEntity) targetBlockEntity).getModule() instanceof ItemTeleportModule)))
                     player.sendMessage(new TranslatableText("modularitemframe.message.invalid_target"), false);
-                else if (!blockEntity.getPos().isWithinDistance(tmp, ModularItemFrame.getConfig().teleportRange + (countRange * 10))) {
+                else if (!frame.getPos().isWithinDistance(tmp, ModularItemFrame.getConfig().teleportRange + (countRange * 10))) {
                     player.sendMessage(new TranslatableText("modularitemframe.message.too_far", ModularItemFrame.getConfig().teleportRange + (countRange * 10)), false);
                 } else {
                     linkedLoc = tmp;
                     direction = EnumMode.DISPENSE;
 
                     ItemTeleportModule targetModule = (ItemTeleportModule) ((ModularFrameEntity) targetBlockEntity).getModule();
-                    targetModule.linkedLoc = blockEntity.getPos();
+                    targetModule.linkedLoc = frame.getPos();
                     targetModule.direction = EnumMode.VACUUM;
 
                     player.sendMessage(new TranslatableText("modularitemframe.message.link_established"), false);
@@ -189,7 +189,7 @@ public class ItemTeleportModule extends ModuleBase {
             entity.remove();
             NetworkHandler.sendAround(
                     world,
-                    blockEntity.getPos(),
+                    frame.getPos(),
                     32,
                     new SpawnParticlesPacket(ParticleTypes.EXPLOSION, entity.getBlockPos(), 1));
             break;
@@ -225,8 +225,8 @@ public class ItemTeleportModule extends ModuleBase {
     }
 
     private Box getVacuumBox(BlockPos pos) {
-        int range = ModularItemFrame.getConfig().vacuumRange + blockEntity.getRangeUpCount();
-        switch (blockEntity.getFacing()) {
+        int range = ModularItemFrame.getConfig().vacuumRange + frame.getRangeUpCount();
+        switch (frame.getFacing()) {
             case DOWN:
                 return new Box(pos.add(-range, 0, -range), pos.add(range, -range, range));
             case UP:

@@ -70,24 +70,24 @@ public class TankModule extends ModuleBase {
         if (!vol.amount().isZero()) {
             double amount = (float) vol.getAmount_F().as1620() / (float) tank.getMaxAmount_F(0).as1620();
             FluidRenderFace face = null;
-            switch (blockEntity.getFacing()) {
+            switch (frame.getFacing()) {
                 case UP:
-                    face = FluidRenderFace.createFlatFace(0.2d, 0.08d, 0.2d, 0.8d, 0.08d, 0.2d + amount * 0.6d, 1, blockEntity.getFacing());
+                    face = FluidRenderFace.createFlatFace(0.2d, 0.08d, 0.2d, 0.8d, 0.08d, 0.2d + amount * 0.6d, 1, frame.getFacing());
                     break;
                 case DOWN:
-                    face = FluidRenderFace.createFlatFace(0.2f, 0.92f, 0.2f, 0.8f, 0.92f, 0.2f + amount * 0.6f, 1, blockEntity.getFacing());
+                    face = FluidRenderFace.createFlatFace(0.2f, 0.92f, 0.2f, 0.8f, 0.92f, 0.2f + amount * 0.6f, 1, frame.getFacing());
                     break;
                 case NORTH:
-                    face = FluidRenderFace.createFlatFace(0.2f, 0.2f, 0.92f, 0.8f, 0.2f + amount * 0.6f, 0.92f, 1, blockEntity.getFacing());
+                    face = FluidRenderFace.createFlatFace(0.2f, 0.2f, 0.92f, 0.8f, 0.2f + amount * 0.6f, 0.92f, 1, frame.getFacing());
                     break;
                 case EAST:
-                    face = FluidRenderFace.createFlatFace(0.08f, 0.2f, 0.2f, 0.08f, 0.2f + amount * 0.6f, 0.8f, 1, blockEntity.getFacing());
+                    face = FluidRenderFace.createFlatFace(0.08f, 0.2f, 0.2f, 0.08f, 0.2f + amount * 0.6f, 0.8f, 1, frame.getFacing());
                     break;
                 case WEST:
-                    face = FluidRenderFace.createFlatFace(0.92f, 0.2f, 0.2f, 0.92f, 0.2f + amount * 0.6f, 0.8f, 1, blockEntity.getFacing());
+                    face = FluidRenderFace.createFlatFace(0.92f, 0.2f, 0.2f, 0.92f, 0.2f + amount * 0.6f, 0.8f, 1, frame.getFacing());
                     break;
                 case SOUTH:
-                    face = FluidRenderFace.createFlatFace(0.2f, 0.2f, 0.08f, 0.8f, 0.2f + amount * 0.6f, 0.08f, 1, blockEntity.getFacing());
+                    face = FluidRenderFace.createFlatFace(0.2f, 0.2f, 0.08f, 0.8f, 0.2f + amount * 0.6f, 0.08f, 1, frame.getFacing());
                     break;
             }
 
@@ -119,7 +119,7 @@ public class TankModule extends ModuleBase {
         if (world.isClient || !canTick(world,60, 10)) return;
         if (mode == EnumMode.NONE || ModularItemFrame.getConfig().tankTransferRate <= 0) return;
 
-        FixedFluidInv neighbor = blockEntity.getAttachedTank();
+        FixedFluidInv neighbor = frame.getAttachedTank();
         if (neighbor != null) {
             if (mode == EnumMode.DRAIN)
                 FluidVolumeUtil.move((FluidExtractable) neighbor, tank, FluidAmount.of1620(ModularItemFrame.getConfig().tankTransferRate));
@@ -130,7 +130,7 @@ public class TankModule extends ModuleBase {
 
     @Override
     public void onFrameUpgradesChanged() {
-        int newCapacity = (int) Math.pow(ModularItemFrame.getConfig().tankFrameCapacity, blockEntity.getCapacityUpCount() + 1);
+        int newCapacity = (int) Math.pow(ModularItemFrame.getConfig().tankFrameCapacity, frame.getCapacityUpCount() + 1);
         SimpleFixedFluidInv tmp = new SimpleFixedFluidInv(1, FluidAmount.of1620(newCapacity));
         tmp.insert(tank.extract(tmp.getMaxAmount_F(0).min(tank.getMaxAmount_F(0))));
         tank = tmp;

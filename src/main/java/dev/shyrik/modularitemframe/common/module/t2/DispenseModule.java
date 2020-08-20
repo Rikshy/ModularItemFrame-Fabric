@@ -54,7 +54,7 @@ public class DispenseModule extends ModuleBase {
 
     @Override
     public void screw(World world, BlockPos pos, PlayerEntity player, ItemStack driver) {
-        int countRange = blockEntity.getRangeUpCount() + 1;
+        int countRange = frame.getRangeUpCount() + 1;
         if (!world.isClient && countRange > 1) {
             if (player.isSneaking()) range--;
             else range++;
@@ -80,18 +80,18 @@ public class DispenseModule extends ModuleBase {
     @Override
     public void onFrameUpgradesChanged() {
         super.onFrameUpgradesChanged();
-        range = Math.min(range, blockEntity.getRangeUpCount() + 1);
+        range = Math.min(range, frame.getRangeUpCount() + 1);
     }
 
     @Override
     public void tick(World world, BlockPos pos) {
         if (world.isClient || !canTick(world,60, 10)) return;
 
-        FixedItemInv inventory = blockEntity.getAttachedInventory(range);
+        FixedItemInv inventory = frame.getAttachedInventory(range);
         if (inventory != null) {
             ItemStack extracted = inventory.getExtractable().extract(1);
             if (!extracted.isEmpty())
-                ItemHelper.ejectStack(world, pos, blockEntity.getFacing(), extracted);
+                ItemHelper.ejectStack(world, pos, frame.getFacing(), extracted);
         }
     }
 

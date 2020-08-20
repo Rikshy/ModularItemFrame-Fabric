@@ -24,11 +24,11 @@ import net.minecraft.world.World;
 import java.util.List;
 
 public abstract class ModuleBase {
-    protected ModularFrameEntity blockEntity;
+    protected ModularFrameEntity frame;
     ModuleItem item;
 
     public void setTile(ModularFrameEntity te) {
-        blockEntity = te;
+        frame = te;
     }
 
     public ModuleItem getItem() { return item; }
@@ -138,14 +138,14 @@ public abstract class ModuleBase {
      * Helper method which safe checks ticks
      */
     public boolean canTick(World world, int base, int mod) {
-        return world.getTime() % Math.max(base - mod * blockEntity.getSpeedUpCount(), 10) == 0;
+        return world.getTime() % Math.max(base - mod * frame.getSpeedUpCount(), 10) == 0;
     }
 
     /**
      * Forwarded from blockEntity
      */
     public void markDirty() {
-        blockEntity.markDirty();
+        frame.markDirty();
     }
 
     /**

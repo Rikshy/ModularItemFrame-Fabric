@@ -59,7 +59,7 @@ public class CraftingPlusModule extends CraftingModule {
                 mode = EnumMode.values()[modeIdx];
                 player.sendMessage(new TranslatableText(mode.getName()), false);
             } else {
-                player.openHandledScreen(getScreenHandler(blockEntity.getCachedState(), world, pos));
+                player.openHandledScreen(getScreenHandler(frame.getCachedState(), world, pos));
             }
 
             markDirty();
@@ -68,7 +68,7 @@ public class CraftingPlusModule extends CraftingModule {
 
     @Override
     protected FixedItemInv getWorkingInventories(Inventory playerInventory) {
-        FixedItemInv neighborInventory = blockEntity.getAttachedInventory();
+        FixedItemInv neighborInventory = frame.getAttachedInventory();
         FixedItemInv fixedPlayerInv = new FixedInventoryVanillaWrapper(playerInventory);
         if (neighborInventory != null) {
             if (mode == EnumMode.NO_PLAYER) return neighborInventory;

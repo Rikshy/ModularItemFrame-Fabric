@@ -64,7 +64,7 @@ public class IOModule extends ModuleBase {
     @Override
     public void onBlockClicked(World world, BlockPos pos, PlayerEntity player) {
         if (!world.isClient) {
-            FixedItemInv handler = blockEntity.getAttachedInventory();
+            FixedItemInv handler = frame.getAttachedInventory();
             if (handler != null) {
                 ItemExtractable extractor = handler.getExtractable();
                 ItemStack attempt = extractor.attemptAnyExtraction(1, Simulation.SIMULATE);
@@ -72,7 +72,7 @@ public class IOModule extends ModuleBase {
                     int amount = player.isSneaking() ? attempt.getMaxCount() : 1;
                     ItemStack extract = extractor.extract(amount);
                     extract = InventoryHelper.givePlayer(player, extract);
-                    if (!extract.isEmpty()) ItemHelper.ejectStack(world, pos, blockEntity.getFacing(), extract);
+                    if (!extract.isEmpty()) ItemHelper.ejectStack(world, pos, frame.getFacing(), extract);
                     lastStack = extractor.attemptAnyExtraction(1, Simulation.SIMULATE);
                     markDirty();
                 }
@@ -83,7 +83,7 @@ public class IOModule extends ModuleBase {
     @Override
     public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
         if (!world.isClient) {
-            FixedItemInv handler = blockEntity.getAttachedInventory();
+            FixedItemInv handler = frame.getAttachedInventory();
             if (handler != null) {
                 ItemStack held = player.getStackInHand(hand);
                 long time = world.getTime();
@@ -111,7 +111,7 @@ public class IOModule extends ModuleBase {
     @Override
     public void tick(World world, BlockPos pos) {
         if(!world.isClient) {
-            FixedItemInv handler = blockEntity.getAttachedInventory();
+            FixedItemInv handler = frame.getAttachedInventory();
             if (handler != null) {
                 ItemStack attempt = handler.getExtractable().attemptAnyExtraction(1, Simulation.SIMULATE);
                 if (!ItemStack.areItemsEqual(attempt, displayItem)) {

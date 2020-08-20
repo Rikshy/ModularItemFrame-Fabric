@@ -78,7 +78,7 @@ public class TrashCanModule extends ModuleBase {
         if (!world.isClient) {
             if (!canTick(world,60, 10)) return;
 
-            FixedItemInv trash = blockEntity.getAttachedInventory();
+            FixedItemInv trash = frame.getAttachedInventory();
             if (trash != null) {
                 for (int slot = 0; slot < trash.getSlotCount(); slot++) {
                     if (!trash.getInvStack(slot).isEmpty()) {

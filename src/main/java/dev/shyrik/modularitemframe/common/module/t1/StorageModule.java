@@ -68,7 +68,7 @@ public class StorageModule extends ModuleBase {
                 int amount = player.isSneaking() ? attempt.getMaxCount() : 1;
                 ItemStack extract = inventory.extract(amount);
                 extract = InventoryHelper.givePlayer(player, extract);
-                if (!extract.isEmpty()) ItemHelper.ejectStack(world, pos, blockEntity.getFacing(), extract);
+                if (!extract.isEmpty()) ItemHelper.ejectStack(world, pos, frame.getFacing(), extract);
                 lastStack = inventory.attemptAnyExtraction(1, Simulation.SIMULATE);
                 markDirty();
             }
@@ -103,13 +103,13 @@ public class StorageModule extends ModuleBase {
 
     @Override
     public void onFrameUpgradesChanged() {
-        int newCapacity = (int)Math.pow(2, blockEntity.getCapacityUpCount());
+        int newCapacity = (int)Math.pow(2, frame.getCapacityUpCount());
         DirectFixedItemInv tmp = new DirectFixedItemInv(newCapacity);
         for (int slot = 0; slot < inventory.getSlotCount(); slot++) {
             if (slot < tmp.getSlotCount())
                 tmp.setInvStack(slot, inventory.getInvStack(slot), Simulation.ACTION);
             else
-                ItemHelper.ejectStack(blockEntity.getWorld(), blockEntity.getPos(), blockEntity.getFacing(), inventory.getInvStack(slot));
+                ItemHelper.ejectStack(frame.getWorld(), frame.getPos(), frame.getFacing(), inventory.getInvStack(slot));
         }
         inventory = tmp;
         markDirty();
@@ -119,7 +119,7 @@ public class StorageModule extends ModuleBase {
     public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player) {
         super.onRemove(world, pos, facing, player);
         for( int slot = 0; slot < inventory.getSlotCount(); slot++) {
-            ItemHelper.ejectStack(world, pos, blockEntity.getFacing(), inventory.getInvStack(slot));
+            ItemHelper.ejectStack(world, pos, frame.getFacing(), inventory.getInvStack(slot));
         }
     }
 

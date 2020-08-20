@@ -92,7 +92,7 @@ public class VacuumModule extends ModuleBase {
     public void tick(World world, BlockPos pos) {
         if (world.isClient || !canTick(world,60, 10)) return;
 
-        FixedItemInv handler = blockEntity.getAttachedInventory();
+        FixedItemInv handler = frame.getAttachedInventory();
         if (handler != null) {
             List<ItemEntity> entities = world.getEntitiesByClass(ItemEntity.class, getVacuumBox(pos), itemEntity -> true);
             for (ItemEntity entity : entities) {
@@ -120,7 +120,7 @@ public class VacuumModule extends ModuleBase {
     public void onFrameUpgradesChanged() {
         super.onFrameUpgradesChanged();
 
-        int maxRange = ModularItemFrame.getConfig().vacuumRange + blockEntity.getRangeUpCount();
+        int maxRange = ModularItemFrame.getConfig().vacuumRange + frame.getRangeUpCount();
         rangeX = Math.min(rangeX, maxRange);
         rangeY = Math.min(rangeY, maxRange);
         rangeZ = Math.min(rangeZ, maxRange);
@@ -147,7 +147,7 @@ public class VacuumModule extends ModuleBase {
     }
 
     private Box getVacuumBox(BlockPos pos) {
-        switch (blockEntity.getFacing()) {
+        switch (frame.getFacing()) {
             case DOWN:
                 return new Box(pos.add(-rangeX, 0, -rangeZ), pos.add(rangeX, -rangeY, rangeZ));
             case UP:
@@ -165,7 +165,7 @@ public class VacuumModule extends ModuleBase {
     }
 
     private void adjustRange(PlayerEntity player) {
-        int maxRange = ModularItemFrame.getConfig().vacuumRange + blockEntity.getRangeUpCount();
+        int maxRange = ModularItemFrame.getConfig().vacuumRange + frame.getRangeUpCount();
         if (maxRange > 1) {
             int r = 0;
             switch (mode) {

@@ -71,16 +71,16 @@ public class BlockPlaceModule extends ModuleBase {
     @Override
     public void tick(World world, BlockPos pos) {
         if (world.isClient || !canTick(world,60, 10)) return;
-        FixedItemInv inventory = blockEntity.getAttachedInventory();
+        FixedItemInv inventory = frame.getAttachedInventory();
         if (inventory == null) return;
 
         ItemStack itemToPlace = inventory.getExtractable().attemptExtraction(
                 new ItemClassFilter(BlockItem.class), 1, Simulation.SIMULATE);
 
         if (!itemToPlace.isEmpty()) {
-            Direction facing = blockEntity.getFacing();
+            Direction facing = frame.getFacing();
 
-            for (int offset = blockEntity.getRangeUpCount() + 1; offset > 0; offset--) {
+            for (int offset = frame.getRangeUpCount() + 1; offset > 0; offset--) {
                 BlockPos placePos = pos.offset(facing, offset);
 
                 ActionResult placeResult = ((BlockItem) itemToPlace.getItem()).place(

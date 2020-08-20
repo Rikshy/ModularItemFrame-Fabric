@@ -63,24 +63,24 @@ public class NullifyModule extends ModuleBase {
     @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float ticks, VertexConsumerProvider buffer, int light, int overlay) {
         FluidRenderFace face = null;
-        switch (blockEntity.getFacing()) {
+        switch (frame.getFacing()) {
             case UP:
-                face = FluidRenderFace.createFlatFace(0.3f, 0.07f, 0.3f, 0.7f, 0.07f, 0.7f, 1, blockEntity.getFacing());
+                face = FluidRenderFace.createFlatFace(0.3f, 0.07f, 0.3f, 0.7f, 0.07f, 0.7f, 1, frame.getFacing());
                 break;
             case DOWN:
-                face = FluidRenderFace.createFlatFace(0.3f, 0.93f, 0.3f, 0.7f, 0.93f, 0.7f, 1, blockEntity.getFacing());
+                face = FluidRenderFace.createFlatFace(0.3f, 0.93f, 0.3f, 0.7f, 0.93f, 0.7f, 1, frame.getFacing());
                 break;
             case NORTH:
-                face = FluidRenderFace.createFlatFace(0.3f, 0.3f, 0.93f, 0.7f, 0.7f, 0.93f, 1, blockEntity.getFacing());
+                face = FluidRenderFace.createFlatFace(0.3f, 0.3f, 0.93f, 0.7f, 0.7f, 0.93f, 1, frame.getFacing());
                 break;
             case EAST:
-                face = FluidRenderFace.createFlatFace(0.07f, 0.3f, 0.3f, 0.07f, 0.7f, 0.7f, 1, blockEntity.getFacing());
+                face = FluidRenderFace.createFlatFace(0.07f, 0.3f, 0.3f, 0.07f, 0.7f, 0.7f, 1, frame.getFacing());
                 break;
             case WEST:
-                face = FluidRenderFace.createFlatFace(0.93f, 0.3f, 0.3f, 0.93f, 0.7f, 0.7f, 1, blockEntity.getFacing());
+                face = FluidRenderFace.createFlatFace(0.93f, 0.3f, 0.3f, 0.93f, 0.7f, 0.7f, 1, frame.getFacing());
                 break;
             case SOUTH:
-                face = FluidRenderFace.createFlatFace(0.3f, 0.3f, 0.07f, 0.7f, 0.7f, 0.07f, 1, blockEntity.getFacing());
+                face = FluidRenderFace.createFlatFace(0.3f, 0.3f, 0.07f, 0.7f, 0.7f, 0.07f, 1, frame.getFacing());
                 break;
         }
 
@@ -102,7 +102,7 @@ public class NullifyModule extends ModuleBase {
                 held.setCount(0);
                 NetworkHandler.sendAround(
                         world,
-                        blockEntity.getPos(),
+                        frame.getPos(),
                         32,
                         new PlaySoundPacket(pos, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 0.4F, 0.7F));
             } else if (player.isSneaking() && held.isEmpty() && !lastStack.isEmpty()) {
@@ -110,7 +110,7 @@ public class NullifyModule extends ModuleBase {
                 lastStack = ItemStack.EMPTY;
                 NetworkHandler.sendAround(
                         world,
-                        blockEntity.getPos(),
+                        frame.getPos(),
                         32,
                         new PlaySoundPacket(pos, SoundEvents.ENTITY_ENDER_PEARL_THROW, SoundCategory.BLOCKS, 0.4F, 0.7F));
             }
