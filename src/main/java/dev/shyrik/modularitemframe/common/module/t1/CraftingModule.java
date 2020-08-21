@@ -96,6 +96,34 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
         return ActionResult.SUCCESS;
     }
 
+    @Override
+    public NamedScreenHandlerFactory getScreenHandler(BlockState state, World world, BlockPos pos) {
+        return new SimpleNamedScreenHandlerFactory((id, playerInventory, player) ->
+                new CraftingFrameScreenHandler(
+                        id,
+                        player.inventory,
+                        ghostInventory,
+                        player,
+                        this),
+                new TranslatableText("gui.modularitemframe.crafting.name")
+        );
+    }
+
+    @Override
+    public CompoundTag toTag() {
+        CompoundTag tag = super.toTag();
+        tag.put(NBT_DISPLAY, displayItem.toTag(new CompoundTag()));
+        tag.put(NBT_GHOST_INVENTORY, ghostInventory.toTag());
+        return tag;
+    }
+
+    @Override
+    public void fromTag(CompoundTag tag) {
+        super.fromTag(tag);
+        if (tag.contains(NBT_DISPLAY)) displayItem = ItemStack.fromTag(tag.getCompound(NBT_DISPLAY));
+        if (tag.contains(NBT_GHOST_INVENTORY)) ghostInventory.fromTag(tag.getCompound(NBT_GHOST_INVENTORY));
+    }
+
     private void craft(PlayerEntity player, boolean fullStack) {
         final FixedItemInv workingInv = getWorkingInventories(player.inventory);
         reloadRecipe();
@@ -152,33 +180,5 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
             markDirty();
         }
         return displayItem;
-    }
-
-    @Override
-    public CompoundTag toTag() {
-        CompoundTag tag = super.toTag();
-        tag.put(NBT_DISPLAY, displayItem.toTag(new CompoundTag()));
-        tag.put(NBT_GHOST_INVENTORY, ghostInventory.toTag());
-        return tag;
-    }
-
-    @Override
-    public void fromTag(CompoundTag tag) {
-        super.fromTag(tag);
-        if (tag.contains(NBT_DISPLAY)) displayItem = ItemStack.fromTag(tag.getCompound(NBT_DISPLAY));
-        if (tag.contains(NBT_GHOST_INVENTORY)) ghostInventory.fromTag(tag.getCompound(NBT_GHOST_INVENTORY));
-    }
-
-    @Override
-    public NamedScreenHandlerFactory getScreenHandler(BlockState state, World world, BlockPos pos) {
-        return new SimpleNamedScreenHandlerFactory((id, playerInventory, player) ->
-                new CraftingFrameScreenHandler(
-                        id,
-                        player.inventory,
-                        ghostInventory,
-                        player,
-                        this),
-                new TranslatableText("gui.modularitemframe.crafting.name")
-        );
     }
 }

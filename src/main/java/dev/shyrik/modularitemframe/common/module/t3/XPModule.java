@@ -79,6 +79,42 @@ public class XPModule extends ModuleBase {
         return ActionResult.SUCCESS;
     }
 
+    @Override
+    public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player) {
+        super.onRemove(world, pos, facing, player);
+        if (player == null || player instanceof FakePlayer)
+            world.spawnEntity(new ExperienceOrbEntity(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, experience));
+        else player.addExperience(experience);
+    }
+
+    @Override
+    public void tick(World world, BlockPos pos) {
+        if (experience >= MAX_XP) return;
+        if (world.isClient || !canTick(world,60, 10)) return;
+
+        List<ExperienceOrbEntity> entities = world.getEntitiesByClass(ExperienceOrbEntity.class, getVacuumBox(pos), experienceOrbEntity -> true);
+        for (ExperienceOrbEntity entity : entities) {
+            if (!entity.isAlive()) continue;
+
+            addExperience(entity.getExperienceAmount());
+        }
+    }
+
+    @Override
+    public CompoundTag toTag() {
+        CompoundTag tag = super.toTag();
+        tag.putInt(NBT_XP, experience);
+        tag.putInt(NBT_LEVEL, levels);
+        return tag;
+    }
+
+    @Override
+    public void fromTag(CompoundTag tag) {
+        super.fromTag(tag);
+        if (tag.contains(NBT_XP)) experience = tag.getInt(NBT_XP);
+        if (tag.contains(NBT_LEVEL)) levels = tag.getInt(NBT_LEVEL);
+    }
+
     private void drainPlayerXpToReachPlayerLevel(PlayerEntity player, int level) {
         int targetXP = ExperienceHelper.getExperienceForLevel(level);
         int drainXP = ExperienceHelper.getPlayerXP(player) - targetXP;
@@ -112,27 +148,6 @@ public class XPModule extends ModuleBase {
         player.addExperience(requiredXP);
     }
 
-    @Override
-    public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player) {
-        super.onRemove(world, pos, facing, player);
-        if (player == null || player instanceof FakePlayer)
-            world.spawnEntity(new ExperienceOrbEntity(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, experience));
-        else player.addExperience(experience);
-    }
-
-    @Override
-    public void tick(World world, BlockPos pos) {
-        if (experience >= MAX_XP) return;
-        if (world.isClient || !canTick(world,60, 10)) return;
-
-        List<ExperienceOrbEntity> entities = world.getEntitiesByClass(ExperienceOrbEntity.class, getVacuumBox(pos), experienceOrbEntity -> true);
-        for (ExperienceOrbEntity entity : entities) {
-            if (!entity.isAlive()) continue;
-
-            addExperience(entity.getExperienceAmount());
-        }
-    }
-
     private Box getVacuumBox(BlockPos pos) {
         int range = ModularItemFrame.getConfig().vacuumRange + frame.getRangeUpCount();
         switch (frame.getFacing()) {
@@ -150,20 +165,5 @@ public class XPModule extends ModuleBase {
                 return new Box(pos.add(0, -range, -range), pos.add(-range, range, range));
         }
         return new Box(pos, pos.add(1, 1, 1));
-    }
-
-    @Override
-    public CompoundTag toTag() {
-        CompoundTag tag = super.toTag();
-        tag.putInt(NBT_XP, experience);
-        tag.putInt(NBT_LEVEL, levels);
-        return tag;
-    }
-
-    @Override
-    public void fromTag(CompoundTag tag) {
-        super.fromTag(tag);
-        if (tag.contains(NBT_XP)) experience = tag.getInt(NBT_XP);
-        if (tag.contains(NBT_LEVEL)) levels = tag.getInt(NBT_LEVEL);
     }
 }

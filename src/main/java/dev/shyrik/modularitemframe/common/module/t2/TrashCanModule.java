@@ -53,6 +53,12 @@ public class TrashCanModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
+    public List<Identifier> getVariantFronts() {
+        return frontTex;
+    }
+
+    @Override
+    @Environment(EnvType.CLIENT)
     public Identifier innerTexture() {
         return ModularFrameBlock.INNER_HARD;
     }
@@ -61,11 +67,6 @@ public class TrashCanModule extends ModuleBase {
     @Environment(EnvType.CLIENT)
     public String getModuleName() {
         return I18n.translate("modularitemframe.module.trash_can");
-    }
-
-    @Override
-    public List<Identifier> getVariantFronts() {
-        return frontTex;
     }
 
     @Override

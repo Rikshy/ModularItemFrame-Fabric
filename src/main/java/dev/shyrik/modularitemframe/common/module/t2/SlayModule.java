@@ -9,6 +9,7 @@ import dev.shyrik.modularitemframe.api.util.ItemHelper;
 import dev.shyrik.modularitemframe.api.util.fake.FakePlayer;
 import dev.shyrik.modularitemframe.api.util.fake.FakePlayerFactory;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
+import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -58,6 +59,18 @@ public class SlayModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
+    public Identifier innerTexture() {
+        return ModularFrameBlock.INNER_HARD;
+    }
+
+    @Override
+    @Environment(EnvType.CLIENT)
+    public String getModuleName() {
+        return I18n.translate("modularitemframe.module.slay");
+    }
+
+    @Override
+    @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float ticks, VertexConsumerProvider buffer, int light, int overlay) {
         Direction facing = frame.getFacing();
         switch (facing) {
@@ -74,12 +87,6 @@ public class SlayModule extends ModuleBase {
                 renderer.renderInside(weapon, rotation, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, light, overlay);
                 break;
         }
-    }
-
-    @Override
-    @Environment(EnvType.CLIENT)
-    public String getModuleName() {
-        return I18n.translate("modularitemframe.module.slay");
     }
 
     @Override
@@ -125,6 +132,21 @@ public class SlayModule extends ModuleBase {
         }
     }
 
+    @Override
+    public CompoundTag toTag() {
+        CompoundTag tag = super.toTag();
+        tag.put(NBT_WEAPON, weapon.toTag(new CompoundTag()));
+        tag.putInt(NBT_ROTATION, rotation);
+        return tag;
+    }
+
+    @Override
+    public void fromTag(CompoundTag tag) {
+        super.fromTag(tag);
+        if (tag.contains(NBT_WEAPON)) weapon = ItemStack.fromTag(tag.getCompound(NBT_WEAPON));
+        if (tag.contains(NBT_ROTATION)) rotation = tag.getInt(NBT_ROTATION);
+    }
+
     private void hitIt(World world, BlockPos pos) {
         FakePlayer player = FakePlayerFactory.get(world, DEFAULT_CLICKER);
 
@@ -160,20 +182,5 @@ public class SlayModule extends ModuleBase {
         }
 
         return ItemStack.EMPTY;
-    }
-
-    @Override
-    public CompoundTag toTag() {
-        CompoundTag tag = super.toTag();
-        tag.put(NBT_WEAPON, weapon.toTag(new CompoundTag()));
-        tag.putInt(NBT_ROTATION, rotation);
-        return tag;
-    }
-
-    @Override
-    public void fromTag(CompoundTag tag) {
-        super.fromTag(tag);
-        if (tag.contains(NBT_WEAPON)) weapon = ItemStack.fromTag(tag.getCompound(NBT_WEAPON));
-        if (tag.contains(NBT_ROTATION)) rotation = tag.getInt(NBT_ROTATION);
     }
 }

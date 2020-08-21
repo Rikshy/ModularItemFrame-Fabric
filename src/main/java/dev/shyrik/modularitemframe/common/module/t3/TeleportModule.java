@@ -147,31 +147,6 @@ public class TeleportModule extends ModuleBase {
         }
     }
 
-    private boolean isTargetLocationValid(World world) {
-        if (frame.getFacing().getAxis().isHorizontal() || frame.getFacing() == Direction.UP)
-            return world.isAir(linkedLoc.offset(Direction.DOWN));
-        else return world.isAir(linkedLoc.offset(Direction.UP));
-    }
-
-    private boolean hasValidConnection(World world, PlayerEntity player) {
-        if (linkedLoc == null) {
-            if (player != null) player.sendMessage(new TranslatableText("modularitemframe.message.no_target"), false);
-            return false;
-        }
-        BlockEntity targetTile = world.getBlockEntity(linkedLoc);
-        if (!(targetTile instanceof ModularFrameEntity) || !(((ModularFrameEntity) targetTile).getModule() instanceof TeleportModule)) {
-            if (player != null)
-                player.sendMessage(new TranslatableText("modularitemframe.message.invalid_target"), false);
-            return false;
-        }
-        if (!isTargetLocationValid(world)) {
-            if (player != null)
-                player.sendMessage(new TranslatableText("modularitemframe.message.location_blocked"), false);
-            return false;
-        }
-        return true;
-    }
-
     @Override
     public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player) {
         if (hasValidConnection(world, null)) {
@@ -196,5 +171,30 @@ public class TeleportModule extends ModuleBase {
         super.fromTag(tag);
         if (tag.contains(NBT_LINK_X))
             linkedLoc = new BlockPos(tag.getInt(NBT_LINK_X), tag.getInt(NBT_LINK_Y), tag.getInt(NBT_LINK_Z));
+    }
+
+    private boolean isTargetLocationValid(World world) {
+        if (frame.getFacing().getAxis().isHorizontal() || frame.getFacing() == Direction.UP)
+            return world.isAir(linkedLoc.offset(Direction.DOWN));
+        else return world.isAir(linkedLoc.offset(Direction.UP));
+    }
+
+    private boolean hasValidConnection(World world, PlayerEntity player) {
+        if (linkedLoc == null) {
+            if (player != null) player.sendMessage(new TranslatableText("modularitemframe.message.no_target"), false);
+            return false;
+        }
+        BlockEntity targetTile = world.getBlockEntity(linkedLoc);
+        if (!(targetTile instanceof ModularFrameEntity) || !(((ModularFrameEntity) targetTile).getModule() instanceof TeleportModule)) {
+            if (player != null)
+                player.sendMessage(new TranslatableText("modularitemframe.message.invalid_target"), false);
+            return false;
+        }
+        if (!isTargetLocationValid(world)) {
+            if (player != null)
+                player.sendMessage(new TranslatableText("modularitemframe.message.location_blocked"), false);
+            return false;
+        }
+        return true;
     }
 }

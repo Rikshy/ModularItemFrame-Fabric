@@ -81,6 +81,7 @@ public class BlockBreakModule extends ModuleBase {
     }
 
     @Override
+    @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float ticks, VertexConsumerProvider buffer, int light, int overlay) {
         renderer.renderInside(displayItem, rotation.get(breakProgress), matrixStack, buffer, light, overlay);
     }
@@ -141,14 +142,6 @@ public class BlockBreakModule extends ModuleBase {
         }
     }
 
-    private void resetState(World world, BlockState state, BlockPos pos, Integer newBreakId) {
-        if (breakId != null) world.setBlockBreakingInfo(breakId, lastPos, -1);
-        breakProgress = 0;
-        lastTarget = state;
-        lastPos = pos;
-        breakId = newBreakId;
-    }
-
     @Override
     public CompoundTag toTag() {
         CompoundTag tag = new CompoundTag();
@@ -160,5 +153,13 @@ public class BlockBreakModule extends ModuleBase {
     public void fromTag(CompoundTag tag) {
         super.fromTag(tag);
         if (tag.contains(NBT_PROGRESS)) breakProgress = tag.getInt(NBT_PROGRESS);
+    }
+
+    private void resetState(World world, BlockState state, BlockPos pos, Integer newBreakId) {
+        if (breakId != null) world.setBlockBreakingInfo(breakId, lastPos, -1);
+        breakProgress = 0;
+        lastTarget = state;
+        lastPos = pos;
+        breakId = newBreakId;
     }
 }

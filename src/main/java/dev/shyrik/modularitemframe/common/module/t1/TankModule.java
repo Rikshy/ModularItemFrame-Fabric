@@ -48,11 +48,13 @@ public class TankModule extends ModuleBase {
     }
 
     @Override
+    @Environment(EnvType.CLIENT)
     public Identifier frontTexture() {
         return BG;
     }
 
     @Override
+    @Environment(EnvType.CLIENT)
     public Identifier backTexture() {
         return BG;
     }

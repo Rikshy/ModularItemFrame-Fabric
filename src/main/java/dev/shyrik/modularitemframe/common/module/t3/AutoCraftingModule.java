@@ -25,6 +25,11 @@ public class AutoCraftingModule extends CraftingPlusModule {
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_t3_auto_crafting");
 
     @Override
+    public Identifier getId() {
+        return ID;
+    }
+
+    @Override
     @Environment(EnvType.CLIENT)
     public Identifier frontTexture() {
         return BG;
@@ -34,11 +39,6 @@ public class AutoCraftingModule extends CraftingPlusModule {
     @Environment(EnvType.CLIENT)
     public Identifier innerTexture() {
         return ModularFrameBlock.INNER_HARDEST;
-    }
-
-    @Override
-    public Identifier getId() {
-        return ID;
     }
 
     @Override

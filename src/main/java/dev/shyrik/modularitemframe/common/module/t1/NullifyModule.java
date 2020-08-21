@@ -63,24 +63,25 @@ public class NullifyModule extends ModuleBase {
     @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float ticks, VertexConsumerProvider buffer, int light, int overlay) {
         FluidRenderFace face = null;
-        switch (frame.getFacing()) {
+        Direction facing = frame.getFacing();
+        switch (facing) {
             case UP:
-                face = FluidRenderFace.createFlatFace(0.3f, 0.07f, 0.3f, 0.7f, 0.07f, 0.7f, 1, frame.getFacing());
+                face = FluidRenderFace.createFlatFace(0.3f, 0.07f, 0.3f, 0.7f, 0.07f, 0.7f, 1, facing);
                 break;
             case DOWN:
-                face = FluidRenderFace.createFlatFace(0.3f, 0.93f, 0.3f, 0.7f, 0.93f, 0.7f, 1, frame.getFacing());
+                face = FluidRenderFace.createFlatFace(0.3f, 0.93f, 0.3f, 0.7f, 0.93f, 0.7f, 1, facing);
                 break;
             case NORTH:
-                face = FluidRenderFace.createFlatFace(0.3f, 0.3f, 0.93f, 0.7f, 0.7f, 0.93f, 1, frame.getFacing());
+                face = FluidRenderFace.createFlatFace(0.3f, 0.3f, 0.93f, 0.7f, 0.7f, 0.93f, 1, facing);
                 break;
             case EAST:
-                face = FluidRenderFace.createFlatFace(0.07f, 0.3f, 0.3f, 0.07f, 0.7f, 0.7f, 1, frame.getFacing());
+                face = FluidRenderFace.createFlatFace(0.07f, 0.3f, 0.3f, 0.07f, 0.7f, 0.7f, 1, facing);
                 break;
             case WEST:
-                face = FluidRenderFace.createFlatFace(0.93f, 0.3f, 0.3f, 0.93f, 0.7f, 0.7f, 1, frame.getFacing());
+                face = FluidRenderFace.createFlatFace(0.93f, 0.3f, 0.3f, 0.93f, 0.7f, 0.7f, 1, facing);
                 break;
             case SOUTH:
-                face = FluidRenderFace.createFlatFace(0.3f, 0.3f, 0.07f, 0.7f, 0.7f, 0.07f, 1, frame.getFacing());
+                face = FluidRenderFace.createFlatFace(0.3f, 0.3f, 0.07f, 0.7f, 0.7f, 0.07f, 1, facing);
                 break;
         }
 

@@ -46,16 +46,6 @@ public class ItemModule extends ModuleBase {
         return I18n.translate("modularitemframe.module.item");
     }
 
-    private void rotate(PlayerEntity player) {
-        if (player.isSneaking()) {
-            rotation += 20;
-        } else {
-            rotation -= 20;
-        }
-        if (rotation >= 360 || rotation <= -360) rotation = 0;
-        markDirty();
-    }
-
     @Override
     @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float ticks, VertexConsumerProvider buffer, int light, int overlay) {
@@ -93,5 +83,15 @@ public class ItemModule extends ModuleBase {
         super.fromTag(tag);
         if (tag.contains(NBT_DISPLAY)) displayItem = ItemStack.fromTag(tag.getCompound(NBT_DISPLAY));
         if (tag.contains(NBT_ROTATION)) rotation = tag.getInt(NBT_ROTATION);
+    }
+
+    private void rotate(PlayerEntity player) {
+        if (player.isSneaking()) {
+            rotation += 20;
+        } else {
+            rotation -= 20;
+        }
+        if (rotation >= 360 || rotation <= -360) rotation = 0;
+        markDirty();
     }
 }

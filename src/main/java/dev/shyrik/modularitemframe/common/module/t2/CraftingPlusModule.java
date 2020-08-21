@@ -46,6 +46,7 @@ public class CraftingPlusModule extends CraftingModule {
     }
 
     @Override
+    @Environment(EnvType.CLIENT)
     public Identifier innerTexture() {
         return ModularFrameBlock.INNER_HARD;
     }
@@ -67,18 +68,6 @@ public class CraftingPlusModule extends CraftingModule {
     }
 
     @Override
-    protected FixedItemInv getWorkingInventories(Inventory playerInventory) {
-        FixedItemInv neighborInventory = frame.getAttachedInventory();
-        FixedItemInv fixedPlayerInv = new FixedInventoryVanillaWrapper(playerInventory);
-        if (neighborInventory != null) {
-            if (mode == EnumMode.NO_PLAYER) return neighborInventory;
-            else return CombinedFixedItemInv.create(Arrays.asList(neighborInventory, fixedPlayerInv));
-        }
-
-        return fixedPlayerInv;
-    }
-
-    @Override
     public CompoundTag toTag() {
         CompoundTag tag = super.toTag();
         tag.putInt(NBT_MODE, mode.getIndex());
@@ -89,6 +78,18 @@ public class CraftingPlusModule extends CraftingModule {
     public void fromTag(CompoundTag tag) {
         super.fromTag(tag);
         if (tag.contains(NBT_MODE)) mode = EnumMode.values()[tag.getInt(NBT_MODE)];
+    }
+
+    @Override
+    protected FixedItemInv getWorkingInventories(Inventory playerInventory) {
+        FixedItemInv neighborInventory = frame.getAttachedInventory();
+        FixedItemInv fixedPlayerInv = new FixedInventoryVanillaWrapper(playerInventory);
+        if (neighborInventory != null) {
+            if (mode == EnumMode.NO_PLAYER) return neighborInventory;
+            else return CombinedFixedItemInv.create(Arrays.asList(neighborInventory, fixedPlayerInv));
+        }
+
+        return fixedPlayerInv;
     }
 
     public enum EnumMode {

@@ -70,14 +70,20 @@ public class ItemTeleportModule extends ModuleBase {
     }
 
     @Override
+    public List<Identifier> getVariantFronts() {
+        return ImmutableList.of(BG_NONE, BG_IN, BG_OUT);
+    }
+
+    @Override
     @Environment(EnvType.CLIENT)
     public Identifier innerTexture() {
         return ModularFrameBlock.INNER_HARDEST;
     }
 
     @Override
-    public List<Identifier> getVariantFronts() {
-        return ImmutableList.of(BG_NONE, BG_IN, BG_OUT);
+    @Environment(EnvType.CLIENT)
+    public String getModuleName() {
+        return I18n.translate("modularitemframe.module.itemtele");
     }
 
     @Override
@@ -96,12 +102,6 @@ public class ItemTeleportModule extends ModuleBase {
 
             renderer.renderEnder(frame, matrixStack, buffer, faces);
         }
-    }
-
-    @Override
-    @Environment(EnvType.CLIENT)
-    public String getModuleName() {
-        return I18n.translate("modularitemframe.module.itemtele");
     }
 
     @Override
