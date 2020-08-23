@@ -138,8 +138,8 @@ public class TankModule extends ModuleBase {
     }
 
     @Override
-    public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player) {
-        super.onRemove(world, pos, facing, player);
+    public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack moduleStack) {
+        super.onRemove(world, pos, facing, player, moduleStack);
         if (!ModularItemFrame.getConfig().dropFluidOnTankRemove && tank.getInvFluid(0).amount().isZero())
             return;
         Fluid fluid = tank.getInvFluid(0).getRawFluid();

@@ -166,7 +166,7 @@ public class ItemTeleportModule extends ModuleBase {
     }
 
     @Override
-    public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player) {
+    public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack moduleStack) {
         if (hasValidConnection(world)) {
             ItemTeleportModule targetModule = (ItemTeleportModule) ((ModularFrameEntity) Objects.requireNonNull(world.getBlockEntity(linkedLoc))).getModule();
             targetModule.linkedLoc = null;

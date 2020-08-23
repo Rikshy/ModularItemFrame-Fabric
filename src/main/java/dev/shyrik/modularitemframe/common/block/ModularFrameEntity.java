@@ -172,7 +172,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         if (player != null) remain = InventoryHelper.givePlayer(player, remain);
         if (!remain.isEmpty()) ItemHelper.ejectStack(world, pos, facing, remain);
 
-        module.onRemove(world, pos, facing, player);
+        module.onRemove(world, pos, facing, player, remain);
         setModule(new EmptyModule());
         markDirty();
     }

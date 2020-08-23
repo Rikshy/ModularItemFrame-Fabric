@@ -83,8 +83,8 @@ public class SlayModule extends ModuleBase {
     }
 
     @Override
-    public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player) {
-        super.onRemove(world, pos, facing, player);
+    public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack moduleStack) {
+        super.onRemove(world, pos, facing, player, moduleStack);
         ItemHelper.ejectStack(world, pos, facing, weapon);
     }
 

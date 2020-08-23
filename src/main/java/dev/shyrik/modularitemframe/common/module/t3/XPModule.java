@@ -10,6 +10,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -74,8 +75,8 @@ public class XPModule extends ModuleBase {
     }
 
     @Override
-    public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player) {
-        super.onRemove(world, pos, facing, player);
+    public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack moduleStack) {
+        super.onRemove(world, pos, facing, player, moduleStack);
         if (player == null)
             world.spawnEntity(new ExperienceOrbEntity(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, experience));
         else player.addExperience(experience);

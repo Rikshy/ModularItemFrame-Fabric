@@ -228,11 +228,15 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
         ModularFrameEntity tile = (ModularFrameEntity)builder.get(LootContextParameters.BLOCK_ENTITY);
         if (tile != null) {
             if (!(tile.module instanceof EmptyModule)) {
-                drops.add(new ItemStack(tile.module.getItem()));
-                tile.module.onRemove(builder.getWorld(), tile.getPos(), state.get(FACING), null);
+                ItemStack modStack = new ItemStack(tile.module.getItem());
+                drops.add(modStack);
+                tile.module.onRemove(builder.getWorld(), tile.getPos(), state.get(FACING), null, modStack);
             }
-            for (UpgradeBase upgrade : tile.upgrades)
-                drops.add(new ItemStack(upgrade.getItem()));
+            for (UpgradeBase upgrade : tile.upgrades) {
+                ItemStack upStack = new ItemStack(upgrade.getItem());
+                drops.add(upStack);
+                upgrade.onRemove(builder.getWorld(), tile.getPos(), state.get(FACING), upStack);
+            }
         }
         return drops;
     }

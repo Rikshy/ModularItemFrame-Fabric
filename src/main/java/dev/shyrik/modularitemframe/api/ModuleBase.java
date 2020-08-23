@@ -133,7 +133,7 @@ public abstract class ModuleBase {
      * Called when module is removed with the {@link dev.shyrik.modularitemframe.common.item.ScrewdriverItem screwdriver}
      * or destroyed.
      */
-    public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player) {
+    public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack moduleStack) {
     }
 
     /**
