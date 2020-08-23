@@ -50,8 +50,6 @@
     "modularitemframe.message.screw_mode_change.rem_up": "Aufwertung entfernen",
     "modularitemframe.message.screw_mode_change.inter": "interagieren",
     "modularitemframe.message.screw_mode_change.rot": "rotieren",
-    "modularitemframe.message.vacuum_mode_change": "[ModularItemFrame] Vacuum Modus verändert jetzt die %s Reichweite",
-    "modularitemframe.message.vacuum_range_change": "[ModularItemFrame] Vacuum Reichweite %s auf %d geändert",
 
     "modularitemframe.module.empty": "Leer",
     "modularitemframe.module.io": "I/O",
