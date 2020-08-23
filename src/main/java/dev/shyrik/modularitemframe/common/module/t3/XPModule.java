@@ -17,7 +17,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
@@ -125,31 +124,12 @@ public class XPModule extends ModuleBase {
         if (experience >= MAX_XP) return;
         if (world.isClient || !canTick(world,60, 10)) return;
 
-        List<ExperienceOrbEntity> entities = world.getEntitiesByClass(ExperienceOrbEntity.class, getVacuumBox(pos), experienceOrbEntity -> true);
+        List<ExperienceOrbEntity> entities = world.getEntitiesByClass(ExperienceOrbEntity.class, getScanBox(), experienceOrbEntity -> true);
         for (ExperienceOrbEntity entity : entities) {
             if (!entity.isAlive()) continue;
 
             addExperience(entity.getExperienceAmount());
         }
-    }
-
-    private Box getVacuumBox(BlockPos pos) {
-        int range = ModularItemFrame.getConfig().vacuumRange + frame.getRangeUpCount();
-        switch (frame.getFacing()) {
-            case DOWN:
-                return new Box(pos.add(-range, 0, -range), pos.add(range, -range, range));
-            case UP:
-                return new Box(pos.add(-range, 0, -range), pos.add(range, range, range));
-            case NORTH:
-                return new Box(pos.add(-range, -range, 0), pos.add(range, range, -range));
-            case SOUTH:
-                return new Box(pos.add(-range, -range, 0), pos.add(range, range, range));
-            case WEST:
-                return new Box(pos.add(0, -range, -range), pos.add(range, range, range));
-            case EAST:
-                return new Box(pos.add(0, -range, -range), pos.add(-range, range, range));
-        }
-        return new Box(pos, pos.add(1, 1, 1));
     }
 
     @Override

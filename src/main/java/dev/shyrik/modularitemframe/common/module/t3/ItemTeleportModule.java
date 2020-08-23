@@ -27,7 +27,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
@@ -180,7 +179,7 @@ public class ItemTeleportModule extends ModuleBase {
         if (world.isClient || !canTick(world,60, 10)) return;
         if (direction != EnumMode.VACUUM || !hasValidConnection(world)) return;
 
-        List<ItemEntity> entities = world.getEntitiesByClass(ItemEntity.class, getVacuumBox(pos), itemEntity -> true);
+        List<ItemEntity> entities = world.getEntitiesByClass(ItemEntity.class, getScanBox(), itemEntity -> true);
         for (ItemEntity entity : entities) {
             ItemStack entityStack = entity.getStack();
             if (!entity.isAlive() || entityStack.isEmpty()) continue;
@@ -223,26 +222,6 @@ public class ItemTeleportModule extends ModuleBase {
                 && ((ModularFrameEntity) blockEntity).getModule() instanceof ItemTeleportModule
                 && ((ItemTeleportModule) ((ModularFrameEntity) blockEntity).getModule()).direction == EnumMode.DISPENSE;
     }
-
-    private Box getVacuumBox(BlockPos pos) {
-        int range = ModularItemFrame.getConfig().vacuumRange + frame.getRangeUpCount();
-        switch (frame.getFacing()) {
-            case DOWN:
-                return new Box(pos.add(-range, 0, -range), pos.add(range, -range, range));
-            case UP:
-                return new Box(pos.add(-range, 0, -range), pos.add(range, range, range));
-            case NORTH:
-                return new Box(pos.add(-range, -range, 0), pos.add(range, range, -range));
-            case SOUTH:
-                return new Box(pos.add(-range, -range, 0), pos.add(range, range, range));
-            case WEST:
-                return new Box(pos.add(0, -range, -range), pos.add(range, range, range));
-            case EAST:
-                return new Box(pos.add(0, -range, -range), pos.add(-range, range, range));
-        }
-        return new Box(pos, pos.add(1, 1, 1));
-    }
-
 
     public enum EnumMode {
         VACUUM(0, "modularitemframe.mode.in"),
