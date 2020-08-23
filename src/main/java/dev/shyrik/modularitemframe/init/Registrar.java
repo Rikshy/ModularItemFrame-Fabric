@@ -7,14 +7,12 @@ import dev.shyrik.modularitemframe.api.UpgradeBase;
 import dev.shyrik.modularitemframe.api.UpgradeItem;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.block.ModularFrameEntity;
+import dev.shyrik.modularitemframe.common.item.ItemFilterUpgradeItem;
 import dev.shyrik.modularitemframe.common.item.ScrewdriverItem;
 import dev.shyrik.modularitemframe.common.module.t1.*;
 import dev.shyrik.modularitemframe.common.module.t2.*;
 import dev.shyrik.modularitemframe.common.module.t3.*;
-import dev.shyrik.modularitemframe.common.upgrade.BlastResistUpgrade;
-import dev.shyrik.modularitemframe.common.upgrade.CapacityUpgrade;
-import dev.shyrik.modularitemframe.common.upgrade.RangeUpgrade;
-import dev.shyrik.modularitemframe.common.upgrade.SpeedUpgrade;
+import dev.shyrik.modularitemframe.common.upgrade.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -37,9 +35,11 @@ public class Registrar {
     @SuppressWarnings("unchecked")
     public static final BlockEntityType<ModularFrameEntity> MODULAR_FRAME_ENTITY = (BlockEntityType<ModularFrameEntity>) create("modularframe", ModularFrameEntity::new, MODULAR_FRAME);
 
-    public static final Item SCREWDRIVER = create("screwdriver", new ScrewdriverItem(new Item.Settings().group(ModularItemFrame.GROUP)));
+    public static final Item SCREWDRIVER = create("screwdriver",
+            new ScrewdriverItem(new Item.Settings().group(ModularItemFrame.GROUP)));
     public static final Item CANVAS = create("canvas", new Item(new Item.Settings().group(ModularItemFrame.GROUP)));
-    public static final Item MODULAR_FRAME_ITEM = create("modular_frame", new BlockItem(MODULAR_FRAME, new Item.Settings().group(ModularItemFrame.GROUP)));
+    public static final Item MODULAR_FRAME_ITEM = create("modular_frame",
+            new BlockItem(MODULAR_FRAME, new Item.Settings().group(ModularItemFrame.GROUP)));
 
     public static final ModuleItem CRAFTING_MODULE = createMod(CraftingModule.ID, CraftingModule.class);
     public static final ModuleItem IO_MODULE = createMod(IOModule.ID, IOModule.class);
@@ -67,11 +67,14 @@ public class Registrar {
     public static final UpgradeItem RANGE_UPGRADE = createUp(RangeUpgrade.ID, RangeUpgrade.class);
     public static final UpgradeItem CAP_UPGRADE = createUp(CapacityUpgrade.ID, CapacityUpgrade.class);
     public static final UpgradeItem BLAST_RESIST_UPGRADE = createUp(BlastResistUpgrade.ID, BlastResistUpgrade.class);
+    public static final UpgradeItem ITEM_FILTER_UPGRADE =  create(ItemFilterUpgrade.ID.getPath(),
+            new ItemFilterUpgradeItem(new Item.Settings().group(ModularItemFrame.GROUP), ItemFilterUpgrade.class, ItemFilterUpgrade.ID));
 
     public static void register() {
         ITEMS.keySet().forEach(item -> Registry.register(Registry.ITEM, ITEMS.get(item), item));
         BLOCKS.keySet().forEach(item -> Registry.register(Registry.BLOCK, BLOCKS.get(item), item));
-        BLOCK_ENTITIES.keySet().forEach(blockEntity -> Registry.register(Registry.BLOCK_ENTITY_TYPE, BLOCK_ENTITIES.get(blockEntity), blockEntity));
+        BLOCK_ENTITIES.keySet().forEach(blockEntity ->
+                Registry.register(Registry.BLOCK_ENTITY_TYPE, BLOCK_ENTITIES.get(blockEntity), blockEntity));
     }
 
     private static <T extends Item> T create(String name, T item){

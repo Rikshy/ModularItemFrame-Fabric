@@ -4,6 +4,7 @@ import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.UpgradeBase;
 import dev.shyrik.modularitemframe.api.mixin.BlockResistanceAccessor;
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -24,7 +25,7 @@ public class BlastResistUpgrade extends UpgradeBase {
         return ID;
     }
 
-    public void onInsert(World world, BlockPos pos, Direction facing) {
+    public void onInsert(World world, BlockPos pos, Direction facing, ItemStack upStack) {
         Block attached = world.getBlockState(pos.offset(facing.getOpposite())).getBlock();
         Block me = world.getBlockState(pos).getBlock();
 
@@ -35,7 +36,7 @@ public class BlastResistUpgrade extends UpgradeBase {
         ((BlockResistanceAccessor)attached).setResistance(99999);
     }
 
-    public void onRemove(World world, BlockPos pos, Direction facing) {
+    public void onRemove(World world, BlockPos pos, Direction facing, ItemStack upStack) {
         Block attached = world.getBlockState(pos.offset(facing.getOpposite())).getBlock();
         Block me = world.getBlockState(pos).getBlock();
 

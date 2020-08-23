@@ -80,6 +80,7 @@
     "modularitemframe.tooltip.xp_level": "%d Level",
 
     "gui.modularitemframe.crafting.name": "",
+    "gui.modularitemframe.filter.name": "",
 
     "itemGroup.modularitemframe": "ModularItemFrame"
 }

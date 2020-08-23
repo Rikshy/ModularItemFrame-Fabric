@@ -139,7 +139,7 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
             result = ActionResult.SUCCESS;
         } else if (handItem instanceof UpgradeItem && blockEntity.acceptsUpgrade()) {
             if (!world.isClient) {
-                if (blockEntity.tryAddUpgrade(((UpgradeItem) handItem).createUpgrade())) {
+                if (blockEntity.tryAddUpgrade(((UpgradeItem) handItem).createUpgrade(), handStack)) {
                     if (!player.isCreative()) player.getStackInHand(hand).decrement(1);
                     blockEntity.markDirty();
                 }

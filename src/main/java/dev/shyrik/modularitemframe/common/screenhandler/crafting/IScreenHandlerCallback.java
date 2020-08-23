@@ -1,4 +1,4 @@
-package dev.shyrik.modularitemframe.common.screenhandler;
+package dev.shyrik.modularitemframe.common.screenhandler.crafting;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;

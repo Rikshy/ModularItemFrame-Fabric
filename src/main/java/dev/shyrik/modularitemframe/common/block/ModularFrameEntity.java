@@ -43,20 +43,20 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     }
 
     //region <upgrade>
-    public boolean tryAddUpgrade(UpgradeBase up) {
-        return tryAddUpgrade(up, true);
-    }
-
-    private boolean tryAddUpgrade(UpgradeBase up, boolean fireInsert) {
+    public boolean tryAddUpgrade(UpgradeBase up, ItemStack upStack) {
         if (up != null && countUpgradeOfType(up.getClass()) < up.getMaxCount()) {
             upgrades.add(up);
-            if (fireInsert) {
-                up.onInsert(world, pos, getFacing());
+            if (!upStack.isEmpty()) {
+                up.onInsert(world, pos, getFacing(), upStack);
                 module.onFrameUpgradesChanged();
             }
             return true;
         }
         return false;
+    }
+
+    private void tryAddUpgrade(UpgradeBase up) {
+        tryAddUpgrade(up, ItemStack.EMPTY);
     }
 
     public Iterable<UpgradeBase> getUpgrades() {
@@ -73,9 +73,10 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
 
     public void dropUpgrades(PlayerEntity player, Direction facing) {
         for (UpgradeBase up : upgrades) {
-            up.onRemove(world, pos, facing);
-
             ItemStack remain = new ItemStack(up.getItem());
+
+            up.onRemove(world, pos, facing, remain);
+
             if (player != null) remain = InventoryHelper.givePlayer(player, remain);
             if (!remain.isEmpty()) ItemHelper.ejectStack(world, pos, facing, remain);
         }
@@ -229,7 +230,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         }
         upgrades = new ArrayList<>();
         for (Tag sub : cmp.getList(NBT_UPGRADES, 8)) {
-            tryAddUpgrade(UpgradeItem.createUpgrade(new Identifier(sub.asString())), false);
+            tryAddUpgrade(UpgradeItem.createUpgrade(new Identifier(sub.asString())));
         }
     }
     //endregion
