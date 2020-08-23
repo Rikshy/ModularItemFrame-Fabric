@@ -81,7 +81,7 @@ public class VacuumModule extends ModuleBase {
                         entity.world,
                         entity.getBlockPos(),
                         32,
-                        new SpawnParticlesPacket(ParticleTypes.EXPLOSION, entity.getBlockPos(), 1));
+                        new SpawnParticlesPacket(ParticleTypes.POOF, entity.getBlockPos(), 7));
                 break;
             }
         }

@@ -190,7 +190,7 @@ public class ItemTeleportModule extends ModuleBase {
                     world,
                     frame.getPos(),
                     32,
-                    new SpawnParticlesPacket(ParticleTypes.EXPLOSION, entity.getBlockPos(), 1));
+                    new SpawnParticlesPacket(ParticleTypes.POOF, entity.getBlockPos(), 8));
             break;
         }
     }
