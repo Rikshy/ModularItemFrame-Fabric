@@ -28,9 +28,9 @@ public class ModularItemFrameConfig implements ConfigData {
     @ConfigEntry.BoundedDiscrete(min = 0, max = 256)
     public int teleportRange = 64;
 
-    @Comment("Base range of the vacuum module pickup range")
+    @Comment("Base radius of the world scanning modules (e.g. vacuum)")
     @ConfigEntry.BoundedDiscrete(min = 1, max = 16)
-    public int vacuumRange = 3;
+    public int scanZoneRadius = 3;
 
     @Override
     public void validatePostLoad() {
@@ -47,8 +47,8 @@ public class ModularItemFrameConfig implements ConfigData {
             teleportRange = 256;
         }
 
-        if (vacuumRange > 16) {
-            vacuumRange = 16;
+        if (scanZoneRadius > 16) {
+            scanZoneRadius = 16;
         }
     }
 }

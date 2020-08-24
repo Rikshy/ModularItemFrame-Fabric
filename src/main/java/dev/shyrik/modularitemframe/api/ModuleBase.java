@@ -1,6 +1,7 @@
 package dev.shyrik.modularitemframe.api;
 
 import com.google.common.collect.ImmutableList;
+import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.block.ModularFrameEntity;
@@ -18,6 +19,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
@@ -131,7 +133,7 @@ public abstract class ModuleBase {
      * Called when module is removed with the {@link dev.shyrik.modularitemframe.common.item.ScrewdriverItem screwdriver}
      * or destroyed.
      */
-    public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player) {
+    public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack moduleStack) {
     }
 
     /**
@@ -139,13 +141,6 @@ public abstract class ModuleBase {
      */
     public boolean canTick(World world, int base, int mod) {
         return world.getTime() % Math.max(base - mod * frame.getSpeedUpCount(), 10) == 0;
-    }
-
-    /**
-     * Forwarded from blockEntity
-     */
-    public void markDirty() {
-        frame.markDirty();
     }
 
     /**
@@ -161,4 +156,33 @@ public abstract class ModuleBase {
      */
     public void fromTag(CompoundTag tag) {
     }
+
+    //region <helper>
+    /**
+     * Forwarded from blockEntity
+     */
+    public void markDirty() {
+        frame.markDirty();
+    }
+
+    protected Box getScanBox() {
+        BlockPos pos = frame.getPos();
+        int range = frame.getRangeUpCount() + ModularItemFrame.getConfig().scanZoneRadius;
+        switch (frame.getFacing()) {
+            case DOWN:
+                return new Box(pos.add(-range, 0, -range), pos.add(range, -range, range));
+            case UP:
+                return new Box(pos.add(-range, 0, -range), pos.add(range, range, range));
+            case NORTH:
+                return new Box(pos.add(-range, -range, 0), pos.add(range, range, -range));
+            case SOUTH:
+                return new Box(pos.add(-range, -range, 0), pos.add(range, range, range));
+            case WEST:
+                return new Box(pos.add(0, -range, -range), pos.add(range, range, range));
+            case EAST:
+                return new Box(pos.add(0, -range, -range), pos.add(-range, range, range));
+        }
+        return new Box(pos, pos.add(1, 1, 1));
+    }
+    //endregion
 }

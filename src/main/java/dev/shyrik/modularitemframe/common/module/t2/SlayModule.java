@@ -90,8 +90,14 @@ public class SlayModule extends ModuleBase {
     }
 
     @Override
-    public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player) {
-        super.onRemove(world, pos, facing, player);
+    @Environment(EnvType.CLIENT)
+    public String getModuleName() {
+        return I18n.translate("modularitemframe.module.slay");
+    }
+
+    @Override
+    public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack moduleStack) {
+        super.onRemove(world, pos, facing, player, moduleStack);
         ItemHelper.ejectStack(world, pos, facing, weapon);
     }
 

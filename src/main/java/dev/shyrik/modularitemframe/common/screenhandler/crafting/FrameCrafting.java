@@ -1,4 +1,4 @@
-package dev.shyrik.modularitemframe.common.screenhandler;
+package dev.shyrik.modularitemframe.common.screenhandler.crafting;
 
 import alexiil.mc.lib.attributes.Simulation;
 import alexiil.mc.lib.attributes.item.FixedItemInv;
