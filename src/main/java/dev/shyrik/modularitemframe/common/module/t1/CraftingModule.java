@@ -101,9 +101,8 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
         return new SimpleNamedScreenHandlerFactory((id, playerInventory, player) ->
                 new CraftingFrameScreenHandler(
                         id,
-                        player.inventory,
-                        ghostInventory,
                         player,
+                        ghostInventory,
                         this),
                 new TranslatableText("gui.modularitemframe.crafting.name")
         );

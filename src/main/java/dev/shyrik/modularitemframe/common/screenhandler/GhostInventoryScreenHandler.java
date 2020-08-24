@@ -2,6 +2,7 @@ package dev.shyrik.modularitemframe.common.screenhandler;
 
 import dev.shyrik.modularitemframe.api.util.GhostSlot;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
@@ -9,8 +10,24 @@ import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 
 public abstract class GhostInventoryScreenHandler extends ScreenHandler {
-    protected GhostInventoryScreenHandler(ScreenHandlerType<?> type, int syncId) {
+
+    private static final int SLOTS_PER_ROW = 9;
+    private static final int INV_ROWS = 3;
+
+    protected GhostInventoryScreenHandler(ScreenHandlerType<?> type, int syncId, Inventory playerInventory) {
         super(type, syncId);
+
+        if (playerInventory != null) {
+            for (int row = 0; row < INV_ROWS; ++row) {
+                for (int col = 0; col < SLOTS_PER_ROW; ++col) {
+                    addSlot(new Slot(playerInventory, col + row * SLOTS_PER_ROW + SLOTS_PER_ROW, 8 + col * 18, 84 + row * 18));
+                }
+            }
+
+            for (int col = 0; col < SLOTS_PER_ROW; ++col) {
+                addSlot(new Slot(playerInventory, col, 8 + col * 18, 142));
+            }
+        }
     }
 
     @Override
