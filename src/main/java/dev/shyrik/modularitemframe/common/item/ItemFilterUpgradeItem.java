@@ -5,6 +5,7 @@ import dev.shyrik.modularitemframe.api.UpgradeItem;
 import dev.shyrik.modularitemframe.common.screenhandler.filter.FilterUpgradeScreenHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.FishingRodItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.screen.NamedScreenHandlerFactory;
@@ -26,7 +27,9 @@ public class ItemFilterUpgradeItem extends UpgradeItem {
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack stack = user.getStackInHand(hand);
-        if (world.isClient && user.isSneaking()) {
+        if (!user.isSneaking()) return TypedActionResult.pass(stack);
+
+        if (!world.isClient) {
             user.openHandledScreen(getScreenHandler(stack));
         }
 
@@ -46,7 +49,7 @@ public class ItemFilterUpgradeItem extends UpgradeItem {
     public static void readTags(ItemStack stack, SimpleInventory inv) {
         CompoundTag tag = stack.getOrCreateTag();
         if (tag.contains(NBT_FILTER)) {
-            inv.readTags(tag.getList(NBT_FILTER, 0));
+            inv.readTags(tag.getList(NBT_FILTER, 10));
         }
     }
 

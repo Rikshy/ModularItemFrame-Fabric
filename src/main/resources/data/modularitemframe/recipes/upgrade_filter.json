@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "result": {
+    "item": "modularitemframe:upgrade_filter",
+    "count": 2
+  },
+  "pattern": [
+    "P#P"
+  ],
+  "key": {
+    "#": {
+      "item": "modularitemframe:modular_frame"
+    },
+    "S": {
+      "item": "minecraft:paper"
+    }
+  }
+}

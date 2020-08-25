@@ -4,6 +4,8 @@ import alexiil.mc.lib.attributes.SearchOptions;
 import alexiil.mc.lib.attributes.fluid.FixedFluidInv;
 import alexiil.mc.lib.attributes.fluid.FluidAttributes;
 import alexiil.mc.lib.attributes.item.*;
+import alexiil.mc.lib.attributes.item.filter.ConstantItemFilter;
+import alexiil.mc.lib.attributes.item.filter.ItemFilter;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.*;
 import dev.shyrik.modularitemframe.api.util.InventoryHelper;
@@ -18,7 +20,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Tickable;
@@ -32,7 +33,9 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
 
     private static final String NBT_MODULE = "frame_module";
     private static final String NBT_MODULE_DATA = "frame_module_data";
-    private static final String NBT_UPGRADES = "upgrades";
+    private static final String NBT_UPGRADES = "frame_upgrades";
+    private static final String NBT_UPGRADE_ID = "upgrade_id";
+    private static final String NBT_UPGRADE_DATA = "upgrade_data";
 
     ModuleBase module;
     List<UpgradeBase> upgrades = new ArrayList<>();
@@ -80,6 +83,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
             if (player != null) remain = InventoryHelper.givePlayer(player, remain);
             if (!remain.isEmpty()) ItemHelper.ejectStack(world, pos, facing, remain);
         }
+        upgrades.clear();
 
         module.onFrameUpgradesChanged();
         markDirty();
@@ -99,6 +103,22 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
 
     public boolean isBlastResist() {
         return countUpgradeOfType(BlastResistUpgrade.class) >= 1;
+    }
+
+    public ItemFilter getItemFilter() {
+        ItemFilter filter = null;
+        for(UpgradeBase upgrade : upgrades) {
+            if (upgrade instanceof ItemFilterUpgrade) {
+                ItemFilterUpgrade up = (ItemFilterUpgrade)upgrade;
+                if (filter == null) {
+                    filter = up.getFilter();
+                } else {
+                    filter.or(up.getFilter());
+                }
+            }
+        }
+
+        return filter == null ? ConstantItemFilter.ANYTHING : filter;
     }
 
     public int countUpgradeOfType(Class<? extends UpgradeBase> clsUp) {
@@ -213,7 +233,10 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
 
         ListTag upgradeList = new ListTag();
         for (UpgradeBase up : upgrades) {
-            upgradeList.add(StringTag.of(up.getId().toString()));
+            CompoundTag upTag = new CompoundTag();
+            upTag.putString(NBT_UPGRADE_ID, up.getId().toString());
+            upTag.put(NBT_UPGRADE_DATA, up.toTag());
+            upgradeList.add(upTag);
         }
         compound.put(NBT_UPGRADES, upgradeList);
         return compound;
@@ -229,8 +252,11 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
             cmp.remove(NBT_MODULE_DATA);
         }
         upgrades = new ArrayList<>();
-        for (Tag sub : cmp.getList(NBT_UPGRADES, 8)) {
-            tryAddUpgrade(UpgradeItem.createUpgrade(new Identifier(sub.asString())));
+        for (Tag sub : cmp.getList(NBT_UPGRADES, 10)) {
+            UpgradeBase up = UpgradeItem.createUpgrade(new Identifier(((CompoundTag)sub).getString(NBT_UPGRADE_ID)));
+            assert up != null;
+            up.fromTag(((CompoundTag)sub).getCompound(NBT_UPGRADE_DATA));
+            tryAddUpgrade(up);
         }
     }
     //endregion

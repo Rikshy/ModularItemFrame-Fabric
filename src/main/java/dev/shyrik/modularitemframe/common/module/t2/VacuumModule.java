@@ -68,7 +68,7 @@ public class VacuumModule extends ModuleBase {
             List<ItemEntity> entities = world.getEntitiesByClass(ItemEntity.class, getScanBox(), itemEntity -> true);
             for (ItemEntity entity : entities) {
                 ItemStack entityStack = entity.getStack();
-                ItemInsertable inserter = handler.getInsertable();
+                ItemInsertable inserter = handler.getInsertable().filtered(frame.getItemFilter());
                 if (!entity.isAlive() ||
                         entityStack.isEmpty() ||
                         inserter.attemptInsertion(entityStack, Simulation.SIMULATE).getCount() == entityStack.getCount())

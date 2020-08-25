@@ -82,7 +82,7 @@ public class TrashCanModule extends ModuleBase {
             FixedItemInv trash = frame.getAttachedInventory();
             if (trash != null) {
                 for (int slot = 0; slot < trash.getSlotCount(); slot++) {
-                    if (!trash.getInvStack(slot).isEmpty()) {
+                    if (!trash.getInvStack(slot).isEmpty() && frame.getItemFilter().matches(trash.getInvStack(slot))) {
                         trash.setInvStack(slot, ItemStack.EMPTY, Simulation.ACTION);
                         NetworkHandler.sendAround(
                                 world,

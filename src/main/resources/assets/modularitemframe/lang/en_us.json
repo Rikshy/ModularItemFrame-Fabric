@@ -27,6 +27,7 @@
 
   "item.modularitemframe.upgrade_speed": "Speed Upgrade",
   "item.modularitemframe.upgrade_range": "Range Upgrade",
+  "item.modularitemframe.upgrade_filter": "Filter Upgrade",
   "item.modularitemframe.upgrade_capacity": "Capacity Upgrade",
   "item.modularitemframe.upgrade_resist": "Resistance Upgrade",
   "item.modularitemframe.upgrade_security": "Security Upgrade",

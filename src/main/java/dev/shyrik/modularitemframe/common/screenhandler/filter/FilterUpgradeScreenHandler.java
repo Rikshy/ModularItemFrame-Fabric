@@ -41,7 +41,7 @@ public class FilterUpgradeScreenHandler extends GhostInventoryScreenHandler {
 
     @Override
     public boolean canUse(PlayerEntity player) {
-        return false;
+        return true;
     }
 
     @Override

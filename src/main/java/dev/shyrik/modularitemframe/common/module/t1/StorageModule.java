@@ -1,6 +1,7 @@
 package dev.shyrik.modularitemframe.common.module.t1;
 
 import alexiil.mc.lib.attributes.Simulation;
+import alexiil.mc.lib.attributes.item.ItemInsertable;
 import alexiil.mc.lib.attributes.item.impl.DirectFixedItemInv;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
@@ -81,13 +82,14 @@ public class StorageModule extends ModuleBase {
             ItemStack held = player.getStackInHand(hand);
             if (lastStack.isEmpty() || ItemStack.areItemsEqual(lastStack, held)) {
                 long time = world.getTime();
+                ItemInsertable insertable = inventory.filtered(frame.getItemFilter());
 
                 if (time - lastClick <= 8L && !player.isSneaking() && !lastStack.isEmpty())
-                    InventoryHelper.giveAllPossibleStacks(inventory, player.inventory, lastStack, held);
+                    InventoryHelper.giveAllPossibleStacks(insertable, player.inventory, lastStack, held);
                 else if (!held.isEmpty()) {
                     ItemStack heldCopy = held.copy();
                     heldCopy.setCount(1);
-                    if (inventory.insert(heldCopy).isEmpty()) {
+                    if (insertable.insert(heldCopy).isEmpty()) {
                         held.decrement(1);
 
                         lastStack = heldCopy;
