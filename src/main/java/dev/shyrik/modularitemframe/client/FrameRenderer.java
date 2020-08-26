@@ -225,76 +225,27 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
     //endregion <itemRender>
 
     //region <ender>
-    public static class EndRenderFace {
-        public EndRenderFace(float offset1, float offset2, float offset3, Direction side) {
-            this.offset1 = offset1;
-            this.offset2 = offset2;
-            this.offset3 = offset3;
-            this.side = side;
-        }
-        public float offset1, offset2, offset3;
-        public Direction side;
-    }
-
-    public void renderEnder(ModularFrameEntity frame, MatrixStack matrixStack, VertexConsumerProvider bufferBuilder, List<EndRenderFace> faces) {
-        EndRenderFace face = faces.stream().filter(endRenderFace -> endRenderFace.side == frame.getFacing()).findFirst().orElse(null);
-        if (face == null)
-            return;
-
+    public void renderEnder(ModularFrameEntity frame, MatrixStack matrixStack, VertexConsumerProvider bufferBuilder, float offset1, float offset2, float offset3) {
         double distance = frame.getPos().getSquaredDistance(dispatcher.camera.getPos(), true);
         int val = getPasses(distance);
         Matrix4f matrix4f = matrixStack.peek().getModel();
 
-        enderMagic(0.15F, matrix4f, bufferBuilder.getBuffer(layers.get(0)), face);
+        enderMagic(0.15F, matrix4f, bufferBuilder.getBuffer(layers.get(0)), offset1, offset2, offset3);
 
         for (int i = 1; i < val; ++i) {
-            enderMagic(2.0F / (float) (18 - i), matrix4f, bufferBuilder.getBuffer(layers.get(i)), face);
+            enderMagic(2.0F / (float) (18 - i), matrix4f, bufferBuilder.getBuffer(layers.get(i)), offset1, offset2, offset3);
         }
     }
 
-    private void enderMagic(float colorMultiplier, Matrix4f matrix, VertexConsumer buffer, EndRenderFace face) {
+    private void enderMagic(float colorMultiplier, Matrix4f matrix, VertexConsumer buffer, float offset1, float offset2, float offset3) {
         float red = (RANDOM.nextFloat() * 0.5F + 0.1F) * colorMultiplier;
         float blue = (RANDOM.nextFloat() * 0.5F + 0.4F) * colorMultiplier;
         float green = (RANDOM.nextFloat() * 0.5F + 0.5F) * colorMultiplier;
 
-        switch (face.side){
-            case DOWN:
-                buffer.vertex(matrix, face.offset1, face.offset2, face.offset3).color(red, blue, green, 1.0F).next();
-                buffer.vertex(matrix, face.offset1, face.offset2, face.offset1).color(red, blue, green, 1.0F).next();
-                buffer.vertex(matrix, face.offset3, face.offset2, face.offset1).color(red, blue, green, 1.0F).next();
-                buffer.vertex(matrix, face.offset3, face.offset2, face.offset3).color(red, blue, green, 1.0F).next();
-                break;
-            case UP:
-                buffer.vertex(matrix, face.offset1, face.offset2, face.offset1).color(red, blue, green, 1.0F).next();
-                buffer.vertex(matrix, face.offset1, face.offset2, face.offset3).color(red, blue, green, 1.0F).next();
-                buffer.vertex(matrix, face.offset3, face.offset2, face.offset3).color(red, blue, green, 1.0F).next();
-                buffer.vertex(matrix, face.offset3, face.offset2, face.offset1).color(red, blue, green, 1.0F).next();
-                break;
-            case NORTH:
-                buffer.vertex(matrix, face.offset3, face.offset1, face.offset2).color(red, blue, green, 1.0F).next();
-                buffer.vertex(matrix, face.offset1, face.offset1, face.offset2).color(red, blue, green, 1.0F).next();
-                buffer.vertex(matrix, face.offset1, face.offset3, face.offset2).color(red, blue, green, 1.0F).next();
-                buffer.vertex(matrix, face.offset3, face.offset3, face.offset2).color(red, blue, green, 1.0F).next();
-                break;
-            case SOUTH:
-                buffer.vertex(matrix, face.offset1, face.offset1, face.offset2).color(red, blue, green, 1.0F).next();
-                buffer.vertex(matrix, face.offset3, face.offset1, face.offset2).color(red, blue, green, 1.0F).next();
-                buffer.vertex(matrix, face.offset3, face.offset3, face.offset2).color(red, blue, green, 1.0F).next();
-                buffer.vertex(matrix, face.offset1, face.offset3, face.offset2).color(red, blue, green, 1.0F).next();
-                break;
-            case WEST:
-                buffer.vertex(matrix, face.offset2, face.offset1, face.offset1).color(red, blue, green, 1.0F).next();
-                buffer.vertex(matrix, face.offset2, face.offset1, face.offset3).color(red, blue, green, 1.0F).next();
-                buffer.vertex(matrix, face.offset2, face.offset3, face.offset3).color(red, blue, green, 1.0F).next();
-                buffer.vertex(matrix, face.offset2, face.offset3, face.offset1).color(red, blue, green, 1.0F).next();
-                break;
-            case EAST:
-                buffer.vertex(matrix, face.offset2, face.offset1, face.offset3).color(red, blue, green, 1.0F).next();
-                buffer.vertex(matrix, face.offset2, face.offset1, face.offset1).color(red, blue, green, 1.0F).next();
-                buffer.vertex(matrix, face.offset2, face.offset3, face.offset1).color(red, blue, green, 1.0F).next();
-                buffer.vertex(matrix, face.offset2, face.offset3, face.offset2).color(red, blue, green, 1.0F).next();
-                break;
-        }
+        buffer.vertex(matrix, offset1, offset1, offset2).color(red, blue, green, 1.0F).next();
+        buffer.vertex(matrix, offset3, offset1, offset2).color(red, blue, green, 1.0F).next();
+        buffer.vertex(matrix, offset3, offset3, offset2).color(red, blue, green, 1.0F).next();
+        buffer.vertex(matrix, offset1, offset3, offset2).color(red, blue, green, 1.0F).next();
     }
 
     private int getPasses(double d) {
