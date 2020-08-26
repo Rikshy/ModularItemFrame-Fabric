@@ -1,6 +1,5 @@
 package dev.shyrik.modularitemframe.common.module.t3;
 
-import com.google.common.collect.ImmutableList;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.fake.FakePlayer;
@@ -35,6 +34,7 @@ import java.util.Objects;
 public class TeleportModule extends ModuleBase {
 
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t3_tele");
+    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_t3_tele");
 
     private static final String NBT_LINK = "linked_pos";
     private static final String NBT_LINK_X = "linked_posX";
@@ -51,7 +51,7 @@ public class TeleportModule extends ModuleBase {
     @Override
     @Environment(EnvType.CLIENT)
     public Identifier frontTexture() {
-        return new Identifier(ModularItemFrame.MOD_ID, "block/module_t1_item");
+        return BG;
     }
 
     @Override
@@ -69,7 +69,9 @@ public class TeleportModule extends ModuleBase {
     @Override
     @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float ticks, VertexConsumerProvider buffer, int light, int overlay) {
-        renderer.renderEnder(frame, matrixStack, buffer, 0.85f, 0.08f, 0.14f);
+        if (linkedLoc != null) {
+            renderer.renderEnder(frame, matrixStack, buffer, 0.85f, 0.08f, 0.14f);
+        }
     }
 
     @Override
@@ -129,6 +131,7 @@ public class TeleportModule extends ModuleBase {
                 } else {
                     linkedLoc = tmp;
                     ((TeleportModule) ((ModularFrameEntity) targetTile).getModule()).linkedLoc = frame.getPos();
+                    targetTile.markDirty();
                     player.sendMessage(new TranslatableText("modularitemframe.message.link_established"), false);
                     nbt.remove(NBT_LINK);
                     driver.setTag(nbt);
@@ -141,6 +144,7 @@ public class TeleportModule extends ModuleBase {
     public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack moduleStack) {
         if (hasValidConnection(world, null)) {
             ((TeleportModule) ((ModularFrameEntity) Objects.requireNonNull(world.getBlockEntity(linkedLoc))).getModule()).linkedLoc = null;
+            Objects.requireNonNull(world.getBlockEntity(linkedLoc)).markDirty();
         }
         super.onRemove(world, pos, facing, player, moduleStack);
     }
@@ -161,6 +165,7 @@ public class TeleportModule extends ModuleBase {
         super.fromTag(tag);
         if (tag.contains(NBT_LINK_X))
             linkedLoc = new BlockPos(tag.getInt(NBT_LINK_X), tag.getInt(NBT_LINK_Y), tag.getInt(NBT_LINK_Z));
+        else linkedLoc = null;
     }
 
     private boolean isTargetLocationValid(World world) {

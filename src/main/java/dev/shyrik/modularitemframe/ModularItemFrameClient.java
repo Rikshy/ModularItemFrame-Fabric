@@ -49,6 +49,7 @@ public class ModularItemFrameClient implements ClientModInitializer {
 
                 AutoCraftingModule.BG,
                 FluidDispenserModule.BG,
+                TeleportModule.BG,
                 ItemTeleportModule.BG_IN,
                 ItemTeleportModule.BG_OUT,
                 ItemTeleportModule.BG_NONE,

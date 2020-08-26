@@ -204,6 +204,7 @@ public class ItemTeleportModule extends ModuleBase {
         super.fromTag(tag);
         if (tag.contains(NBT_LINK_X))
             linkedLoc = new BlockPos(tag.getInt(NBT_LINK_X), tag.getInt(NBT_LINK_Y), tag.getInt(NBT_LINK_Z));
+        else linkedLoc = null;
         if (tag.contains(NBT_DIR)) direction = EnumMode.values()[tag.getInt(NBT_DIR)];
     }
 
