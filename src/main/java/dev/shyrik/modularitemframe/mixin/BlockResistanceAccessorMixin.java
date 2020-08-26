@@ -9,5 +9,5 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public abstract class BlockResistanceAccessorMixin implements BlockResistanceAccessor {
 
     @Accessor("resistance")
-    public abstract void setResistance(float resistance);
+    public abstract void setModItFrResistance(float resistance);
 }

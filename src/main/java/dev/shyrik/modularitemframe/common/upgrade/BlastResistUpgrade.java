@@ -32,15 +32,15 @@ public class BlastResistUpgrade extends UpgradeBase {
         oldMe = me.getBlastResistance();
         oldAttached = attached.getBlastResistance();
 
-        ((BlockResistanceAccessor)me).setResistance(99999);
-        ((BlockResistanceAccessor)attached).setResistance(99999);
+        ((BlockResistanceAccessor)me).setModItFrResistance(99999);
+        ((BlockResistanceAccessor)attached).setModItFrResistance(99999);
     }
 
     public void onRemove(World world, BlockPos pos, Direction facing, ItemStack upStack) {
         Block attached = world.getBlockState(pos.offset(facing.getOpposite())).getBlock();
         Block me = world.getBlockState(pos).getBlock();
 
-        ((BlockResistanceAccessor)me).setResistance(oldMe);
-        ((BlockResistanceAccessor)attached).setResistance(oldAttached);
+        ((BlockResistanceAccessor)me).setModItFrResistance(oldMe);
+        ((BlockResistanceAccessor)attached).setModItFrResistance(oldAttached);
     }
 }
