@@ -41,10 +41,6 @@
     "modularitemframe.message.crafting_plus.no_player": "[ModularItemFrame] Rahmen sucht nun nur im angehefteten Inventar",
     "modularitemframe.message.mode_change": "[ModularItemFrame] Modus verändert zu %s",
     "modularitemframe.message.screw_mode_change": "[ModularItemFrame] Schraubendreher Modus verändert zu %s",
-    "modularitemframe.message.screw_mode_change.rem_mod": "Modul entfernen",
-    "modularitemframe.message.screw_mode_change.rem_up": "Aufwertung entfernen",
-    "modularitemframe.message.screw_mode_change.inter": "interagieren",
-    "modularitemframe.message.screw_mode_change.rot": "rotieren",
 
     "modularitemframe.mode.no": "kein",
     "modularitemframe.mode.in": "Einlass",
@@ -54,6 +50,10 @@
     "modularitemframe.mode.hybrid_inv": "attached and player inventory",
     "modularitemframe.mode.attached_inv": "attached inventory only",
     "modularitemframe.mode.player_inv": "player inventory only",
+    "modularitemframe.mode.rem_mod": "Modul entfernen",
+    "modularitemframe.mode.rem_up": "Aufwertung entfernen",
+    "modularitemframe.mode.interact": "interagieren",
+    "modularitemframe.mode.rotate": "rotieren",
 
     "modularitemframe.module.empty": "Leer",
     "modularitemframe.module.io": "I/O",

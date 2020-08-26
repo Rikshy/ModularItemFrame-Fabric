@@ -62,10 +62,10 @@ public class ScrewdriverItem extends ToolItem {
     }
 
     public enum EnumMode {
-        REMOVE_MOD(0, "modularitemframe.message.screw_mode_change.rem_mod"),
-        REMOVE_UP(1, "modularitemframe.message.screw_mode_change.rem_up"),
-        INTERACT(2, "modularitemframe.message.screw_mode_change.inter");
-        //ROTATE(2, "modularitemframe.message.screw_mode_change.rot");
+        REMOVE_MOD(0, "modularitemframe.mode.rem_mod"),
+        REMOVE_UP(1, "modularitemframe.mode.rem_up"),
+        INTERACT(2, "modularitemframe.mode.inter");
+        //ROTATE(2, "modularitemframe.mode.rot");
 
         public static final EnumMode[] VALUES = new EnumMode[3];
 

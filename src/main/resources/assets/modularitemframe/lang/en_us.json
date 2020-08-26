@@ -39,10 +39,6 @@
   "modularitemframe.message.loc_saved": "[ModularItemFrame] Location saved",
   "modularitemframe.message.mode_change": "[ModularItemFrame] Mode changed to %s",
   "modularitemframe.message.screw_mode_change": "[ModularItemFrame] Screwdriver mode changed to %s",
-  "modularitemframe.message.screw_mode_change.rem_mod": "remove module",
-  "modularitemframe.message.screw_mode_change.rem_up": "remove upgrades",
-  "modularitemframe.message.screw_mode_change.inter": "interact",
-  "modularitemframe.message.screw_mode_change.rot": "rotate",
 
   "modularitemframe.mode.no": "none",
   "modularitemframe.mode.in": "input",
@@ -52,6 +48,10 @@
   "modularitemframe.mode.hybrid_inv": "attached and player inventory",
   "modularitemframe.mode.attached_inv": "attached inventory only",
   "modularitemframe.mode.player_inv": "player inventory only",
+  "modularitemframe.mode.rem_mod": "remove module",
+  "modularitemframe.mode.rem_up": "remove upgrades",
+  "modularitemframe.mode.interact": "interact",
+  "modularitemframe.mode.rotate": "rotate",
 
   "modularitemframe.module.empty": "Empty",
   "modularitemframe.module.io": "I/O",
