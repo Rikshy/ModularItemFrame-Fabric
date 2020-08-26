@@ -191,7 +191,7 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
     //region <placing/breaking>
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return getDefaultState().with(FACING, ctx.getPlayerLookDirection().getOpposite());
+        return getDefaultState().with(FACING, ctx.getSide());
     }
 
     @Override
