@@ -5,15 +5,14 @@
   "item.modularitemframe.canvas": "Canvas",
   "item.modularitemframe.module_t1_item": "Item Module",
   "item.modularitemframe.module_t1_crafting": "Crafting Module",
-  "item.modularitemframe.module_t1_null": "Nullify Module",
   "item.modularitemframe.module_t1_tank": "Tank Module",
   "item.modularitemframe.module_t1_io": "I/O Module",
   "item.modularitemframe.module_t1_storage": "Storage Module",
 
   "item.modularitemframe.module_t2_dispense": "Dispense Module",
   "item.modularitemframe.module_t2_vacuum": "Vacuum Module",
-  "item.modularitemframe.module_t2_trashcan": "Trashcan Module",
   "item.modularitemframe.module_t2_craft_plus": "Crafting Plus Module",
+  "item.modularitemframe.module_t2_trashcan": "Trashcan Module",
   "item.modularitemframe.module_t2_slay": "Slay Module",
   "item.modularitemframe.module_t2_break": "Block Break Module",
   "item.modularitemframe.module_t2_place": "Block Place Module",
@@ -59,7 +58,7 @@
   "modularitemframe.module.item": "Item",
   "modularitemframe.module.crafting": "Crafting",
   "modularitemframe.module.tank": "Tank",
-  "modularitemframe.module.null": "Nullify",
+  "modularitemframe.module.trash_can": "Trashcan",
   "modularitemframe.module.storage": "Storage",
 
   "modularitemframe.module.block_breaker": "Block Breaker",
@@ -67,7 +66,6 @@
   "modularitemframe.module.crafting_plus": "Crafting Plus",
   "modularitemframe.module.dispense": "Dispense",
   "modularitemframe.module.vacuum": "Vacuum",
-  "modularitemframe.module.trash_can": "Trashcan",
   "modularitemframe.module.slay": "Slay",
 
   "modularitemframe.module.auto_crafting": "Auto Crafting",

@@ -33,7 +33,6 @@ public class ModularItemFrameClient implements ClientModInitializer {
                 CraftingModule.BG,
                 IOModule.BG,
                 ItemModule.BG,
-                NullifyModule.BG,
                 StorageModule.BG,
                 TankModule.BG,
 
@@ -41,11 +40,11 @@ public class ModularItemFrameClient implements ClientModInitializer {
                 BlockPlaceModule.BG,
                 CraftingPlusModule.BG,
                 DispenseModule.BG,
+                SlayModule.BG,
+                VacuumModule.BG,
                 TrashCanModule.BG1,
                 TrashCanModule.BG2,
                 TrashCanModule.BG3,
-                SlayModule.BG,
-                VacuumModule.BG,
 
                 AutoCraftingModule.BG,
                 FluidDispenserModule.BG,

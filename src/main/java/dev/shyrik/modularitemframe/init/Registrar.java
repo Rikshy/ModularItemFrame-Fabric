@@ -44,15 +44,14 @@ public class Registrar {
     public static final ModuleItem CRAFTING_MODULE = createMod(CraftingModule.ID, CraftingModule.class);
     public static final ModuleItem IO_MODULE = createMod(IOModule.ID, IOModule.class);
     public static final ModuleItem ITEM_MODULE = createMod(ItemModule.ID, ItemModule.class);
-    public static final ModuleItem NULLIFY_MODULE = createMod(NullifyModule.ID, NullifyModule.class);
     public static final ModuleItem STORAGE_MODULE = createMod(StorageModule.ID, StorageModule.class);
     public static final ModuleItem TANK_MODULE = createMod(TankModule.ID, TankModule.class);
 
     public static final ModuleItem BLOCK_BREAKER = createMod(BlockBreakModule.ID, BlockBreakModule.class);
     public static final ModuleItem BLOCK_PLACER = createMod(BlockPlaceModule.ID, BlockPlaceModule.class);
     public static final ModuleItem CRAFTING_PLUS_MODULE = createMod(CraftingPlusModule.ID, CraftingPlusModule.class);
-    public static final ModuleItem DISPENSE_MODULE = createMod(DispenseModule.ID, DispenseModule.class);
     public static final ModuleItem TRASH_CAN_MODULE = createMod(TrashCanModule.ID, TrashCanModule.class);
+    public static final ModuleItem DISPENSE_MODULE = createMod(DispenseModule.ID, DispenseModule.class);
     public static final ModuleItem SLAY_MODULE = createMod(SlayModule.ID, SlayModule.class);
     public static final ModuleItem VACUUM_MODULE = createMod(VacuumModule.ID, VacuumModule.class);
 
