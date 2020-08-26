@@ -1,5 +1,7 @@
 package dev.shyrik.modularitemframe.common.item;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
@@ -33,7 +35,7 @@ public class ScrewdriverItem extends ToolItem {
         if (!world.isClient && player.isSneaking()) {
             ItemStack driver = player.getStackInHand(hand);
             EnumMode mode = readModeFromTag(driver);
-            mode = EnumMode.VALUES[mode.getIndex() + 1 >= EnumMode.values().length ? 0 : mode.getIndex() + 1];
+            mode = EnumMode.values()[mode.getIndex() + 1 >= EnumMode.values().length ? 0 : mode.getIndex() + 1];
             writeModeToTag(driver, mode);
             player.sendMessage(new TranslatableText("modularitemframe.message.screw_mode_change", mode.getName()), false);
 
@@ -57,7 +59,7 @@ public class ScrewdriverItem extends ToolItem {
         CompoundTag nbt = stack.getTag();
         EnumMode mode = EnumMode.REMOVE_MOD;
         if (nbt == null) writeModeToTag(stack, mode);
-        else if (nbt.contains(NBT_MODE)) mode = EnumMode.VALUES[nbt.getInt(NBT_MODE)];
+        else if (nbt.contains(NBT_MODE)) mode = EnumMode.values()[nbt.getInt(NBT_MODE)];
         return mode;
     }
 
@@ -66,8 +68,6 @@ public class ScrewdriverItem extends ToolItem {
         REMOVE_UP(1, "modularitemframe.mode.rem_up"),
         INTERACT(2, "modularitemframe.mode.inter");
         //ROTATE(2, "modularitemframe.mode.rot");
-
-        public static final EnumMode[] VALUES = new EnumMode[3];
 
         private final int index;
         private final String name;
@@ -81,13 +81,9 @@ public class ScrewdriverItem extends ToolItem {
             return this.index;
         }
 
+        @Environment(EnvType.CLIENT)
         public String getName() {
             return I18n.translate(this.name);
-        }
-
-        static {
-            for (EnumMode enummode : values())
-                VALUES[enummode.index] = enummode;
         }
     }
 }

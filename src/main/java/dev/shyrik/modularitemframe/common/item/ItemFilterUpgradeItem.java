@@ -3,6 +3,8 @@ package dev.shyrik.modularitemframe.common.item;
 import dev.shyrik.modularitemframe.api.UpgradeBase;
 import dev.shyrik.modularitemframe.api.UpgradeItem;
 import dev.shyrik.modularitemframe.common.screenhandler.filter.FilterUpgradeScreenHandler;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
@@ -84,7 +86,7 @@ public class ItemFilterUpgradeItem extends UpgradeItem {
     public static EnumMode readModeTag(CompoundTag tag) {
         EnumMode mode = EnumMode.WHITELIST;
         if (tag.contains(NBT_MODE)) {
-            mode = EnumMode.VALUES[tag.getInt(NBT_MODE)];
+            mode = EnumMode.values()[tag.getInt(NBT_MODE)];
         }
         return mode;
     }
@@ -107,8 +109,6 @@ public class ItemFilterUpgradeItem extends UpgradeItem {
         WHITELIST(0, "modularitemframe.mode.whitelist"),
         BLACKLIST(1, "modularitemframe.mode.blacklist");
 
-        public static final EnumMode[] VALUES = new EnumMode[2];
-
         private final int index;
         private final String name;
 
@@ -121,13 +121,9 @@ public class ItemFilterUpgradeItem extends UpgradeItem {
             return this.index;
         }
 
+        @Environment(EnvType.CLIENT)
         public String getName() {
             return I18n.translate(this.name);
-        }
-
-        static {
-            for (EnumMode enummode : values())
-                VALUES[enummode.index] = enummode;
         }
     }
 }

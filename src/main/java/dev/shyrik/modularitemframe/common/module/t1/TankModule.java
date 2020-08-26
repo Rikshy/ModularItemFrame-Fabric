@@ -103,7 +103,7 @@ public class TankModule extends ModuleBase {
             if (ModularItemFrame.getConfig().tankTransferRate > 0) {
                 int modeIdx = mode.getIndex() + 1;
                 if (modeIdx == EnumMode.values().length) modeIdx = 0;
-                mode = EnumMode.VALUES[modeIdx];
+                mode = EnumMode.values()[modeIdx];
                 player.sendMessage(new TranslatableText("modularitemframe.message.mode_change", mode.getName()), false);
             }
         }
@@ -173,15 +173,13 @@ public class TankModule extends ModuleBase {
         super.fromTag(tag);
         if (tag.contains(NBT_TANK)) tank.fromTag(tag.getCompound(NBT_TANK));
         if (tag.contains(NBT_MODE))
-            mode = ModularItemFrame.getConfig().tankTransferRate > 0 ? EnumMode.VALUES[tag.getInt(NBT_MODE)] : EnumMode.NONE;
+            mode = ModularItemFrame.getConfig().tankTransferRate > 0 ? EnumMode.values()[tag.getInt(NBT_MODE)] : EnumMode.NONE;
     }
 
     public enum EnumMode {
         NONE(0, "modularitemframe.mode.no"),
         DRAIN(1, "modularitemframe.mode.in"),
         PUSH(2, "modularitemframe.mode.out");
-
-        public static final EnumMode[] VALUES = new EnumMode[3];
 
         private final int index;
         private final String name;
@@ -198,12 +196,6 @@ public class TankModule extends ModuleBase {
         @Environment(EnvType.CLIENT)
         public String getName() {
             return I18n.translate(this.name);
-        }
-
-
-        static {
-            for (EnumMode enummode : values())
-                VALUES[enummode.index] = enummode;
         }
     }
 }
