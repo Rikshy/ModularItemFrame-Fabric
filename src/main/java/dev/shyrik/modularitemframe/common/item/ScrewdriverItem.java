@@ -64,9 +64,9 @@ public class ScrewdriverItem extends ToolItem {
     }
 
     public enum EnumMode {
-        REMOVE_MOD(0, "modularitemframe.mode.rem_mod"),
-        REMOVE_UP(1, "modularitemframe.mode.rem_up"),
-        INTERACT(2, "modularitemframe.mode.inter");
+        REMOVE_MOD(0, "modularitemframe.mode.remove_module"),
+        REMOVE_UP(1, "modularitemframe.mode.remove_upgrades"),
+        INTERACT(2, "modularitemframe.mode.interact");
         //ROTATE(2, "modularitemframe.mode.rot");
 
         private final int index;

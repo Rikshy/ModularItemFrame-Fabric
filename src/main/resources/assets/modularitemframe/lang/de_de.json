@@ -50,8 +50,8 @@
     "modularitemframe.mode.hybrid_inv": "attached and player inventory",
     "modularitemframe.mode.attached_inv": "attached inventory only",
     "modularitemframe.mode.player_inv": "player inventory only",
-    "modularitemframe.mode.rem_mod": "Modul entfernen",
-    "modularitemframe.mode.rem_up": "Aufwertung entfernen",
+    "modularitemframe.mode.remove_module": "Modul entfernen",
+    "modularitemframe.mode.remove_upgrades": "Aufwertung entfernen",
     "modularitemframe.mode.interact": "interagieren",
     "modularitemframe.mode.rotate": "rotieren",
 
