@@ -74,12 +74,8 @@ public abstract class ModuleBase {
     @Environment(EnvType.CLIENT)
     public abstract String getModuleName();
 
-    public boolean hasModelVariants() {
-        return !getVariantFronts().isEmpty();
-    }
-
     public List<Identifier> getVariantFronts() {
-        return ImmutableList.of();
+        return ImmutableList.of(frontTexture());
     }
 
     /**

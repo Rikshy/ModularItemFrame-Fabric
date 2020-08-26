@@ -55,24 +55,10 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
         ModuleItem.getModuleIds().forEach(id -> {
             ModuleBase module = ModuleItem.createModule(id);
             assert module != null;
-            if (module.hasModelVariants()) {
-                for (Identifier front : module.getVariantFronts()) {
-                    BakedModel bakedFrame = unbakedFrame.bake(modelLoader, mat -> {
-                        if (mat.getTextureId().toString().contains("default_front"))
-                            return bmMan.method_24153(mat.getAtlasId()).getSprite(front);
-                        if (mat.getTextureId().toString().contains("default_back"))
-                            return bmMan.method_24153(mat.getAtlasId()).getSprite(module.backTexture());
-                        if (mat.getTextureId().toString().contains("default_inner"))
-                            return bmMan.method_24153(mat.getAtlasId()).getSprite(module.innerTexture());
-                        return bmMan.method_24153(mat.getAtlasId()).getSprite(mat.getTextureId());
-                    }, ModelRotation.X0_Y0, RegistryHelper.getId(Registrar.MODULAR_FRAME));
-
-                    models.put(front, bakedFrame);
-                }
-            } else {
+            for (Identifier front : module.getVariantFronts()) {
                 BakedModel bakedFrame = unbakedFrame.bake(modelLoader, mat -> {
                     if (mat.getTextureId().toString().contains("default_front"))
-                        return bmMan.method_24153(mat.getAtlasId()).getSprite(module.frontTexture());
+                        return bmMan.method_24153(mat.getAtlasId()).getSprite(front);
                     if (mat.getTextureId().toString().contains("default_back"))
                         return bmMan.method_24153(mat.getAtlasId()).getSprite(module.backTexture());
                     if (mat.getTextureId().toString().contains("default_inner"))
@@ -80,7 +66,7 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
                     return bmMan.method_24153(mat.getAtlasId()).getSprite(mat.getTextureId());
                 }, ModelRotation.X0_Y0, RegistryHelper.getId(Registrar.MODULAR_FRAME));
 
-                models.put(module.frontTexture(), bakedFrame);
+                models.put(front, bakedFrame);
             }
         });
 
