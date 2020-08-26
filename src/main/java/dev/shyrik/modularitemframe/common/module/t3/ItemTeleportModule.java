@@ -167,10 +167,11 @@ public class ItemTeleportModule extends ModuleBase {
 
     @Override
     public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack moduleStack) {
-        if (hasValidConnection(world)) {
+        if (!world.isClient && hasValidConnection(world)) {
             ItemTeleportModule targetModule = (ItemTeleportModule) ((ModularFrameEntity) Objects.requireNonNull(world.getBlockEntity(linkedLoc))).getModule();
             targetModule.linkedLoc = null;
             targetModule.direction = EnumMode.NONE;
+            targetModule.markDirty();
         }
     }
 
@@ -203,8 +204,8 @@ public class ItemTeleportModule extends ModuleBase {
             tag.putInt(NBT_LINK_X, linkedLoc.getX());
             tag.putInt(NBT_LINK_Y, linkedLoc.getY());
             tag.putInt(NBT_LINK_Z, linkedLoc.getZ());
-            tag.putInt(NBT_DIR, direction.index);
         }
+        tag.putInt(NBT_DIR, direction.index);
         return tag;
     }
 
@@ -221,7 +222,7 @@ public class ItemTeleportModule extends ModuleBase {
         BlockEntity blockEntity = world.getBlockEntity(linkedLoc);
         return blockEntity instanceof ModularFrameEntity
                 && ((ModularFrameEntity) blockEntity).getModule() instanceof ItemTeleportModule
-                && ((ItemTeleportModule) ((ModularFrameEntity) blockEntity).getModule()).direction == EnumMode.DISPENSE;
+                && ((ItemTeleportModule) ((ModularFrameEntity) blockEntity).getModule()).direction != direction;
     }
 
     public enum EnumMode {
