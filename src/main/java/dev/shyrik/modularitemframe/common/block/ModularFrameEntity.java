@@ -159,8 +159,18 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     }
 
     public FixedFluidInv getAttachedTank() {
+        return getAttachedTank(getRangeUpCount());
+    }
+    public FixedFluidInv getAttachedTank(int range) {
         assert world != null;
-        return FluidAttributes.FIXED_INV.getFirstOrNull(world, getAttachedPos(), SearchOptions.inDirection(getFacing()));
+        Direction facing = getFacing();
+        FixedFluidInv inv = null;
+        for (int i = 0; i <= range; i++) {
+            inv = FluidAttributes.FIXED_INV.getFirstOrNull(world, getAttachedPos().offset(facing, i), SearchOptions.inDirection(facing));
+            if (inv != null)
+                break;
+        }
+        return inv;
     }
 
     @SuppressWarnings("unused")
