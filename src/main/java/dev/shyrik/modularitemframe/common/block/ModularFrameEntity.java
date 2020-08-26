@@ -42,7 +42,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     
     public ModularFrameEntity() {
         super(Registrar.MODULAR_FRAME_ENTITY);
-        setModule(new EmptyModule());
+        setModule(new EmptyModule(), ItemStack.EMPTY);
     }
 
     //region <upgrade>
@@ -179,9 +179,11 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     //endregion
 
     //region <module>
-    public void setModule(ModuleBase mod) {
+    public void setModule(ModuleBase mod, ItemStack moduleStack) {
         module = mod == null ? new EmptyModule() : mod;
         module.setTile(this);
+        if (!moduleStack.isEmpty())
+            module.onInsert(world, pos, getFacing(), moduleStack);
     }
 
     public ModuleBase getModule() {
@@ -199,7 +201,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         if (!remain.isEmpty()) ItemHelper.ejectStack(world, pos, facing, remain);
 
         module.onRemove(world, pos, facing, player, remain);
-        setModule(new EmptyModule());
+        setModule(new EmptyModule(), ItemStack.EMPTY);
         markDirty();
     }
     //endregion
@@ -253,7 +255,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         if (module.getId().toString().equals(cmp.getString(NBT_MODULE))) {
             module.fromTag(cmp.getCompound(NBT_MODULE_DATA));
         } else {
-            setModule(ModuleItem.createModule(new Identifier(cmp.getString(NBT_MODULE))));
+            setModule(ModuleItem.createModule(new Identifier(cmp.getString(NBT_MODULE))), ItemStack.EMPTY);
             module.fromTag(cmp.getCompound(NBT_MODULE_DATA));
             cmp.remove(NBT_MODULE_DATA);
         }
