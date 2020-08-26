@@ -178,9 +178,9 @@ public abstract class ModuleBase {
             case SOUTH:
                 return new Box(pos.add(-range, -range, 0), pos.add(range, range, range));
             case WEST:
-                return new Box(pos.add(0, -range, -range), pos.add(range, range, range));
-            case EAST:
                 return new Box(pos.add(0, -range, -range), pos.add(-range, range, range));
+            case EAST:
+                return new Box(pos.add(0, -range, -range), pos.add(range, range, range));
         }
         return new Box(pos, pos.add(1, 1, 1));
     }
