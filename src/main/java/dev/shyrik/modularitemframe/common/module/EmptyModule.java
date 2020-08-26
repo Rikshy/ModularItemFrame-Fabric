@@ -38,6 +38,7 @@ public class EmptyModule extends ModuleBase {
     }
 
     @Override
+    @Environment(EnvType.CLIENT)
     public String getModuleName() {
         return I18n.translate("modularitemframe.module.empty");
     }

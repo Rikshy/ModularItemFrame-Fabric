@@ -27,7 +27,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.world.World;
@@ -90,12 +89,6 @@ public class SlayModule extends ModuleBase {
     }
 
     @Override
-    @Environment(EnvType.CLIENT)
-    public String getModuleName() {
-        return I18n.translate("modularitemframe.module.slay");
-    }
-
-    @Override
     public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack moduleStack) {
         super.onRemove(world, pos, facing, player, moduleStack);
         ItemHelper.ejectStack(world, pos, facing, weapon);
@@ -129,7 +122,7 @@ public class SlayModule extends ModuleBase {
             } else {
                 if (rotation >= 360) {
                     rotation -= 360;
-                    hitIt(world, pos);
+                    hitIt(world);
                 }
                 rotation += 15 * (frame.getSpeedUpCount() + 1);
             }
@@ -153,32 +146,16 @@ public class SlayModule extends ModuleBase {
         if (tag.contains(NBT_ROTATION)) rotation = tag.getInt(NBT_ROTATION);
     }
 
-    private void hitIt(World world, BlockPos pos) {
+    private void hitIt(World world) {
         FakePlayer player = FakePlayerFactory.get(world, DEFAULT_CLICKER);
 
-        for(MobEntity entity : world.getEntitiesByClass(MobEntity.class, getAttackBox(pos), mobEntity -> true)) {
+        for(MobEntity entity : world.getEntitiesByClass(MobEntity.class, getScanBox(), mobEntity -> true)) {
             player.setStackInHand(Hand.MAIN_HAND, weapon);
             player.attack(entity);
             //displayItem.damage(1, player, p -> {});
 
             //TODO item damage handling?
         }
-    }
-
-    private Box getAttackBox(BlockPos pos) {
-        int range = 1 + frame.getRangeUpCount();
-        switch (frame.getFacing()) {
-            case DOWN:
-            case UP:
-                return new Box(pos.add(-range, 0, -range), pos.add(range, 0, range));
-            case NORTH:
-            case SOUTH:
-                return new Box(pos.add(-range, -range, 0), pos.add(range, range, 0));
-            case WEST:
-            case EAST:
-                return new Box(pos.add(0, -range, -range), pos.add(0, range, range));
-        }
-        return new Box(pos, pos.add(1, 1, 1));
     }
 
     private ItemStack getNextStack() {
