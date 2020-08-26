@@ -143,13 +143,19 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     }
 
     public FixedItemInv getAttachedInventory() {
-        return getAttachedInventory(0);
+        return getAttachedInventory(getRangeUpCount());
     }
 
     public FixedItemInv getAttachedInventory(int range) {
         assert world != null;
         Direction facing = getFacing();
-        return ItemAttributes.FIXED_INV.getFirstOrNull(world, getAttachedPos().offset(facing, range), SearchOptions.inDirection(facing));
+        FixedItemInv inv = null;
+        for (int i = 0; i <= range; i++) {
+            inv = ItemAttributes.FIXED_INV.getFirstOrNull(world, getAttachedPos().offset(facing, i), SearchOptions.inDirection(facing));
+            if (inv != null)
+                break;
+        }
+        return inv;
     }
 
     public FixedFluidInv getAttachedTank() {

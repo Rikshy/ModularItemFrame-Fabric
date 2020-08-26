@@ -39,7 +39,6 @@
   "modularitemframe.message.too_far": "[ModularItemFrame] Target destination is too far away (Max %s)",
   "modularitemframe.message.link_established": "[ModularItemFrame] Link established",
   "modularitemframe.message.loc_saved": "[ModularItemFrame] Location saved",
-  "modularitemframe.message.range_change": "[ModularItemFrame] Dropper range changed to %d",
   "modularitemframe.message.crafting_plus.player": "[ModularItemFrame] Frame now also checks players inventory",
   "modularitemframe.message.crafting_plus.no_player": "[ModularItemFrame] Frame now only checks attached inventory",
   "modularitemframe.message.mode_change": "[ModularItemFrame] Mode changed to %s",

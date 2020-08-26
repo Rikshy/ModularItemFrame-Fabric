@@ -39,7 +39,6 @@
     "modularitemframe.message.too_far": "[ModularItemFrame] Zielort ist zu weit entfernt (Max %s)",
     "modularitemframe.message.link_established": "[ModularItemFrame] Verbindung hergestellt",
     "modularitemframe.message.loc_saved": "[ModularItemFrame] Position gespeichert",
-    "modularitemframe.message.range_change": "[ModularItemFrame] Spenderreichweite verändert auf %d",
     "modularitemframe.message.crafting_plus.player": "[ModularItemFrame] Rahmen durchsucht nun auf das Spielerinventar",
     "modularitemframe.message.crafting_plus.no_player": "[ModularItemFrame] Rahmen sucht nun nur im angehefteten Inventar",
     "modularitemframe.message.mode_change": "[ModularItemFrame] Modus verändert zu %s",
