@@ -46,7 +46,7 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
     private static final VoxelShape EAST_SHAPE = Block.createCuboidShape(0, 2, 2, 1.75, 14, 14);
     private static final VoxelShape WEST_SHAPE = Block.createCuboidShape(16, 2, 2, 14.25, 14, 14);
 
-    public static final Identifier INNER_DEF = new Identifier(ModularItemFrame.MOD_ID, "block/hard_inner");
+    public static final Identifier INNER_DEF = new Identifier(ModularItemFrame.MOD_ID, "block/default_inner");
     public static final Identifier INNER_HARD = new Identifier(ModularItemFrame.MOD_ID, "block/hard_inner");
     public static final Identifier INNER_HARDEST = new Identifier(ModularItemFrame.MOD_ID, "block/hardest_inner");
 
