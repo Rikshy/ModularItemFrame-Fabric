@@ -15,14 +15,14 @@ public class FilterUpgradeScreenHandler extends GhostInventoryScreenHandler {
     private static final int SLOTS_PER_ROW = 9;
     private static final int INV_ROWS = 3;
 
-    private final SimpleInventory inv = new SimpleInventory(9);
+    private final SimpleInventory inv;
     private final ItemStack filterStack;
 
     public FilterUpgradeScreenHandler(int containerId, Inventory playerInventory, ItemStack filter) {
         super(ScreenHandlerType.GENERIC_9X1, containerId);
 
         filterStack = filter;
-        ItemFilterUpgradeItem.readTags(filterStack, inv);
+        inv = new SimpleInventory(ItemFilterUpgradeItem.readInvTag(filterStack.getOrCreateTag()).toArray(new ItemStack[0]));
 
         for (int col = 0; col < SLOTS_PER_ROW; ++col) {
             addSlot(new GhostSlot(inv, col, 8 + col * 18, 18));
@@ -46,7 +46,7 @@ public class FilterUpgradeScreenHandler extends GhostInventoryScreenHandler {
 
     @Override
     public void sendContentUpdates() {
-        ItemFilterUpgradeItem.writeTags(filterStack, inv);
+        ItemFilterUpgradeItem.writeInvTag(filterStack.getOrCreateTag(), inv);
 
         super.sendContentUpdates();
     }

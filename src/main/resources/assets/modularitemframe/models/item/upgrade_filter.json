@@ -2,5 +2,13 @@
 	"parent": "item/generated",
 	"textures": {
 		"layer0": "modularitemframe:item/upgrade_filter"
-	}
+	},
+	"overrides": [
+		{
+			"predicate": {
+				"custom_model_data": 1
+			},
+			"model": "modularitemframe:item/upgrade_filter_black"
+		}
+	]
 }

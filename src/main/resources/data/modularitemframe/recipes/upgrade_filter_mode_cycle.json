@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "result": {
+    "item": "modularitemframe:upgrade_filter",
+    "data": {
+      "$": {
+        "value": "i0",
+        "paths": {
+          "filter_mode": "keep",
+          "CustomModelData": "keep"
+        }
+      },
+      "filter_mode": "$ i0.filter_mode - 1 ? i0.filter_mode + 1 : 0",
+      "CustomModelData": "$ i0.filter_mode - 1 ? i0.filter_mode + 1 : 0"
+    }
+  },
+  "ingredients": [{
+      "item": "modularitemframe:upgrade_filter"
+  }]
+}
