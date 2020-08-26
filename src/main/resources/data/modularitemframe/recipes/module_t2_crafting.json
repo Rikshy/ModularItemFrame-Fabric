@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "result": {
-    "item": "modularitemframe:module_t2_craft_plus"
+    "item": "modularitemframe:module_t2_crafting"
   },
   "pattern": [
     "ICI",
@@ -10,7 +10,7 @@
   ],
   "key": {
     "#": {
-      "item": "modularitemframe:module_t1_crafting"
+      "item": "minecraft:crafting_table"
     },
     "A": {
       "item": "modularitemframe:module_t1_io"

@@ -11,6 +11,7 @@ import dev.shyrik.modularitemframe.common.item.ItemFilterUpgradeItem;
 import dev.shyrik.modularitemframe.common.item.ScrewdriverItem;
 import dev.shyrik.modularitemframe.common.module.t1.*;
 import dev.shyrik.modularitemframe.common.module.t2.*;
+import dev.shyrik.modularitemframe.common.module.t2.CraftingModule;
 import dev.shyrik.modularitemframe.common.module.t3.*;
 import dev.shyrik.modularitemframe.common.upgrade.*;
 import net.minecraft.block.Block;
@@ -41,7 +42,6 @@ public class Registrar {
     public static final Item MODULAR_FRAME_ITEM = create("modular_frame",
             new BlockItem(MODULAR_FRAME, new Item.Settings().group(ModularItemFrame.GROUP)));
 
-    public static final ModuleItem CRAFTING_MODULE = createMod(CraftingModule.ID, CraftingModule.class);
     public static final ModuleItem IO_MODULE = createMod(IOModule.ID, IOModule.class);
     public static final ModuleItem ITEM_MODULE = createMod(ItemModule.ID, ItemModule.class);
     public static final ModuleItem STORAGE_MODULE = createMod(StorageModule.ID, StorageModule.class);
@@ -49,7 +49,7 @@ public class Registrar {
 
     public static final ModuleItem BLOCK_BREAKER = createMod(BlockBreakModule.ID, BlockBreakModule.class);
     public static final ModuleItem BLOCK_PLACER = createMod(BlockPlaceModule.ID, BlockPlaceModule.class);
-    public static final ModuleItem CRAFTING_PLUS_MODULE = createMod(CraftingPlusModule.ID, CraftingPlusModule.class);
+    public static final ModuleItem CRAFTING_MODULE = createMod(CraftingModule.ID, CraftingModule.class);
     public static final ModuleItem TRASH_CAN_MODULE = createMod(TrashCanModule.ID, TrashCanModule.class);
     public static final ModuleItem DISPENSE_MODULE = createMod(DispenseModule.ID, DispenseModule.class);
     public static final ModuleItem SLAY_MODULE = createMod(SlayModule.ID, SlayModule.class);

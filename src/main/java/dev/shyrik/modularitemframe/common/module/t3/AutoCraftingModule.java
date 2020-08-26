@@ -5,7 +5,7 @@ import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.util.InventoryHelper;
 import dev.shyrik.modularitemframe.api.util.ItemHelper;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
-import dev.shyrik.modularitemframe.common.module.t2.CraftingPlusModule;
+import dev.shyrik.modularitemframe.common.module.t2.CraftingModule;
 import dev.shyrik.modularitemframe.common.network.NetworkHandler;
 import dev.shyrik.modularitemframe.common.network.packet.PlaySoundPacket;
 import net.fabricmc.api.EnvType;
@@ -19,7 +19,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class AutoCraftingModule extends CraftingPlusModule {
+public class AutoCraftingModule extends CraftingModule {
 
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t3_auto_crafting");
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_t3_auto_crafting");

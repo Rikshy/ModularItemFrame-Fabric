@@ -1,6 +1,0 @@
-{
-	"parent": "item/generated",
-	"textures": {
-		"layer0": "modularitemframe:item/module_t2_craft_plus"
-	}
-}

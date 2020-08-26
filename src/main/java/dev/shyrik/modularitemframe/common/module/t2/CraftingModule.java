@@ -1,13 +1,15 @@
-package dev.shyrik.modularitemframe.common.module.t1;
+package dev.shyrik.modularitemframe.common.module.t2;
 
 import alexiil.mc.lib.attributes.item.FixedItemInv;
 import alexiil.mc.lib.attributes.item.compat.FixedInventoryVanillaWrapper;
+import alexiil.mc.lib.attributes.item.impl.CombinedFixedItemInv;
 import alexiil.mc.lib.attributes.item.impl.DirectFixedItemInv;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.InventoryHelper;
 import dev.shyrik.modularitemframe.api.util.ItemHelper;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
+import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.network.NetworkHandler;
 import dev.shyrik.modularitemframe.common.network.packet.PlaySoundPacket;
 import dev.shyrik.modularitemframe.common.screenhandler.crafting.CraftingFrameScreenHandler;
@@ -38,16 +40,18 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 public class CraftingModule extends ModuleBase implements IScreenHandlerCallback {
+    public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_crafting");
+    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_t2_crafting");
 
-    public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t1_crafting");
-    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_t1_crafting");
-    
     private static final String NBT_GHOST_INVENTORY = "ghost_inventory";
     private static final String NBT_DISPLAY = "display";
+    private static final String NBT_MODE = "cp_mode";
 
+    public EnumMode mode = EnumMode.PLAYER;
     protected CraftingRecipe recipe;
     private ItemStack displayItem = ItemStack.EMPTY;
     private final DirectFixedItemInv ghostInventory = new DirectFixedItemInv(9);
@@ -59,14 +63,20 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
 
     @Override
     @Environment(EnvType.CLIENT)
+    public String getModuleName() {
+        return I18n.translate("modularitemframe.module.crafting");
+    }
+
+    @Override
+    @Environment(EnvType.CLIENT)
     public Identifier frontTexture() {
         return BG;
     }
 
     @Override
     @Environment(EnvType.CLIENT)
-    public String getModuleName() {
-        return I18n.translate("modularitemframe.module.crafting");
+    public Identifier innerTexture() {
+        return ModularFrameBlock.INNER_HARD;
     }
 
     @Override
@@ -78,7 +88,15 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
     @Override
     public void screw(World world, BlockPos pos, PlayerEntity player, ItemStack driver) {
         if (!world.isClient) {
-            player.openHandledScreen(getScreenHandler(frame.getCachedState(), world, pos));
+            if (player.isSneaking()) {
+                int modeIdx = mode.getIndex() + 1;
+                if (modeIdx == EnumMode.values().length) modeIdx = 0;
+                mode = EnumMode.values()[modeIdx];
+                player.sendMessage(new TranslatableText(mode.getName()), false);
+            } else {
+                player.openHandledScreen(getScreenHandler(frame.getCachedState(), world, pos));
+            }
+
             markDirty();
         }
     }
@@ -111,6 +129,7 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
     @Override
     public CompoundTag toTag() {
         CompoundTag tag = super.toTag();
+        tag.putInt(NBT_MODE, mode.getIndex());
         tag.put(NBT_DISPLAY, displayItem.toTag(new CompoundTag()));
         tag.put(NBT_GHOST_INVENTORY, ghostInventory.toTag());
         return tag;
@@ -119,6 +138,7 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
     @Override
     public void fromTag(CompoundTag tag) {
         super.fromTag(tag);
+        if (tag.contains(NBT_MODE)) mode = EnumMode.values()[tag.getInt(NBT_MODE)];
         if (tag.contains(NBT_DISPLAY)) displayItem = ItemStack.fromTag(tag.getCompound(NBT_DISPLAY));
         if (tag.contains(NBT_GHOST_INVENTORY)) ghostInventory.fromTag(tag.getCompound(NBT_GHOST_INVENTORY));
     }
@@ -145,7 +165,20 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
     }
 
     protected FixedItemInv getWorkingInventories(Inventory playerInventory) {
-        return new FixedInventoryVanillaWrapper(playerInventory);
+        FixedItemInv neighborInventory = frame.getAttachedInventory();
+        FixedItemInv fixedPlayerInv = new FixedInventoryVanillaWrapper(playerInventory);
+        switch (mode) {
+            case HYBRID:
+                if (neighborInventory == null)
+                    return fixedPlayerInv;
+                return CombinedFixedItemInv.create(Arrays.asList(neighborInventory, fixedPlayerInv));
+            case ATTACHED:
+                return neighborInventory;
+            case PLAYER:
+                return fixedPlayerInv;
+        }
+
+        return null;
     }
 
     protected boolean hasValidRecipe() {
@@ -179,5 +212,28 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
             markDirty();
         }
         return displayItem;
+    }
+
+    public enum EnumMode {
+        HYBRID(0, "modularitemframe.mode.hybrid_inv"),
+        ATTACHED(1, "modularitemframe.mode.attached_inv"),
+        PLAYER(2, "modularitemframe.mode.player_inv");
+
+        private final int index;
+        private final String name;
+
+        EnumMode(int indexIn, String nameIn) {
+            index = indexIn;
+            name = nameIn;
+        }
+
+        public int getIndex() {
+            return this.index;
+        }
+
+        @Environment(EnvType.CLIENT)
+        public String getName() {
+            return I18n.translate(this.name);
+        }
     }
 }

@@ -5,6 +5,7 @@ import dev.shyrik.modularitemframe.client.FrameRenderer;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.module.t1.*;
 import dev.shyrik.modularitemframe.common.module.t2.*;
+import dev.shyrik.modularitemframe.common.module.t2.CraftingModule;
 import dev.shyrik.modularitemframe.common.module.t3.*;
 import dev.shyrik.modularitemframe.common.network.NetworkHandler;
 import dev.shyrik.modularitemframe.init.Registrar;
@@ -30,7 +31,6 @@ public class ModularItemFrameClient implements ClientModInitializer {
                 ModularFrameBlock.INNER_HARDEST,
                 ModularFrameBlock.INNER_HARD,
 
-                CraftingModule.BG,
                 IOModule.BG,
                 ItemModule.BG,
                 StorageModule.BG,
@@ -38,7 +38,7 @@ public class ModularItemFrameClient implements ClientModInitializer {
 
                 BlockBreakModule.BG,
                 BlockPlaceModule.BG,
-                CraftingPlusModule.BG,
+                CraftingModule.BG,
                 DispenseModule.BG,
                 SlayModule.BG,
                 VacuumModule.BG,
