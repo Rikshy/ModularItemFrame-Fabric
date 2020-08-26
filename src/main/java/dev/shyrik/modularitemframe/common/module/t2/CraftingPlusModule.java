@@ -22,7 +22,7 @@ import java.util.Arrays;
 
 public class CraftingPlusModule extends CraftingModule {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_craft_plus");
-    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_t2_craft_plus");
+    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_t2_craft_plus");
 
     private static final String NBT_MODE = "cp_mode";
 

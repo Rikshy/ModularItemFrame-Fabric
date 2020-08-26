@@ -36,9 +36,9 @@ import java.util.Objects;
 public class ItemTeleportModule extends ModuleBase {
 
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t3_itemtele");
-    public static final Identifier BG_IN = new Identifier(ModularItemFrame.MOD_ID, "block/module_t3_itemtelein");
-    public static final Identifier BG_OUT = new Identifier(ModularItemFrame.MOD_ID, "block/module_t3_itemteleout");
-    public static final Identifier BG_NONE = new Identifier(ModularItemFrame.MOD_ID, "block/module_t3_itemtelenone");
+    public static final Identifier BG_IN = new Identifier(ModularItemFrame.MOD_ID, "module/module_t3_itemtelein");
+    public static final Identifier BG_OUT = new Identifier(ModularItemFrame.MOD_ID, "module/module_t3_itemteleout");
+    public static final Identifier BG_NONE = new Identifier(ModularItemFrame.MOD_ID, "module/module_t3_itemtelenone");
 
     private static final String NBT_LINK = "item_linked_pos";
     private static final String NBT_LINK_X = "linked_posX";

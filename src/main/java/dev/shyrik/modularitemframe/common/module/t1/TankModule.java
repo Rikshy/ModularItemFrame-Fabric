@@ -34,7 +34,7 @@ import java.util.Collections;
 public class TankModule extends ModuleBase {
 
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t1_tank");
-    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_t1_tank");
+    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_t1_tank");
 
     private static final String NBT_MODE = "tank_mode";
     private static final String NBT_TANK = "tank";

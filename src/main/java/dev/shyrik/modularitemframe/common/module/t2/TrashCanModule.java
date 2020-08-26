@@ -29,9 +29,9 @@ import java.util.List;
 public class TrashCanModule extends ModuleBase {
 
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_trashcan");
-    public static final Identifier BG1 = new Identifier(ModularItemFrame.MOD_ID, "block/module_t2_trashcan_1");
-    public static final Identifier BG2 = new Identifier(ModularItemFrame.MOD_ID, "block/module_t2_trashcan_2");
-    public static final Identifier BG3 = new Identifier(ModularItemFrame.MOD_ID, "block/module_t2_trashcan_3");
+    public static final Identifier BG1 = new Identifier(ModularItemFrame.MOD_ID, "module/module_t2_trashcan_1");
+    public static final Identifier BG2 = new Identifier(ModularItemFrame.MOD_ID, "module/module_t2_trashcan_2");
+    public static final Identifier BG3 = new Identifier(ModularItemFrame.MOD_ID, "module/module_t2_trashcan_3");
 
     private final List<Identifier> frontTex = ImmutableList.of(
             BG1,

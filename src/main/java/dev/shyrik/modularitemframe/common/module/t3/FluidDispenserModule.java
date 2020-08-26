@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 
 public class FluidDispenserModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t3_fluid_dispenser");
-    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_t3_fluid_dispenser");
+    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_t3_fluid_dispenser");
 
     @Override
     public Identifier getId() {

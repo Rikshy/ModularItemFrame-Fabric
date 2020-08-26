@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 
 public class BlockPlaceModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_place");
-    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_nyi");
+    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_nyi");
 
     public static class FrameItemPlacementContext extends ItemPlacementContext {
         public FrameItemPlacementContext(World world, ItemStack itemStack, BlockPos placePos, Direction direction) {

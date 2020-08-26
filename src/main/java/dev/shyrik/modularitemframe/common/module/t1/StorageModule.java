@@ -28,7 +28,7 @@ import net.minecraft.world.World;
 public class StorageModule extends ModuleBase {
 
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t1_storage");
-    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_t1_storage");
+    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_t1_storage");
 
     private static final String NBT_LAST = "last_click";
     private static final String NBT_LAST_STACK = "last_stack";

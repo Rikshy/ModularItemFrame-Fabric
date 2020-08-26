@@ -29,7 +29,7 @@ import java.util.List;
 public class VacuumModule extends ModuleBase {
 
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_vacuum");
-    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/module_t2_vacuum");
+    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_t2_vacuum");
 
     @Override
     public Identifier getId() {
