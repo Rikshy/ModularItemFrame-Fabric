@@ -35,6 +35,9 @@ public abstract class ModuleBase {
 
     public ModuleItem getItem() { return item; }
 
+    /**
+     * @return unique ID the module gets registered with.
+     */
     public abstract Identifier getId();
 
     /**
@@ -74,14 +77,19 @@ public abstract class ModuleBase {
     @Environment(EnvType.CLIENT)
     public abstract String getModuleName();
 
+    /**
+     * Override this if you want to register multiple backgrounds for the module.
+     *
+     * @return list of resource locations as module backgrounds
+     */
     public List<Identifier> getVariantFronts() {
         return ImmutableList.of(frontTexture());
     }
 
     /**
      * Called by the {@link FrameRenderer} after rendering the frame.
-     * Extra rendering can be don here
-     * like the {@link ModuleItem ModuleItem} does the item thing)
+     * Extra rendering can be done here.
+     * (like the {@link ModuleItem} does the item thing)
      *
      * @param renderer instance of the current {@link FrameRenderer}
      */
@@ -90,52 +98,59 @@ public abstract class ModuleBase {
     }
 
     /**
-     * Called when the frame got left clicked
+     * Called when the frame got left clicked.
      */
     public void onBlockClicked(World world, BlockPos pos, PlayerEntity player) {
     }
 
     /**
-     * Called when a {@link dev.shyrik.modularitemframe.common.item.ScrewdriverItem screwdriver} in interaction mode clicks a frame
-     * Implement behavior for {@link dev.shyrik.modularitemframe.common.item.ScrewdriverItem screwdriver} interaction here
+     * Called when a {@link dev.shyrik.modularitemframe.common.item.ScrewdriverItem} in interaction mode clicks a frame
+     * Implement behavior for {@link dev.shyrik.modularitemframe.common.item.ScrewdriverItem} interaction here
      *
-     * @param driver the driver who was used
+     * @param driver the driver who was used.
      */
     public void screw(World world, BlockPos pos, PlayerEntity player, ItemStack driver) {
     }
 
+    /**
+     * Called when the frames upgrades change.
+     */
     public void onFrameUpgradesChanged() {
     }
 
     /**
-     * Called when a frame is simply right clicked
+     * Called when a frame is simply right clicked.
      */
     public abstract ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult trace);
 
     /**
-     * in case your module has a gui
+     * in case your module has a gui.
      */
     public NamedScreenHandlerFactory getScreenHandler(BlockState state, World world, BlockPos pos) {
         return null;
     }
 
     /**
-     * called when the blockEntity entity ticks
+     * called when the blockEntity entity ticks.
      */
     public void tick(World world, BlockPos pos) {
     }
 
     /**
-     * Called when module is removed with the {@link dev.shyrik.modularitemframe.common.item.ScrewdriverItem screwdriver}
+     * Called when module is added to a frame.
+     */
     public void onInsert(World world, BlockPos pos, Direction facing, ItemStack moduleStack) {
     }
+
+    /**
+     * Called when module is removed with the {@link dev.shyrik.modularitemframe.common.item.ScrewdriverItem}
      * or destroyed.
      */
     public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack moduleStack) {
     }
 
     /**
-     * Helper method which safe checks ticks
+     * Helper method which safe checks ticks.
      */
     public boolean canTick(World world, int base, int mod) {
         return world.getTime() % Math.max(base - mod * frame.getSpeedUpCount(), 10) == 0;
@@ -143,7 +158,6 @@ public abstract class ModuleBase {
 
     /**
      * Tag serialization in case there are some data to be saved!
-     * this gets synced automatically
      */
     public CompoundTag toTag() {
         return new CompoundTag();
@@ -157,12 +171,15 @@ public abstract class ModuleBase {
 
     //region <helper>
     /**
-     * Forwarded from blockEntity
+     * Forwarded from blockEntity. initiates data sync.
      */
     public void markDirty() {
         frame.markDirty();
     }
 
+    /**
+     * helper method for default world interaction range.
+     */
     protected Box getScanBox() {
         BlockPos pos = frame.getPos();
         int range = frame.getRangeUpCount() + ModularItemFrame.getConfig().scanZoneRadius;

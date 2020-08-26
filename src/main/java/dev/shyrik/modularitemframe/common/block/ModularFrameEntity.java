@@ -89,22 +89,37 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         markDirty();
     }
 
+    /**
+     * @return the current amount of {@link SpeedUpgrade} installed in the frame.
+     */
     public int getSpeedUpCount() {
         return countUpgradeOfType(SpeedUpgrade.class);
     }
 
+    /**
+     * @return the current amount of {@link RangeUpgrade} installed in the frame.
+     */
     public int getRangeUpCount() {
         return countUpgradeOfType(RangeUpgrade.class);
     }
 
+    /**
+     * @return the current amount of {@link CapacityUpgrade} installed in the frame.
+     */
     public int getCapacityUpCount() {
         return countUpgradeOfType(CapacityUpgrade.class);
     }
 
+    /**
+     * @return true if there is a blast resistance upgrade installed.
+     */
     public boolean isBlastResist() {
         return countUpgradeOfType(BlastResistUpgrade.class) >= 1;
     }
 
+    /**
+     * @return An {@link alexiil.mc.lib.attributes.item.filter.AggregateItemFilter} of all filter upgrades installed (or combined)
+     */
     public ItemFilter getItemFilter() {
         ItemFilter filter = null;
         for(UpgradeBase upgrade : upgrades) {
@@ -121,6 +136,11 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         return filter == null ? ConstantItemFilter.ANYTHING : filter;
     }
 
+    /**
+     * @param clsUp the amount should be counted.
+     *
+     * @return the current amount of the given type installed in the frame.
+     */
     public int countUpgradeOfType(Class<? extends UpgradeBase> clsUp) {
         int count = 0;
         for (UpgradeBase up : upgrades) {
@@ -131,21 +151,35 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     //endregion
 
     //region <block>
+    /**
+     * @return the current {@link Direction} the frame is facing.
+     */
     public Direction getFacing() {
         assert world != null;
         return world.getBlockState(pos).get(ModularFrameBlock.FACING);
     }
 
+    /**
+     * @return {@link BlockEntity} the frame is attached to.
+     */
     @SuppressWarnings("unused")
     public BlockEntity getAttachedEntity() {
         assert world != null;
         return world.getBlockEntity(getAttachedPos());
     }
 
+    /**
+     * @return {@link FixedItemInv} the frame is attached to, respecting the range upgrades applied to the frame.
+     */
     public FixedItemInv getAttachedInventory() {
         return getAttachedInventory(getRangeUpCount());
     }
 
+    /**
+     * @return {@link FixedItemInv} the frame is attached to.
+     *
+     * @param range range the inventory should be searched.
+     */
     public FixedItemInv getAttachedInventory(int range) {
         assert world != null;
         Direction facing = getFacing();
@@ -158,9 +192,18 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         return inv;
     }
 
+    /**
+     * @return {@link FixedFluidInv} the frame is attached to, respecting the range upgrades applied to the frame.
+     */
     public FixedFluidInv getAttachedTank() {
         return getAttachedTank(getRangeUpCount());
     }
+
+    /**
+     * @return {@link FixedFluidInv} the frame is attached to.
+     *
+     * @param range range the tank should be searched.
+     */
     public FixedFluidInv getAttachedTank(int range) {
         assert world != null;
         Direction facing = getFacing();
@@ -173,12 +216,18 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         return inv;
     }
 
+    /**
+     * @return {@link BlockState} the frame is attached to.
+     */
     @SuppressWarnings("unused")
     public BlockState getAttachedBlock() {
         assert world != null;
         return world.getBlockState(getAttachedPos());
     }
 
+    /**
+     * @return {@link BlockPos} the frame is attached to.
+     */
     public BlockPos getAttachedPos() {
         return pos.offset(getFacing().getOpposite());
     }
