@@ -8,34 +8,22 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.screen.slot.Slot;
 
 public class FilterUpgradeScreenHandler extends GhostInventoryScreenHandler {
 
     private static final int SLOTS_PER_ROW = 9;
-    private static final int INV_ROWS = 3;
 
     private final SimpleInventory inv;
     private final ItemStack filterStack;
 
     public FilterUpgradeScreenHandler(int containerId, Inventory playerInventory, ItemStack filter) {
-        super(ScreenHandlerType.GENERIC_9X1, containerId);
+        super(ScreenHandlerType.GENERIC_9X1, containerId, playerInventory);
 
         filterStack = filter;
         inv = new SimpleInventory(ItemFilterUpgradeItem.readInvTag(filterStack.getOrCreateTag()).toArray(new ItemStack[0]));
 
         for (int col = 0; col < SLOTS_PER_ROW; ++col) {
             addSlot(new GhostSlot(inv, col, 8 + col * 18, 18));
-        }
-
-        for (int row = 0; row < INV_ROWS; ++row) {
-            for (int col = 0; col < SLOTS_PER_ROW; ++col) {
-                addSlot(new Slot(playerInventory, col + row * SLOTS_PER_ROW + SLOTS_PER_ROW, 8 + col * 18, 84 + row * 18));
-            }
-        }
-
-        for (int col = 0; col < SLOTS_PER_ROW; ++col) {
-            addSlot(new Slot(playerInventory, col, 8 + col * 18, 142));
         }
     }
 

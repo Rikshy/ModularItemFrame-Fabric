@@ -5,19 +5,15 @@ import dev.shyrik.modularitemframe.api.util.GhostSlot;
 import dev.shyrik.modularitemframe.common.screenhandler.GhostInventoryScreenHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftingResultInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.CraftingResultSlot;
-import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 public class CraftingFrameScreenHandler extends GhostInventoryScreenHandler {
 
     private static final int FRAME_SLOTS_PER_ROW = 3;
-    private static final int SLOTS_PER_ROW = 9;
-    private static final int INV_ROWS = 3;
     /**
      * The object to send callbacks to.
      */
@@ -27,8 +23,8 @@ public class CraftingFrameScreenHandler extends GhostInventoryScreenHandler {
     private final CraftingResultInventory craftResult = new CraftingResultInventory();
     private final PlayerEntity player;
 
-    public CraftingFrameScreenHandler(int containerId, Inventory playerInventory, FixedItemInv frameInventory, PlayerEntity player, IScreenHandlerCallback callbacks) {
-        super(ScreenHandlerType.CRAFTING, containerId);
+    public CraftingFrameScreenHandler(int containerId, PlayerEntity player, FixedItemInv frameInventory, IScreenHandlerCallback callbacks) {
+        super(ScreenHandlerType.CRAFTING, containerId, player.inventory);
         this.player = player;
         this.callbacks = callbacks;
 
@@ -41,22 +37,10 @@ public class CraftingFrameScreenHandler extends GhostInventoryScreenHandler {
                 return false;
             }
         });
+
         for (int row = 0; row < FRAME_SLOTS_PER_ROW; ++row) {
             for (int col = 0; col < FRAME_SLOTS_PER_ROW; ++col) {
                 addSlot(new GhostSlot(matrix, col + row * FRAME_SLOTS_PER_ROW, 30 + col * 18, 17 + row * 18));
-            }
-        }
-
-
-        if (playerInventory != null) {
-            for (int row = 0; row < INV_ROWS; ++row) {
-                for (int col = 0; col < SLOTS_PER_ROW; ++col) {
-                    addSlot(new Slot(playerInventory, col + row * SLOTS_PER_ROW + SLOTS_PER_ROW, 8 + col * 18, 84 + row * 18));
-                }
-            }
-
-            for (int col = 0; col < SLOTS_PER_ROW; ++col) {
-                addSlot(new Slot(playerInventory, col, 8 + col * 18, 142));
             }
         }
     }

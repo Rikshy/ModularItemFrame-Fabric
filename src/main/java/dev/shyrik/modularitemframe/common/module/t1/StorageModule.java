@@ -45,6 +45,7 @@ public class StorageModule extends ModuleBase {
     }
 
     @Override
+    @Environment(EnvType.CLIENT)
     public Identifier frontTexture() {
         return BG;
     }

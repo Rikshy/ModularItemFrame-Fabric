@@ -35,6 +35,7 @@ public class ItemModule extends ModuleBase {
         return ID;
     }
 
+    @Override
     @Environment(EnvType.CLIENT)
     public Identifier frontTexture() {
         return BG;
@@ -52,6 +53,7 @@ public class ItemModule extends ModuleBase {
         renderer.renderInside(displayItem, rotation, matrixStack, buffer, light, overlay);
     }
 
+    @Override
     public void screw(World world, BlockPos pos, PlayerEntity player, ItemStack driver) {
         if (!world.isClient) {
             rotate(player);
