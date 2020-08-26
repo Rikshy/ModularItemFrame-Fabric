@@ -24,7 +24,7 @@ public class CraftingFrameScreenHandler extends GhostInventoryScreenHandler {
     private final PlayerEntity player;
 
     public CraftingFrameScreenHandler(int containerId, PlayerEntity player, FixedItemInv frameInventory, IScreenHandlerCallback callbacks) {
-        super(ScreenHandlerType.CRAFTING, containerId, player.inventory);
+        super(ScreenHandlerType.CRAFTING, containerId);
         this.player = player;
         this.callbacks = callbacks;
 
@@ -43,6 +43,8 @@ public class CraftingFrameScreenHandler extends GhostInventoryScreenHandler {
                 addSlot(new GhostSlot(matrix, col + row * FRAME_SLOTS_PER_ROW, 30 + col * 18, 17 + row * 18));
             }
         }
+
+        addPlayerInventory(player.inventory);
     }
 
     @Override

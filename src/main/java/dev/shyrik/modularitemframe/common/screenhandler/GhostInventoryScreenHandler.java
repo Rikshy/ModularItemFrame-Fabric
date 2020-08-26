@@ -14,19 +14,19 @@ public abstract class GhostInventoryScreenHandler extends ScreenHandler {
     private static final int SLOTS_PER_ROW = 9;
     private static final int INV_ROWS = 3;
 
-    protected GhostInventoryScreenHandler(ScreenHandlerType<?> type, int syncId, Inventory playerInventory) {
+    protected GhostInventoryScreenHandler(ScreenHandlerType<?> type, int syncId) {
         super(type, syncId);
+    }
 
-        if (playerInventory != null) {
-            for (int row = 0; row < INV_ROWS; ++row) {
-                for (int col = 0; col < SLOTS_PER_ROW; ++col) {
-                    addSlot(new Slot(playerInventory, col + row * SLOTS_PER_ROW + SLOTS_PER_ROW, 8 + col * 18, 84 + row * 18));
-                }
-            }
-
+    protected void addPlayerInventory(Inventory playerInventory) {
+        for (int row = 0; row < INV_ROWS; ++row) {
             for (int col = 0; col < SLOTS_PER_ROW; ++col) {
-                addSlot(new Slot(playerInventory, col, 8 + col * 18, 142));
+                addSlot(new Slot(playerInventory, col + row * SLOTS_PER_ROW + SLOTS_PER_ROW, 8 + col * 18, 84 + row * 18));
             }
+        }
+
+        for (int col = 0; col < SLOTS_PER_ROW; ++col) {
+            addSlot(new Slot(playerInventory, col, 8 + col * 18, 142));
         }
     }
 

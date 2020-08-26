@@ -17,7 +17,7 @@ public class FilterUpgradeScreenHandler extends GhostInventoryScreenHandler {
     private final ItemStack filterStack;
 
     public FilterUpgradeScreenHandler(int containerId, Inventory playerInventory, ItemStack filter) {
-        super(ScreenHandlerType.GENERIC_9X1, containerId, playerInventory);
+        super(ScreenHandlerType.GENERIC_9X1, containerId);
 
         filterStack = filter;
         inv = new SimpleInventory(ItemFilterUpgradeItem.readInvTag(filterStack.getOrCreateTag()).toArray(new ItemStack[0]));
@@ -25,6 +25,8 @@ public class FilterUpgradeScreenHandler extends GhostInventoryScreenHandler {
         for (int col = 0; col < SLOTS_PER_ROW; ++col) {
             addSlot(new GhostSlot(inv, col, 8 + col * 18, 18));
         }
+
+        addPlayerInventory(playerInventory);
     }
 
     @Override
