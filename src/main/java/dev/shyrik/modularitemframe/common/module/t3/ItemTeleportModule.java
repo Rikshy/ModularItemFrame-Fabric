@@ -182,6 +182,7 @@ public class ItemTeleportModule extends ModuleBase {
         List<ItemEntity> entities = world.getEntitiesByClass(ItemEntity.class, getScanBox(), itemEntity -> true);
         for (ItemEntity entity : entities) {
             ItemStack entityStack = entity.getStack();
+            if (!frame.getItemFilter().matches(entityStack)) continue;
             if (!entity.isAlive() || entityStack.isEmpty()) continue;
 
             ItemHelper.ejectStack(world, linkedLoc, world.getBlockState(linkedLoc).get(ModularFrameBlock.FACING), entityStack);

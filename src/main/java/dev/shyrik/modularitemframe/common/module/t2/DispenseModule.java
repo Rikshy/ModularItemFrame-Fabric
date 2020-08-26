@@ -89,7 +89,7 @@ public class DispenseModule extends ModuleBase {
 
         FixedItemInv inventory = frame.getAttachedInventory(range);
         if (inventory != null) {
-            ItemStack extracted = inventory.getExtractable().extract(1);
+            ItemStack extracted = inventory.getExtractable().filtered(frame.getItemFilter()).extract(1);
             if (!extracted.isEmpty())
                 ItemHelper.ejectStack(world, pos, frame.getFacing(), extracted);
         }

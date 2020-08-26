@@ -27,6 +27,7 @@
 
     "item.modularitemframe.upgrade_speed": "Geschwindigkeits Aufwertung",
     "item.modularitemframe.upgrade_range": "Reichweiten Aufwertung",
+    "item.modularitemframe.upgrade_filter": "Filter Aufwertung",
     "item.modularitemframe.upgrade_capacity": "Speicher Aufwertung",
     "item.modularitemframe.upgrade_resist": "Schutz Aufwertung",
     "item.modularitemframe.upgrade_security": "Sicherheits Aufwertung",

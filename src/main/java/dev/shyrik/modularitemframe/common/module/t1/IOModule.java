@@ -3,6 +3,7 @@ package dev.shyrik.modularitemframe.common.module.t1;
 import alexiil.mc.lib.attributes.Simulation;
 import alexiil.mc.lib.attributes.item.FixedItemInv;
 import alexiil.mc.lib.attributes.item.ItemExtractable;
+import alexiil.mc.lib.attributes.item.ItemInsertable;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.InventoryHelper;
@@ -66,7 +67,7 @@ public class IOModule extends ModuleBase {
         if (!world.isClient) {
             FixedItemInv handler = frame.getAttachedInventory();
             if (handler != null) {
-                ItemExtractable extractor = handler.getExtractable();
+                ItemExtractable extractor = handler.getExtractable().filtered(frame.getItemFilter());
                 ItemStack attempt = extractor.attemptAnyExtraction(1, Simulation.SIMULATE);
                 if (!attempt.isEmpty()) {
                     int amount = player.isSneaking() ? attempt.getMaxCount() : 1;
@@ -86,14 +87,15 @@ public class IOModule extends ModuleBase {
             FixedItemInv handler = frame.getAttachedInventory();
             if (handler != null) {
                 ItemStack held = player.getStackInHand(hand);
+                ItemInsertable insertable = handler.getInsertable().filtered(frame.getItemFilter());
                 long time = world.getTime();
 
                 if (time - lastClick <= 8L && !player.isSneaking() && !lastStack.isEmpty())
-                    InventoryHelper.giveAllPossibleStacks(handler.getInsertable(), player.inventory, lastStack, held);
+                    InventoryHelper.giveAllPossibleStacks(insertable, player.inventory, lastStack, held);
                 else if (!held.isEmpty()) {
                     ItemStack heldCopy = held.copy();
                     heldCopy.setCount(1);
-                    if (handler.getInsertable().insert(heldCopy).isEmpty()){
+                    if (insertable.insert(heldCopy).isEmpty()){
                         held.decrement(1);
 
                         lastStack = heldCopy;
@@ -113,7 +115,9 @@ public class IOModule extends ModuleBase {
         if(!world.isClient) {
             FixedItemInv handler = frame.getAttachedInventory();
             if (handler != null) {
-                ItemStack attempt = handler.getExtractable().attemptAnyExtraction(1, Simulation.SIMULATE);
+                ItemStack attempt = handler.getExtractable()
+                        .filtered(frame.getItemFilter())
+                        .attemptAnyExtraction(1, Simulation.SIMULATE);
                 if (!ItemStack.areItemsEqual(attempt, displayItem)) {
                     displayItem = attempt;
                     markDirty();

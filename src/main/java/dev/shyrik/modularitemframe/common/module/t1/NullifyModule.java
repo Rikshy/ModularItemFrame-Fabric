@@ -92,7 +92,7 @@ public class NullifyModule extends ModuleBase {
     public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
         if (!world.isClient) {
             ItemStack held = player.getStackInHand(hand);
-            if (!player.isSneaking() && !held.isEmpty()) {
+            if (!player.isSneaking() && !held.isEmpty() && frame.getItemFilter().matches(held)) {
                 if (ItemHelper.simpleAreStacksEqual(held, lastStack)) {
                     if (held.getCount() + lastStack.getCount() > lastStack.getMaxCount())
                         lastStack.setCount(lastStack.getMaxCount());
