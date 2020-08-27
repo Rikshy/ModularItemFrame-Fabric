@@ -28,7 +28,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Quaternion;
 import net.minecraft.world.World;
 
 import java.util.UUID;
@@ -71,21 +70,7 @@ public class SlayModule extends ModuleBase {
     @Override
     @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float ticks, VertexConsumerProvider buffer, int light, int overlay) {
-        Direction facing = frame.getFacing();
-        switch (facing) {
-            case DOWN:
-            case NORTH:
-            case UP:
-            case SOUTH:
-                renderer.renderInside(weapon, rotation, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, light, overlay);
-                break;
-            case WEST:
-            case EAST:
-                matrixStack.multiply(new Quaternion(0, 90.0F, 0.0F, true));
-                matrixStack.translate(-1, 0 ,0);
-                renderer.renderInside(weapon, rotation, 0.5F, ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND, matrixStack, buffer, light, overlay);
-                break;
-        }
+        renderer.renderInside(weapon, rotation, 0F, 0.4F, ModelTransformation.Mode.THIRD_PERSON_RIGHT_HAND, matrixStack, buffer, light, overlay);
     }
 
     @Override
