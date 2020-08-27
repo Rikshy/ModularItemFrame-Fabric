@@ -162,9 +162,9 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
 
     //region <itemRender>
     public void renderInside(ItemStack stack, MatrixStack matrixStack, VertexConsumerProvider buffer, int light, int overlay) {
-        renderInside(stack, 0, 0.5F, ModelTransformation.Mode.FIXED, matrixStack, buffer, light, overlay);
+        renderInside(stack, 0F, 0.5F, ModelTransformation.Mode.FIXED, matrixStack, buffer, light, overlay);
     }
-    public void renderInside(ItemStack stack, int rotation, MatrixStack matrixStack, VertexConsumerProvider buffer, int light, int overlay) {
+    public void renderInside(ItemStack stack, float rotation, MatrixStack matrixStack, VertexConsumerProvider buffer, int light, int overlay) {
         renderInside(stack, rotation, 0.5F, ModelTransformation.Mode.FIXED, matrixStack, buffer, light, overlay);
     }
 
