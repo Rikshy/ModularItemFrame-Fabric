@@ -164,11 +164,15 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
     public void renderInside(ItemStack stack, MatrixStack matrixStack, VertexConsumerProvider buffer, int light, int overlay) {
         renderInside(stack, 0F, 0.5F, ModelTransformation.Mode.FIXED, matrixStack, buffer, light, overlay);
     }
-    public void renderInside(ItemStack stack, float rotation, MatrixStack matrixStack, VertexConsumerProvider buffer, int light, int overlay) {
-        renderInside(stack, rotation, 0.5F, ModelTransformation.Mode.FIXED, matrixStack, buffer, light, overlay);
+    public void renderInside(ItemStack stack, float zRotation, MatrixStack matrixStack, VertexConsumerProvider buffer, int light, int overlay) {
+        renderInside(stack, zRotation, 0.5F, ModelTransformation.Mode.FIXED, matrixStack, buffer, light, overlay);
     }
 
-    public void renderInside(ItemStack stack, float rotation, float scale, ModelTransformation.Mode transformType, MatrixStack matrixStack, VertexConsumerProvider buffer, int light, int overlay) {
+    public void renderInside(ItemStack stack, float zRotation, float scale, ModelTransformation.Mode transformType, MatrixStack matrixStack, VertexConsumerProvider buffer, int light, int overlay) {
+        renderInside(stack, 0F, zRotation, scale, transformType, matrixStack, buffer, light, overlay);
+    }
+
+    public void renderInside(ItemStack stack, float xRotation, float zRotation, float scale, ModelTransformation.Mode transformType, MatrixStack matrixStack, VertexConsumerProvider buffer, int light, int overlay) {
         if (stack.isEmpty())
             return;
 
@@ -177,7 +181,7 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
         ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
 
         matrixStack.translate(0.5F, 0.5F, 0.1F);
-        matrixStack.multiply(new Quaternion(0.0F, 0.0F, rotation, true));
+        matrixStack.multiply(new Quaternion(xRotation, 0.0F, zRotation, true));
         matrixStack.scale(scale, scale, scale);
 
         matrixStack.multiply(new Quaternion(0F, 180.0F, 0.0F, true));
