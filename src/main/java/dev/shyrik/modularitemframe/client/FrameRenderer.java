@@ -21,6 +21,7 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.*;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.*;
@@ -120,30 +121,9 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
     }
 
     private void rotateFrameOnFacing(Direction facing, MatrixStack matrixStack) {
-        switch (facing) {
-            case NORTH:
-                matrixStack.translate(1.0F, 0.0F, 1.0F);
-                matrixStack.multiply(new Quaternion( 0.0F, 180.0F, 0.0F, true));
-                break;
-            case SOUTH:
-                break;
-            case WEST:
-                matrixStack.multiply(new Quaternion(90.0F, -90.0F, 90.0F, true));
-                matrixStack.translate(0.0F, 0.0F, -1.0F);
-                break;
-            case EAST:
-                matrixStack.multiply(new Quaternion(-90.0F, 90.0F, 90.0F, true));
-                matrixStack.translate(-1.0F, 0.0F, 0.0F);
-                break;
-            case DOWN:
-                matrixStack.translate(0.0F, 1.0F, 0.0F);
-                matrixStack.multiply(new Quaternion(90.0F, 0.0F, 0.0F, true));
-                break;
-            case UP:
-                matrixStack.translate(0.0F, 0.0F, 1.0F);
-                matrixStack.multiply(new Quaternion(-90.0F, 0.0F, 0.0F, true));
-                break;
-        }
+    	matrixStack.translate(0.5F, 0.5F, 0.5F);
+    	matrixStack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(-facing.asRotation()));
+    	matrixStack.translate(-0.5F, -0.5F, -0.5F);
     }
 
     private void renderUpgrades(ModularFrameEntity frame, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light, int overlay) {
