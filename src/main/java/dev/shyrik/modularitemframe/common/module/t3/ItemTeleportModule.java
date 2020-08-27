@@ -8,6 +8,7 @@ import dev.shyrik.modularitemframe.client.FrameRenderer;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.block.ModularFrameEntity;
 import dev.shyrik.modularitemframe.common.network.NetworkHandler;
+import dev.shyrik.modularitemframe.common.network.packet.PlaySoundPacket;
 import dev.shyrik.modularitemframe.common.network.packet.SpawnParticlesPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -21,6 +22,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -150,6 +153,8 @@ public class ItemTeleportModule extends ModuleBase {
 
         if (!held.isEmpty()) {
             ItemHelper.ejectStack(world, linkedLoc, world.getBlockState(linkedLoc).get(ModularFrameBlock.FACING), held);
+            NetworkHandler.sendAround(world, linkedLoc, 32,
+                    new PlaySoundPacket(linkedLoc, SoundEvents.BLOCK_DISPENSER_DISPENSE, SoundCategory.BLOCKS));
             held.setCount(0);
         }
         return ActionResult.SUCCESS;
@@ -177,6 +182,8 @@ public class ItemTeleportModule extends ModuleBase {
             if (!entity.isAlive() || entityStack.isEmpty()) continue;
 
             ItemHelper.ejectStack(world, linkedLoc, world.getBlockState(linkedLoc).get(ModularFrameBlock.FACING), entityStack);
+            NetworkHandler.sendAround(world, linkedLoc, 32,
+                    new PlaySoundPacket(linkedLoc, SoundEvents.BLOCK_DISPENSER_DISPENSE, SoundCategory.BLOCKS));
             entity.remove();
             NetworkHandler.sendAround(
                     world,

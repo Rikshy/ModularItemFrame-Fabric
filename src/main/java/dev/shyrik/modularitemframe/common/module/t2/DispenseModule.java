@@ -5,12 +5,16 @@ import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.ItemHelper;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
+import dev.shyrik.modularitemframe.common.network.NetworkHandler;
+import dev.shyrik.modularitemframe.common.network.packet.PlaySoundPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -65,8 +69,11 @@ public class DispenseModule extends ModuleBase {
         FixedItemInv inventory = frame.getAttachedInventory();
         if (inventory != null) {
             ItemStack extracted = inventory.getExtractable().filtered(frame.getItemFilter()).extract(1);
-            if (!extracted.isEmpty())
+            if (!extracted.isEmpty()) {
                 ItemHelper.ejectStack(world, pos, frame.getFacing(), extracted);
+                NetworkHandler.sendAround(world, pos, 32,
+                        new PlaySoundPacket(pos, SoundEvents.BLOCK_DISPENSER_DISPENSE, SoundCategory.BLOCKS));
+            }
         }
     }
 }
