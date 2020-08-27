@@ -39,12 +39,12 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
             .strength(4)
             .nonOpaque();
 
-    private static final VoxelShape UP_SHAPE = Block.createCuboidShape(2, 0, 2, 14, 1.75, 14);
-    private static final VoxelShape DOWN_SHAPE = Block.createCuboidShape(2, 14.25, 2, 14, 16, 14);
-    private static final VoxelShape NORTH_SHAPE = Block.createCuboidShape(14, 2, 16, 2, 14, 14.25);
-    private static final VoxelShape SOUTH_SHAPE = Block.createCuboidShape(2, 2, 0, 14, 14, 1.75);
-    private static final VoxelShape EAST_SHAPE = Block.createCuboidShape(0, 2, 2, 1.75, 14, 14);
-    private static final VoxelShape WEST_SHAPE = Block.createCuboidShape(16, 2, 2, 14.25, 14, 14);
+    private static final VoxelShape UP_SHAPE = Block.createCuboidShape(2, 0, 2, 14, 2, 14);
+    private static final VoxelShape DOWN_SHAPE = Block.createCuboidShape(2, 14, 2, 14, 16, 14);
+    private static final VoxelShape NORTH_SHAPE = Block.createCuboidShape(14, 2, 16, 2, 14, 14);
+    private static final VoxelShape SOUTH_SHAPE = Block.createCuboidShape(2, 2, 0, 14, 14, 2);
+    private static final VoxelShape EAST_SHAPE = Block.createCuboidShape(0, 2, 2, 2, 14, 14);
+    private static final VoxelShape WEST_SHAPE = Block.createCuboidShape(16, 2, 2, 14, 14, 14);
 
     public static final Identifier INNER_DEF = new Identifier(ModularItemFrame.MOD_ID, "block/default_inner");
     public static final Identifier INNER_HARD = new Identifier(ModularItemFrame.MOD_ID, "block/hard_inner");
