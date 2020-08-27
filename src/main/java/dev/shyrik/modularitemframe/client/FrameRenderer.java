@@ -180,10 +180,7 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
         matrixStack.multiply(new Quaternion(0.0F, 0.0F, rotation, true));
         matrixStack.scale(scale, scale, scale);
 
-        BakedModel model = itemRenderer.getHeldItemModel(stack, null, null);
-        if (model.hasDepth()) {
-            matrixStack.multiply(new Quaternion(0F, 180.0F, 0.0F, true));
-        }
+        matrixStack.multiply(new Quaternion(0F, 180.0F, 0.0F, true));
         itemRenderer.renderItem(stack, transformType, light, overlay, matrixStack, buffer);
 
         matrixStack.pop();
