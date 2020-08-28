@@ -7,9 +7,6 @@ import dev.shyrik.modularitemframe.api.util.ItemHelper;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.block.ModularFrameEntity;
-import dev.shyrik.modularitemframe.common.network.NetworkHandler;
-import dev.shyrik.modularitemframe.common.network.packet.PlaySoundPacket;
-import dev.shyrik.modularitemframe.common.network.packet.SpawnParticlesPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -22,6 +19,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.TranslatableText;
@@ -154,8 +152,7 @@ public class ItemTeleportModule extends ModuleBase {
 
         if (!held.isEmpty()) {
             ItemHelper.ejectStack(world, linkedLoc, world.getBlockState(linkedLoc).get(ModularFrameBlock.FACING), held.copy());
-            NetworkHandler.sendAround(world, linkedLoc, 32,
-                    new PlaySoundPacket(linkedLoc, SoundEvents.BLOCK_DISPENSER_DISPENSE, SoundCategory.BLOCKS));
+            world.playSound(player, pos, SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.BLOCKS, 1F, 1F);
             held.setCount(0);
         }
         return ActionResult.SUCCESS;
@@ -183,14 +180,9 @@ public class ItemTeleportModule extends ModuleBase {
             if (!entity.isAlive() || entityStack.isEmpty()) continue;
 
             ItemHelper.ejectStack(world, linkedLoc, world.getBlockState(linkedLoc).get(ModularFrameBlock.FACING), entityStack);
-            NetworkHandler.sendAround(world, linkedLoc, 32,
-                    new PlaySoundPacket(linkedLoc, SoundEvents.BLOCK_DISPENSER_DISPENSE, SoundCategory.BLOCKS));
+            world.playSound(null, pos, SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.BLOCKS, 1F, 1F);
             entity.remove();
-            NetworkHandler.sendAround(
-                    world,
-                    frame.getPos(),
-                    32,
-                    new SpawnParticlesPacket(ParticleTypes.POOF, entity.getBlockPos(), 8));
+            ((ServerWorld) world).spawnParticles(ParticleTypes.POOF, entity.getX() - 0.1, entity.getY(), entity.getZ() - 0.1, 4, 0.2, 0.2, 0.2, 0.07);
             break;
         }
     }

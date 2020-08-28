@@ -6,8 +6,6 @@ import dev.shyrik.modularitemframe.api.util.fake.FakePlayer;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.block.ModularFrameEntity;
-import dev.shyrik.modularitemframe.common.network.NetworkHandler;
-import dev.shyrik.modularitemframe.common.network.packet.PlaySoundPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -105,7 +103,7 @@ public class TeleportModule extends ModuleBase {
 
                 player.requestTeleport(target.getX() + 0.5D, target.getY() + offset, target.getZ() + 0.5D);
                 player.fallDistance = 0.0F;
-                NetworkHandler.sendAround(world, target, 32, new PlaySoundPacket(target, SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.AMBIENT));
+                world.playSound(null, target, SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 1F, 1F);
             }
         }
         return ActionResult.SUCCESS;

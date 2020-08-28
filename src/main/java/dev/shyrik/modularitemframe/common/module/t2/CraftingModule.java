@@ -10,8 +10,6 @@ import dev.shyrik.modularitemframe.api.util.InventoryHelper;
 import dev.shyrik.modularitemframe.api.util.ItemHelper;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
-import dev.shyrik.modularitemframe.common.network.NetworkHandler;
-import dev.shyrik.modularitemframe.common.network.packet.PlaySoundPacket;
 import dev.shyrik.modularitemframe.common.screenhandler.crafting.CraftingFrameScreenHandler;
 import dev.shyrik.modularitemframe.common.screenhandler.crafting.FrameCrafting;
 import dev.shyrik.modularitemframe.common.screenhandler.crafting.IScreenHandlerCallback;
@@ -108,7 +106,7 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
                 player.openHandledScreen(getScreenHandler(state, world, pos));
                 markDirty();
             } else
-                craft(player, player.isSneaking());
+                craft(player, world, player.isSneaking());
         }
 
         return ActionResult.SUCCESS;
@@ -143,7 +141,7 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
         if (tag.contains(NBT_GHOST_INVENTORY)) ghostInventory.fromTag(tag.getCompound(NBT_GHOST_INVENTORY));
     }
 
-    private void craft(PlayerEntity player, boolean fullStack) {
+    private void craft(PlayerEntity player, World world, boolean fullStack) {
         final FixedItemInv workingInv = getWorkingInventories(player.inventory);
         reloadRecipe();
 
@@ -157,11 +155,7 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
 
             InventoryHelper.removeIngredients(workingInv, recipe);
         } while (--craftAmount > 0);
-        NetworkHandler.sendAround(
-                player.world,
-                frame.getPos(),
-                32,
-                new PlaySoundPacket(frame.getPos(), SoundEvents.BLOCK_LADDER_STEP, SoundCategory.BLOCKS));
+        world.playSound(null, frame.getPos(), SoundEvents.BLOCK_LADDER_STEP, SoundCategory.BLOCKS, 1F, 1F);
     }
 
     protected FixedItemInv getWorkingInventories(Inventory playerInventory) {

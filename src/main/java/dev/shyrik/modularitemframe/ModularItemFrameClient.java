@@ -7,7 +7,6 @@ import dev.shyrik.modularitemframe.common.module.t1.*;
 import dev.shyrik.modularitemframe.common.module.t2.*;
 import dev.shyrik.modularitemframe.common.module.t2.CraftingModule;
 import dev.shyrik.modularitemframe.common.module.t3.*;
-import dev.shyrik.modularitemframe.common.network.NetworkHandler;
 import dev.shyrik.modularitemframe.init.Registrar;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry;
@@ -19,7 +18,6 @@ import java.util.Arrays;
 public class ModularItemFrameClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        NetworkHandler.registerS2C();
         ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE)
                 .register((spriteAtlasTexture, registry) -> stitch(registry));
         ApplyModelLoaderCallback.EVENT.register(FrameRenderer::onApplyModelLoader);

@@ -6,8 +6,6 @@ import alexiil.mc.lib.attributes.item.ItemInsertable;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
-import dev.shyrik.modularitemframe.common.network.NetworkHandler;
-import dev.shyrik.modularitemframe.common.network.packet.SpawnParticlesPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -16,6 +14,7 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -77,11 +76,7 @@ public class VacuumModule extends ModuleBase {
                 ItemStack remain = inserter.insert(entityStack);
                 if (remain.isEmpty()) entity.remove();
                 else entity.setStack(remain);
-                NetworkHandler.sendAround(
-                        entity.world,
-                        entity.getBlockPos(),
-                        32,
-                        new SpawnParticlesPacket(ParticleTypes.POOF, entity.getBlockPos(), 7));
+                ((ServerWorld) world).spawnParticles(ParticleTypes.POOF, entity.getX() - 0.1, entity.getY(), entity.getZ() - 0.1, 4, 0.2, 0.2, 0.2, 0.07);
                 break;
             }
         }
