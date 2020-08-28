@@ -185,17 +185,17 @@ public abstract class ModuleBase {
         int range = frame.getRangeUpCount() + ModularItemFrame.getConfig().scanZoneRadius;
         switch (frame.getFacing()) {
             case DOWN:
-                return new Box(pos.add(-range, 0, -range), pos.add(range, -range, range));
+                return new Box(pos.add(-range + 1, 1, -range + 1), pos.add(range, -range + 1, range));
             case UP:
-                return new Box(pos.add(-range, 0, -range), pos.add(range, range, range));
+                return new Box(pos.add(-range + 1, 0, -range + 1), pos.add(range, range, range));
             case NORTH:
-                return new Box(pos.add(-range, -range, 0), pos.add(range, range, -range));
+                return new Box(pos.add(-range + 1, -range + 1, 1), pos.add(range, range, -range + 1));
             case SOUTH:
-                return new Box(pos.add(-range, -range, 0), pos.add(range, range, range));
+                return new Box(pos.add(-range + 1, -range + 1, 0), pos.add(range, range, range));
             case WEST:
-                return new Box(pos.add(0, -range, -range), pos.add(-range, range, range));
+                return new Box(pos.add(1, -range + 1, -range + 1), pos.add(-range + 1, range, range));
             case EAST:
-                return new Box(pos.add(0, -range, -range), pos.add(range, range, range));
+                return new Box(pos.add(0, -range + 1, -range + 1), pos.add(range, range, range));
         }
         return new Box(pos, pos.add(1, 1, 1));
     }
