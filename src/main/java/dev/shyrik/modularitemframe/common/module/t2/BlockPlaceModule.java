@@ -80,7 +80,7 @@ public class BlockPlaceModule extends ModuleBase {
         if (!itemToPlace.isEmpty()) {
             Direction facing = frame.getFacing();
 
-            for (int offset = frame.getRangeUpCount() + 1; offset > 0; offset--) {
+            for (int offset = 0; offset <= Math.pow(frame.getRangeUpCount() + 1, 2); offset++) {
                 BlockPos placePos = pos.offset(facing, offset);
 
                 ActionResult placeResult = ((BlockItem) itemToPlace.getItem()).place(
