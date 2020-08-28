@@ -153,7 +153,7 @@ public class ItemTeleportModule extends ModuleBase {
         ItemStack held = player.getStackInHand(hand);
 
         if (!held.isEmpty()) {
-            ItemHelper.ejectStack(world, linkedLoc, world.getBlockState(linkedLoc).get(ModularFrameBlock.FACING), held);
+            ItemHelper.ejectStack(world, linkedLoc, world.getBlockState(linkedLoc).get(ModularFrameBlock.FACING), held.copy());
             NetworkHandler.sendAround(world, linkedLoc, 32,
                     new PlaySoundPacket(linkedLoc, SoundEvents.BLOCK_DISPENSER_DISPENSE, SoundCategory.BLOCKS));
             held.setCount(0);
