@@ -146,6 +146,7 @@ public class ItemTeleportModule extends ModuleBase {
 
     @Override
     public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
+        if (world.isClient) return ActionResult.FAIL;
         if (direction != EnumMode.VACUUM) return ActionResult.FAIL;
         if (!hasValidConnection(world)) return ActionResult.FAIL;
 
