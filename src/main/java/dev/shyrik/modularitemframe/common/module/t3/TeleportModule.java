@@ -97,7 +97,9 @@ public class TeleportModule extends ModuleBase {
                     player.removeAllPassengers();
                 }
 
-                player.stopRiding();
+                if (player.hasVehicle()) {
+                    player.stopRiding();
+                }
 
                 double offset = world.getBlockState(linkedLoc).get(ModularFrameBlock.FACING) == Direction.UP ? 0.15 : 0;
 
