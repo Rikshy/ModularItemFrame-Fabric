@@ -122,7 +122,16 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
 
     private void rotateFrameOnFacing(Direction facing, MatrixStack matrixStack) {
     	matrixStack.translate(0.5F, 0.5F, 0.5F);
-    	matrixStack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(-facing.asRotation()));
+    	switch (facing) {
+            case UP:
+                matrixStack.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(-90F));
+                break;
+            case DOWN:
+                matrixStack.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(90F));
+                break;
+            default:
+                matrixStack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(-facing.asRotation()));
+        }
     	matrixStack.translate(-0.5F, -0.5F, -0.5F);
     }
 
