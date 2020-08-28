@@ -87,10 +87,11 @@ public class TeleportModule extends ModuleBase {
 
         if (!world.isClient) {
             if (hasValidConnection(world, player)) {
-                BlockPos target;
-                if (frame.getFacing().getAxis().isHorizontal() || frame.getFacing() == Direction.UP)
-                    target = linkedLoc.offset(Direction.DOWN);
-                else target = linkedLoc;
+                BlockPos target = getTargetLocation(world, player);
+                if (target == null) {
+                    player.sendMessage(new TranslatableText("modularitemframe.message.location_blocked"), false);
+                    return ActionResult.FAIL;
+                }
 
                 if (player.hasPassengers()) {
                     player.removeAllPassengers();
@@ -98,9 +99,11 @@ public class TeleportModule extends ModuleBase {
 
                 player.stopRiding();
 
-                if (player.teleport(target.getX() + 0.5D, target.getY() + 0.5D, target.getZ() + 0.5D, true)) {
-                    world.playSound(null, target, SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 1F, 1F);
-                }
+                double offset = world.getBlockState(linkedLoc).get(ModularFrameBlock.FACING) == Direction.UP ? 0.15 : 0;
+
+                player.requestTeleport(target.getX() + 0.5D, target.getY() + offset, target.getZ() + 0.5D);
+                player.fallDistance = 0.0F;
+                world.playSound(null, target, SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 1F, 1F);
             }
         }
         return ActionResult.SUCCESS;
@@ -168,10 +171,22 @@ public class TeleportModule extends ModuleBase {
         else linkedLoc = null;
     }
 
-    private boolean isTargetLocationValid(World world) {
-        if (frame.getFacing().getAxis().isHorizontal() || frame.getFacing() == Direction.UP)
-            return world.isAir(linkedLoc.offset(Direction.DOWN));
-        else return world.isAir(linkedLoc.offset(Direction.UP));
+    private BlockPos getTargetLocation(World world, PlayerEntity player) {
+
+        if (world.getBlockState(linkedLoc).get(ModularFrameBlock.FACING) == Direction.DOWN) {
+            BlockPos pos2 = linkedLoc.offset(Direction.DOWN);
+            if (!world.getBlockState(pos2).getMaterial().blocksMovement())
+                return linkedLoc;
+        } else {
+            BlockPos pos2 = linkedLoc.offset(Direction.DOWN);
+            if (!world.getBlockState(pos2).getMaterial().blocksMovement())
+                return pos2;
+            pos2 = linkedLoc.offset(Direction.UP);
+            if (!world.getBlockState(pos2).getMaterial().blocksMovement())
+                return linkedLoc;
+        }
+
+        return null;
     }
 
     private boolean hasValidConnection(World world, PlayerEntity player) {
@@ -183,11 +198,6 @@ public class TeleportModule extends ModuleBase {
         if (!(targetTile instanceof ModularFrameEntity) || !(((ModularFrameEntity) targetTile).getModule() instanceof TeleportModule)) {
             if (player != null)
                 player.sendMessage(new TranslatableText("modularitemframe.message.invalid_target"), false);
-            return false;
-        }
-        if (!isTargetLocationValid(world)) {
-            if (player != null)
-                player.sendMessage(new TranslatableText("modularitemframe.message.location_blocked"), false);
             return false;
         }
         return true;

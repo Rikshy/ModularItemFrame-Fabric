@@ -115,20 +115,20 @@ public class SlayModule extends ModuleBase {
 
     @Override
     public void tick(World world, BlockPos pos) {
-        if (!world.isClient) {
-            if (weapon.isEmpty()) {
-                weapon = getNextStack();
-                rotation = 0;
-            } else {
-                if (rotation >= 360) {
-                    rotation -= 360;
-                    hitIt(world);
-                }
-                rotation += 15 * (frame.getSpeedUpCount() + 1);
-            }
+        if (world.isClient || frame.isPowered()) return;
 
-            markDirty();
+        if (weapon.isEmpty()) {
+            weapon = getNextStack();
+            rotation = 0;
+        } else {
+            if (rotation >= 360) {
+                rotation -= 360;
+                hitIt(world);
+            }
+            rotation += 15 * (frame.getSpeedUpCount() + 1);
         }
+
+        markDirty();
     }
 
     @Override

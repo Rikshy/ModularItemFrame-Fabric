@@ -57,7 +57,7 @@ public class FluidDispenserModule extends ModuleBase {
 
     @Override
     public void tick(World world, BlockPos pos) {
-        if (world.isClient || !canTick(world,60, 10)) return;
+        if (world.isClient || frame.isPowered() || !canTick(world,60, 10)) return;
         Direction facing = frame.getFacing();
         if (!world.isAir(pos.offset(facing))) return;
 

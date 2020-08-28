@@ -90,6 +90,8 @@ public class TrashCanModule extends ModuleBase {
 
     @Override
     public void tick(World world, BlockPos pos) {
+        if (frame.isPowered()) return;
+
         if (!world.isClient) {
             if (!canTick(world,60, 10)) return;
 

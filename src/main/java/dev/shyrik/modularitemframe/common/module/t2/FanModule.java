@@ -67,15 +67,15 @@ public class FanModule extends ModuleBase {
         int range = frame.getRangeUpCount() + ModularItemFrame.getConfig().scanZoneRadius;
         switch (frame.getFacing()) {
             case DOWN:
-                return new Box(pos.add(0, 1, 0), pos.add(1, -range, 1));
+                return new Box(pos.add(0, 1, 0), pos.add(1, -range + 1, 1));
             case UP:
                 return new Box(pos.add(0, -1, 0), pos.add(1, range, 1));
             case NORTH:
-                return new Box(pos.add(0, 0, 1), pos.add(1, 1, -range));
+                return new Box(pos.add(0, 0, 1), pos.add(1, 1, -range + 1));
             case SOUTH:
                 return new Box(pos.add(0, 0, -1), pos.add(1, 1, range));
             case WEST:
-                return new Box(pos.add(1, 0, 0), pos.add(-range, 1, 1));
+                return new Box(pos.add(1, 0, 0), pos.add(-range + 1, 1, 1));
             case EAST:
                 return new Box(pos.add(-1, 0, 0), pos.add(range, 1, 1));
         }

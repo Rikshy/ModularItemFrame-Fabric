@@ -70,7 +70,7 @@ public class BlockPlaceModule extends ModuleBase {
 
     @Override
     public void tick(World world, BlockPos pos) {
-        if (world.isClient || !canTick(world,60, 10)) return;
+        if (world.isClient || frame.isPowered() || !canTick(world,60, 10)) return;
         FixedItemInv inventory = frame.getAttachedInventory();
         if (inventory == null) return;
 

@@ -144,13 +144,14 @@ public class ItemTeleportModule extends ModuleBase {
 
     @Override
     public ActionResult onUse(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction facing, BlockHitResult hit) {
+        if (world.isClient) return ActionResult.FAIL;
         if (direction != EnumMode.VACUUM) return ActionResult.FAIL;
         if (!hasValidConnection(world)) return ActionResult.FAIL;
 
         ItemStack held = player.getStackInHand(hand);
 
         if (!held.isEmpty()) {
-            ItemHelper.ejectStack(world, linkedLoc, world.getBlockState(linkedLoc).get(ModularFrameBlock.FACING), held);
+            ItemHelper.ejectStack(world, linkedLoc, world.getBlockState(linkedLoc).get(ModularFrameBlock.FACING), held.copy());
             world.playSound(player, pos, SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.BLOCKS, 1F, 1F);
             held.setCount(0);
         }
@@ -169,7 +170,7 @@ public class ItemTeleportModule extends ModuleBase {
 
     @Override
     public void tick(World world, BlockPos pos) {
-        if (world.isClient || !canTick(world,60, 10)) return;
+        if (world.isClient || frame.isPowered() || !canTick(world,60, 10)) return;
         if (direction != EnumMode.VACUUM || !hasValidConnection(world)) return;
 
         List<ItemEntity> entities = world.getEntitiesByClass(ItemEntity.class, getScanBox(), itemEntity -> true);
