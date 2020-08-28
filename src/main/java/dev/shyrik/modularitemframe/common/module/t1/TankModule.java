@@ -125,14 +125,18 @@ public class TankModule extends ModuleBase {
     @Override
     public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack moduleStack) {
         super.onRemove(world, pos, facing, player, moduleStack);
-        if (!ModularItemFrame.getConfig().dropFluidOnTankRemove && tank.getInvFluid(0).amount().isZero())
+        if (!ModularItemFrame.getConfig().dropFluidOnTankRemove || tank.getInvFluid(0).amount().isZero())
             return;
         Fluid fluid = tank.getInvFluid(0).getRawFluid();
 
         if (fluid == null) return;
 
+        int i = 0;
         for (Direction dir : Direction.values()) {
             if (dir == facing.getOpposite()) continue;
+            if (i++ >= tank.getInvFluid(0).amount().whole)
+                break;
+
             BlockState state = world.getBlockState(pos.offset(dir));
             Block block = state.getBlock();
             if (state.canBucketPlace(fluid))
