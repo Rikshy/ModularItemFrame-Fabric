@@ -34,7 +34,7 @@ import java.util.UUID;
 
 public class SlayModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_slay");
-    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_nyi");
+    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_t2_slay");
 
     private static final GameProfile DEFAULT_CLICKER = new GameProfile(UUID.nameUUIDFromBytes("modularitemframe".getBytes()), "[Frame Clicker]");
 
@@ -70,7 +70,7 @@ public class SlayModule extends ModuleBase {
     @Override
     @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float ticks, VertexConsumerProvider buffer, int light, int overlay) {
-        renderer.renderInside(weapon, rotation, 0F, 0.4F, ModelTransformation.Mode.THIRD_PERSON_RIGHT_HAND, matrixStack, buffer, light, overlay);
+        renderer.renderInside(weapon, rotation, 0F, 0.40F, ModelTransformation.Mode.THIRD_PERSON_RIGHT_HAND, matrixStack, buffer, light, overlay);
     }
 
     @Override
