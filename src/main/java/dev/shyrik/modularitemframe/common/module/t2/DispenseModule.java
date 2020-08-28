@@ -5,8 +5,6 @@ import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.ItemHelper;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
-import dev.shyrik.modularitemframe.common.network.NetworkHandler;
-import dev.shyrik.modularitemframe.common.network.packet.PlaySoundPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -71,8 +69,7 @@ public class DispenseModule extends ModuleBase {
             ItemStack extracted = inventory.getExtractable().filtered(frame.getItemFilter()).extract(1);
             if (!extracted.isEmpty()) {
                 ItemHelper.ejectStack(world, pos, frame.getFacing(), extracted);
-                NetworkHandler.sendAround(world, pos, 32,
-                        new PlaySoundPacket(pos, SoundEvents.BLOCK_DISPENSER_DISPENSE, SoundCategory.BLOCKS));
+                world.playSound(null, pos, SoundEvents.BLOCK_DISPENSER_DISPENSE, SoundCategory.BLOCKS, 1F, 1F);
             }
         }
     }

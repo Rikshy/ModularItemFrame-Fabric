@@ -6,8 +6,6 @@ import dev.shyrik.modularitemframe.api.util.fake.FakePlayer;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.block.ModularFrameEntity;
-import dev.shyrik.modularitemframe.common.network.NetworkHandler;
-import dev.shyrik.modularitemframe.common.network.packet.PlaySoundPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -28,8 +26,6 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-
-import java.util.Objects;
 
 public class TeleportModule extends ModuleBase {
 
@@ -103,7 +99,7 @@ public class TeleportModule extends ModuleBase {
                 player.stopRiding();
 
                 if (player.teleport(target.getX() + 0.5D, target.getY() + 0.5D, target.getZ() + 0.5D, true)) {
-                    NetworkHandler.sendAround(world, target, 32, new PlaySoundPacket(target, SoundEvents.BLOCK_PORTAL_TRAVEL, SoundCategory.AMBIENT));
+                    world.playSound(null, target, SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 1F, 1F);
                 }
             }
         }

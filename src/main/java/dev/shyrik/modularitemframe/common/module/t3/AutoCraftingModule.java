@@ -6,8 +6,6 @@ import dev.shyrik.modularitemframe.api.util.InventoryHelper;
 import dev.shyrik.modularitemframe.api.util.ItemHelper;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.module.t2.CraftingModule;
-import dev.shyrik.modularitemframe.common.network.NetworkHandler;
-import dev.shyrik.modularitemframe.common.network.packet.PlaySoundPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.resource.language.I18n;
@@ -75,10 +73,6 @@ public class AutoCraftingModule extends CraftingModule {
 
         InventoryHelper.removeIngredients(inventory, recipe);
 
-        NetworkHandler.sendAround(
-                world,
-                frame.getPos(),
-                32,
-                new PlaySoundPacket(pos, SoundEvents.BLOCK_LADDER_STEP, SoundCategory.BLOCKS));
+        world.playSound(null, frame.getPos(), SoundEvents.BLOCK_LADDER_STEP, SoundCategory.BLOCKS, 1F, 1F);
     }
 }

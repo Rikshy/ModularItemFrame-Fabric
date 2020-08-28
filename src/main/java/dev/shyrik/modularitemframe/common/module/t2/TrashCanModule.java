@@ -6,8 +6,6 @@ import com.google.common.collect.ImmutableList;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.ItemHelper;
-import dev.shyrik.modularitemframe.common.network.NetworkHandler;
-import dev.shyrik.modularitemframe.common.network.packet.PlaySoundPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -80,19 +78,11 @@ public class TrashCanModule extends ModuleBase {
                     lastStack = held.copy();
                 }
                 held.setCount(0);
-                NetworkHandler.sendAround(
-                        world,
-                        frame.getPos(),
-                        32,
-                        new PlaySoundPacket(pos, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 0.4F, 0.7F));
+                world.playSound(null, pos, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.PLAYERS, 1F, 0.7F);
             } else if (player.isSneaking() && held.isEmpty() && !lastStack.isEmpty()) {
                 player.setStackInHand(hand, lastStack);
                 lastStack = ItemStack.EMPTY;
-                NetworkHandler.sendAround(
-                        world,
-                        frame.getPos(),
-                        32,
-                        new PlaySoundPacket(pos, SoundEvents.ENTITY_ENDER_PEARL_THROW, SoundCategory.BLOCKS, 0.4F, 0.7F));
+                world.playSound(null, pos, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.PLAYERS, 1F, 0.7F);
             }
         }
         return ActionResult.SUCCESS;
@@ -108,11 +98,7 @@ public class TrashCanModule extends ModuleBase {
                 for (int slot = 0; slot < trash.getSlotCount(); slot++) {
                     if (!trash.getInvStack(slot).isEmpty() && frame.getItemFilter().matches(trash.getInvStack(slot))) {
                         trash.setInvStack(slot, ItemStack.EMPTY, Simulation.ACTION);
-                        NetworkHandler.sendAround(
-                                world,
-                                pos,
-                                32,
-                                new PlaySoundPacket(pos, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS));
+                        world.playSound(null, pos, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.PLAYERS, 1F, 0.7F);
                         break;
                     }
                 }
