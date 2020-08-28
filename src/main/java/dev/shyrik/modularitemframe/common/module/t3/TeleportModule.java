@@ -142,9 +142,13 @@ public class TeleportModule extends ModuleBase {
 
     @Override
     public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack moduleStack) {
-        if (hasValidConnection(world, null)) {
-            ((TeleportModule) ((ModularFrameEntity) Objects.requireNonNull(world.getBlockEntity(linkedLoc))).getModule()).linkedLoc = null;
-            Objects.requireNonNull(world.getBlockEntity(linkedLoc)).markDirty();
+        if (linkedLoc != null) {
+            BlockEntity targetTile = world.getBlockEntity(linkedLoc);
+            if (targetTile instanceof ModularFrameEntity && ((ModularFrameEntity) targetTile).getModule() instanceof TeleportModule) {
+                TeleportModule farMod = ((TeleportModule)((ModularFrameEntity) targetTile).getModule());
+                farMod.linkedLoc = null;
+                farMod.markDirty();
+            }
         }
         super.onRemove(world, pos, facing, player, moduleStack);
     }
