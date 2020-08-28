@@ -93,8 +93,7 @@ public class BlockBreakModule extends ModuleBase {
 
     @Override
     public void tick(World world, BlockPos pos) {
-        if (world.isClient) return;
-        if (frame.isPowered()) return;
+        if (world.isClient || frame.isPowered()) return;
 
         BlockPos targetPos;
         BlockState targetState;

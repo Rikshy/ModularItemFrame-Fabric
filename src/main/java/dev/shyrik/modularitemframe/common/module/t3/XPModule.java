@@ -85,7 +85,7 @@ public class XPModule extends ModuleBase {
     @Override
     public void tick(World world, BlockPos pos) {
         if (levels >= ExperienceHelper.MAX_LEVEL) return;
-        if (world.isClient || !canTick(world,60, 10)) return;
+        if (world.isClient || frame.isPowered() || !canTick(world,60, 10)) return;
 
         List<ExperienceOrbEntity> entities = world.getEntitiesByClass(ExperienceOrbEntity.class, getScanBox(), experienceOrbEntity -> true);
         for (ExperienceOrbEntity entity : entities) {

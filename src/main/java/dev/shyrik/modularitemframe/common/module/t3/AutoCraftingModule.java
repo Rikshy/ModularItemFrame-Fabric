@@ -57,7 +57,7 @@ public class AutoCraftingModule extends CraftingModule {
 
     @Override
     public void tick(World world,  BlockPos pos) {
-        if (world.isClient || !canTick(world,60, 10)) return;
+        if (world.isClient || frame.isPowered() || !canTick(world,60, 10)) return;
 
         FixedItemInv handler = frame.getAttachedInventory();
         if (handler != null) {
