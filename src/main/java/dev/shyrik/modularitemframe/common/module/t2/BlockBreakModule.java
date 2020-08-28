@@ -103,7 +103,7 @@ public class BlockBreakModule extends ModuleBase {
         do {
             targetPos = pos.offset(frame.getFacing(), offset);
             targetState = world.getBlockState(targetPos);
-        } while (targetState.isAir() && offset++ <= frame.getRangeUpCount());
+        } while (targetState.isAir() && offset++ <= Math.pow(frame.getRangeUpCount() + 1, 2));
 
         float hardness = targetState.getHardness(world, targetPos);
 
