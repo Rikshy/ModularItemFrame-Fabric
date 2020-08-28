@@ -45,6 +45,7 @@ public class ModularItemFrameClient implements ClientModInitializer {
                 TrashCanModule.BG1,
                 TrashCanModule.BG2,
                 TrashCanModule.BG3,
+                FanModule.BG,
 
                 AutoCraftingModule.BG,
                 FluidDispenserModule.BG,

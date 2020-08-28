@@ -54,6 +54,7 @@ public class Registrar {
     public static final ModuleItem DISPENSE_MODULE = createMod(DispenseModule.ID, DispenseModule.class);
     public static final ModuleItem SLAY_MODULE = createMod(SlayModule.ID, SlayModule.class);
     public static final ModuleItem VACUUM_MODULE = createMod(VacuumModule.ID, VacuumModule.class);
+    public static final ModuleItem FAN_MODULE = createMod(FanModule.ID, FanModule.class);
 
     public static final ModuleItem AUTO_CRAFTING_MODULE = createMod(AutoCraftingModule.ID, AutoCraftingModule.class);
     public static final ModuleItem FLUID_DISPENSE_MODULE = createMod(FluidDispenserModule.ID, FluidDispenserModule.class);

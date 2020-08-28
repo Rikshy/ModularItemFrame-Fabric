@@ -15,6 +15,7 @@
   "item.modularitemframe.module_t2_slay": "Slay Module",
   "item.modularitemframe.module_t2_break": "Block Break Module",
   "item.modularitemframe.module_t2_place": "Block Place Module",
+  "item.modularitemframe.module_t2_fan": "Fan Module",
 
   "item.modularitemframe.module_t3_xp": "XP Module",
   "item.modularitemframe.module_t3_tele": "Teleport Module",
@@ -67,6 +68,7 @@
   "modularitemframe.module.dispense": "Dispense",
   "modularitemframe.module.vacuum": "Vacuum",
   "modularitemframe.module.slay": "Slay",
+  "modularitemframe.module.fan": "Fan",
 
   "modularitemframe.module.auto_crafting": "Auto Crafting",
   "modularitemframe.module.tele": "Teleport",
