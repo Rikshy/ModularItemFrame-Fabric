@@ -79,6 +79,17 @@ public class JukeboxModule extends ModuleBase {
                     jukebox.insert(held.split(1));
                     markDirty();
                 }
+            } else if (held.isEmpty() && player.isSneaking()) {
+                ItemStack ejectStack;
+                if (currentSong >= 0) {
+                    ejectStack = jukebox.extract(currentSong, 1);
+                    stop(world);
+                } else {
+                    ejectStack = jukebox.extract(1);
+                }
+                if (!ejectStack.isEmpty())
+                    ItemHelper.ejectStack(world, pos, frame.getFacing(), ejectStack);
+                markDirty();
             }
         }
         return ActionResult.SUCCESS;
