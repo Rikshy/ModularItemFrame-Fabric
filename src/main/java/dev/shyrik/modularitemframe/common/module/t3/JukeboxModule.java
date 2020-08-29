@@ -95,10 +95,6 @@ public class JukeboxModule extends ModuleBase {
     }
 
     @Override
-    public void screw(World world, BlockPos pos, PlayerEntity player, ItemStack driver) {
-    }
-
-    @Override
     public void tick(World world, BlockPos pos) {
         if (world.isClient) {
             if (rotation >= 360) {
@@ -150,7 +146,12 @@ public class JukeboxModule extends ModuleBase {
     }
 
     private void stop(World world) {
+        currentSong = -1;
         world.syncWorldEvent(1010, frame.getPos(), 0);
+    }
+
+    private void play(World world, ItemStack songStack) {
+        world.syncWorldEvent(1010, frame.getPos(), Item.getRawId(songStack.getItem()));
     }
 
     private void playNext(World world) {
@@ -166,7 +167,8 @@ public class JukeboxModule extends ModuleBase {
         if (songStack.isEmpty())
             return;
 
-        world.syncWorldEvent(1010, frame.getPos(), Item.getRawId(songStack.getItem()));
+        if (prevSong != currentSong)
+            play(world, songStack);
     }
 
     private void playPrevious(World world) {
@@ -182,6 +184,7 @@ public class JukeboxModule extends ModuleBase {
         if (songStack.isEmpty())
             return;
 
-        world.syncWorldEvent(1010, frame.getPos(), Item.getRawId(songStack.getItem()));
+        if (prevSong != currentSong)
+            play(world, songStack);
     }
 }
