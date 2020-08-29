@@ -52,8 +52,18 @@ public class FanModule extends ModuleBase {
     @Override
     public void tick(World world, BlockPos pos) {
         if (frame.isPowered()) return;
-        List<Entity> entities = world.getEntitiesByClass(Entity.class, getFanBox(), entity ->
-                (entity instanceof LivingEntity || entity instanceof ItemEntity) && !entity.isSneaky() && entity.isAlive());
+        List<Entity> entities = world.getEntitiesByClass(Entity.class, getFanBox(), entity -> {
+            if (entity instanceof PlayerEntity) {
+                if (entity.isSpectator()) {
+                    return false;
+                }
+            } else if (entity instanceof ItemEntity) {
+                return true;
+            } else if (!(entity instanceof LivingEntity)) {
+                return false;
+            }
+            return !entity.isSneaky() && entity.isAlive();
+        });
         if (entities.isEmpty()) return;
         Direction facing = frame.getFacing();
         double xVel = facing.getOffsetX() * strengthScaling;
