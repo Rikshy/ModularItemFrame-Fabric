@@ -150,7 +150,7 @@ public class JukeboxModule extends ModuleBase {
     }
 
     private void stop(World world) {
-        world.syncWorldEvent(null, 1010, frame.getPos(), 0);
+        world.syncWorldEvent(1010, frame.getPos(), 0);
     }
 
     private void playNext(World world) {
@@ -166,7 +166,7 @@ public class JukeboxModule extends ModuleBase {
         if (songStack.isEmpty())
             return;
 
-        world.syncWorldEvent(null, 1010, frame.getPos(), Item.getRawId(songStack.getItem()));
+        world.syncWorldEvent(1010, frame.getPos(), Item.getRawId(songStack.getItem()));
     }
 
     private void playPrevious(World world) {
@@ -182,6 +182,6 @@ public class JukeboxModule extends ModuleBase {
         if (songStack.isEmpty())
             return;
 
-        world.syncWorldEvent(null, 1010, frame.getPos(), Item.getRawId(songStack.getItem()));
+        world.syncWorldEvent(1010, frame.getPos(), Item.getRawId(songStack.getItem()));
     }
 }
