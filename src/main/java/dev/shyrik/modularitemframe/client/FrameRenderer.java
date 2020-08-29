@@ -153,9 +153,9 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
             float posOffset = pos * 0.05F;
 
             if (side == 0 || side == 1) {
-                matrixStack.translate(0.4F + posOffset, sideOffset, 0.11F);
+                matrixStack.translate(0.4F + posOffset, sideOffset, 0.13F);
             } else {
-                matrixStack.translate(sideOffset, 0.6F - posOffset, 0.11F);
+                matrixStack.translate(sideOffset, 0.6F - posOffset, 0.13F);
             }
             matrixStack.scale(0.05F, 0.05F, 0.05F);
 
