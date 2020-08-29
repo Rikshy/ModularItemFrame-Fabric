@@ -176,7 +176,7 @@ public class JukeboxModule extends ModuleBase {
     }
 
     private void playNext(World world) {
-        int prevSong = currentSong;
+        int prevSong = Math.min(currentSong, jukebox.getSlotCount());
         ItemStack songStack;
         do {
             if (currentSong + 1 >= jukebox.getSlotCount()) {
@@ -193,7 +193,7 @@ public class JukeboxModule extends ModuleBase {
     }
 
     private void playPrevious(World world) {
-        int prevSong = currentSong;
+        int prevSong = Math.max(currentSong, 0);
         ItemStack songStack;
         do {
             if (currentSong - 1 <= 0) {
