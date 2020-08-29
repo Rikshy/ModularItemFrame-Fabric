@@ -101,7 +101,7 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
                 .getModelRenderer()
                 .render(
                         matrixStack.peek(),
-                        vertexConsumers.getBuffer(RenderLayer.getTranslucentNoCrumbling()),
+                        vertexConsumers.getBuffer(RenderLayer.getCutout()),
                         frame.getCachedState(),
                         modelFrame,
                         1,
