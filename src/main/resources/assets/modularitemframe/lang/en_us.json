@@ -23,6 +23,7 @@
   "item.modularitemframe.module_t3_fluid_dispenser": "Fluid Dispenser Module",
   "item.modularitemframe.module_t3_itemtele": "Item Teleporter Module",
   "item.modularitemframe.module_t3_xpvaruum": "XP Vacuum Module",
+  "item.modularitemframe.module_t3_jukebox": "Jukebox Module",
 
   "item.modularitemframe.upgrade_speed": "Speed Upgrade",
   "item.modularitemframe.upgrade_range": "Range Upgrade",
@@ -75,6 +76,7 @@
   "modularitemframe.module.fluid_dispenser": "Fluid Dispenser",
   "modularitemframe.module.itemtele": "Item Teleport",
   "modularitemframe.module.xp": "XP",
+  "modularitemframe.module.jukebox": "Jukebox",
 
   "modularitemframe.tooltip.module": "Module: %s",
   "modularitemframe.tooltip.capacity": "%dmb / %dmb",

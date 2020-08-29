@@ -61,6 +61,7 @@ public class Registrar {
     public static final ModuleItem ITEM_TP_MODULE = createMod(ItemTeleportModule.ID, ItemTeleportModule.class);
     public static final ModuleItem TP_MODULE = createMod(TeleportModule.ID, TeleportModule.class);
     public static final ModuleItem XP_MODULE = createMod(XPModule.ID, XPModule.class);
+    public static final ModuleItem JUKEBOX_MODULE = createMod(JukeboxModule.ID, JukeboxModule.class);
 
 
     public static final UpgradeItem SPEED_UPGRADE = createUp(SpeedUpgrade.ID, SpeedUpgrade.class);

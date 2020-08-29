@@ -51,7 +51,8 @@ public class ModularItemFrameClient implements ClientModInitializer {
                 ItemTeleportModule.BG_IN,
                 ItemTeleportModule.BG_OUT,
                 ItemTeleportModule.BG_NONE,
-                XPModule.BG
+                XPModule.BG,
+                JukeboxModule.BG
         ).forEach(registry::register);
     }
 }
