@@ -89,8 +89,8 @@ public class ItemTeleportModule extends ModuleBase {
     @Override
     @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float ticks, VertexConsumerProvider buffer, int light, int overlay) {
-        if(direction == EnumMode.NONE) {
-            renderer.renderEnder(frame, matrixStack, buffer, 0.70f, 0.08f, 0.30f);
+        if(direction != EnumMode.NONE) {
+            renderer.renderEnder(frame, matrixStack, buffer, 0.625f, 0.063f, 0.375f);
         }
     }
 

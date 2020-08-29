@@ -30,7 +30,7 @@ import java.util.Objects;
 
 public class JukeboxModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t3_jukebox");
-    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_nyi");
+    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_t3_jukebox");
 
     private static final String NBT_JUKEBOX = "jukebox";
     private static final String NBT_CURRENT = "current_song";
@@ -68,7 +68,7 @@ public class JukeboxModule extends ModuleBase {
     @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float ticks, VertexConsumerProvider buffer, int light, int overlay) {
         if (currentSong >= 0 && currentSong < jukebox.getSlotCount()) {
-            renderer.renderInside(jukebox.getInvStack(currentSong), rotation, matrixStack, buffer, light, overlay);
+            renderer.renderInside(jukebox.getInvStack(currentSong), -rotation, matrixStack, buffer, light, overlay);
         }
     }
 

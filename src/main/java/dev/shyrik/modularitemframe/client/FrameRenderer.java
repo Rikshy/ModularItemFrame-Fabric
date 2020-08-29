@@ -21,6 +21,7 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.*;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.*;
@@ -100,7 +101,7 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
                 .getModelRenderer()
                 .render(
                         matrixStack.peek(),
-                        vertexConsumers.getBuffer(RenderLayer.getTranslucentNoCrumbling()),
+                        vertexConsumers.getBuffer(RenderLayer.getCutout()),
                         frame.getCachedState(),
                         modelFrame,
                         1,
@@ -120,30 +121,18 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
     }
 
     private void rotateFrameOnFacing(Direction facing, MatrixStack matrixStack) {
-        switch (facing) {
-            case NORTH:
-                matrixStack.translate(1.0F, 0.0F, 1.0F);
-                matrixStack.multiply(new Quaternion( 0.0F, 180.0F, 0.0F, true));
-                break;
-            case SOUTH:
-                break;
-            case WEST:
-                matrixStack.multiply(new Quaternion(90.0F, -90.0F, 90.0F, true));
-                matrixStack.translate(0.0F, 0.0F, -1.0F);
-                break;
-            case EAST:
-                matrixStack.multiply(new Quaternion(-90.0F, 90.0F, 90.0F, true));
-                matrixStack.translate(-1.0F, 0.0F, 0.0F);
+    	matrixStack.translate(0.5F, 0.5F, 0.5F);
+    	switch (facing) {
+            case UP:
+                matrixStack.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(-90F));
                 break;
             case DOWN:
-                matrixStack.translate(0.0F, 1.0F, 0.0F);
-                matrixStack.multiply(new Quaternion(90.0F, 0.0F, 0.0F, true));
+                matrixStack.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(90F));
                 break;
-            case UP:
-                matrixStack.translate(0.0F, 0.0F, 1.0F);
-                matrixStack.multiply(new Quaternion(-90.0F, 0.0F, 0.0F, true));
-                break;
+            default:
+                matrixStack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(-facing.asRotation()));
         }
+    	matrixStack.translate(-0.5F, -0.5F, -0.5F);
     }
 
     private void renderUpgrades(ModularFrameEntity frame, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light, int overlay) {
@@ -164,9 +153,9 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
             float posOffset = pos * 0.05F;
 
             if (side == 0 || side == 1) {
-                matrixStack.translate(0.4F + posOffset, sideOffset, 0.11F);
+                matrixStack.translate(0.4F + posOffset, sideOffset, 0.13F);
             } else {
-                matrixStack.translate(sideOffset, 0.6F - posOffset, 0.11F);
+                matrixStack.translate(sideOffset, 0.6F - posOffset, 0.13F);
             }
             matrixStack.scale(0.05F, 0.05F, 0.05F);
 
@@ -182,13 +171,17 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
 
     //region <itemRender>
     public void renderInside(ItemStack stack, MatrixStack matrixStack, VertexConsumerProvider buffer, int light, int overlay) {
-        renderInside(stack, 0, 0.5F, ModelTransformation.Mode.FIXED, matrixStack, buffer, light, overlay);
+        renderInside(stack, 0F, 0.5F, ModelTransformation.Mode.FIXED, matrixStack, buffer, light, overlay);
     }
-    public void renderInside(ItemStack stack, int rotation, MatrixStack matrixStack, VertexConsumerProvider buffer, int light, int overlay) {
-        renderInside(stack, rotation, 0.5F, ModelTransformation.Mode.FIXED, matrixStack, buffer, light, overlay);
+    public void renderInside(ItemStack stack, float zRotation, MatrixStack matrixStack, VertexConsumerProvider buffer, int light, int overlay) {
+        renderInside(stack, zRotation, 0.5F, ModelTransformation.Mode.FIXED, matrixStack, buffer, light, overlay);
     }
 
-    public void renderInside(ItemStack stack, float rotation, float scale, ModelTransformation.Mode transformType, MatrixStack matrixStack, VertexConsumerProvider buffer, int light, int overlay) {
+    public void renderInside(ItemStack stack, float zRotation, float scale, ModelTransformation.Mode transformType, MatrixStack matrixStack, VertexConsumerProvider buffer, int light, int overlay) {
+        renderInside(stack, 0F, zRotation, scale, transformType, matrixStack, buffer, light, overlay);
+    }
+
+    public void renderInside(ItemStack stack, float xRotation, float zRotation, float scale, ModelTransformation.Mode transformType, MatrixStack matrixStack, VertexConsumerProvider buffer, int light, int overlay) {
         if (stack.isEmpty())
             return;
 
@@ -197,13 +190,10 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
         ItemRenderer itemRenderer = MinecraftClient.getInstance().getItemRenderer();
 
         matrixStack.translate(0.5F, 0.5F, 0.1F);
-        matrixStack.multiply(new Quaternion(0.0F, 0.0F, rotation, true));
+        matrixStack.multiply(new Quaternion(xRotation, 0.0F, zRotation, true));
         matrixStack.scale(scale, scale, scale);
 
-        BakedModel model = itemRenderer.getHeldItemModel(stack, null, null);
-        if (model.hasDepth()) {
-            matrixStack.multiply(new Quaternion(0F, 180.0F, 0.0F, true));
-        }
+        matrixStack.multiply(new Quaternion(0F, 180.0F, 0.0F, true));
         itemRenderer.renderItem(stack, transformType, light, overlay, matrixStack, buffer);
 
         matrixStack.pop();

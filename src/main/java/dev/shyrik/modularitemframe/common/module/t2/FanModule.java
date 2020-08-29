@@ -1,7 +1,9 @@
 package dev.shyrik.modularitemframe.common.module.t2;
 
+import com.google.common.collect.ImmutableList;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
+import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -23,9 +25,16 @@ import java.util.List;
 
 public class FanModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_fan");
-    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_nyi");
+    public static final Identifier BG1 = new Identifier(ModularItemFrame.MOD_ID, "module/module_t2_fan1");
+    public static final Identifier BG2 = new Identifier(ModularItemFrame.MOD_ID, "module/module_t2_fan2");
+    public static final Identifier BG3 = new Identifier(ModularItemFrame.MOD_ID, "module/module_t2_fan3");
 
+    private static final List<Identifier> frontTex = ImmutableList.of(
+            BG1, BG2, BG3
+    );
     public static final double strengthScaling = 0.09;
+
+    private int texIndex = 0;
 
     @Override
     public Identifier getId() {
@@ -35,7 +44,17 @@ public class FanModule extends ModuleBase {
     @Override
     @Environment(EnvType.CLIENT)
     public Identifier frontTexture() {
-        return BG;
+        return frontTex.get(texIndex);
+    }
+
+    @Override
+    public List<Identifier> getVariantFronts() {
+        return frontTex;
+    }
+
+    @Override
+    public Identifier innerTexture() {
+        return ModularFrameBlock.INNER_HARD;
     }
 
     @Override
@@ -52,6 +71,11 @@ public class FanModule extends ModuleBase {
     @Override
     public void tick(World world, BlockPos pos) {
         if (frame.isPowered()) return;
+        if (world.isClient) {
+            if (world.getTime() % 10 == 0) {
+                texIndex = texIndex < frontTex.size() - 1 ? texIndex + 1 : 0;
+            }
+        }
         List<Entity> entities = world.getEntitiesByClass(Entity.class, getFanBox(), entity ->
                 (entity instanceof LivingEntity || entity instanceof ItemEntity) && !entity.isSneaky() && entity.isAlive());
         if (entities.isEmpty()) return;

@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableList;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.util.ItemHelper;
+import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -57,6 +58,11 @@ public class TrashCanModule extends ModuleBase {
     @Environment(EnvType.CLIENT)
     public List<Identifier> getVariantFronts() {
         return frontTex;
+    }
+
+    @Override
+    public Identifier innerTexture() {
+        return ModularFrameBlock.INNER_HARD;
     }
 
     @Override

@@ -74,7 +74,7 @@ public class TankModule extends ModuleBase {
 
             //only south cuz the matrix is already in that  direction
             FluidRenderFace face = FluidRenderFace
-                    .createFlatFace(0.2f, 0.2f, 0.08f, 0.8f, 0.2f + amount * 0.6f, 0.08f, 1, Direction.SOUTH);
+                    .createFlatFace(0.1875f, 0.1875f, 0.08f, 0.8125f, 0.1875f + amount * 0.625f, 0.08f, 1, Direction.SOUTH);
 
             vol.render(Collections.singletonList(face), buffer, matrixStack);
         }

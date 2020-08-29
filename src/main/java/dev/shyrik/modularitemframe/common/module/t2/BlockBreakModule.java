@@ -32,7 +32,7 @@ import java.util.List;
 
 public class BlockBreakModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_break");
-    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_nyi");
+    public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_t2_break");
 
     private static final String NBT_PROGRESS = "progress";
 
@@ -83,7 +83,7 @@ public class BlockBreakModule extends ModuleBase {
     @Override
     @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float ticks, VertexConsumerProvider buffer, int light, int overlay) {
-        renderer.renderInside(displayItem, rotation.get(breakProgress), matrixStack, buffer, light, overlay);
+        renderer.renderInside(displayItem, -rotation.get(breakProgress) + 10, matrixStack, buffer, light, overlay);
     }
 
     @Override
