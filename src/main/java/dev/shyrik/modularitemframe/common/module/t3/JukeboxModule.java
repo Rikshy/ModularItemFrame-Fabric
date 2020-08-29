@@ -34,9 +34,11 @@ public class JukeboxModule extends ModuleBase {
 
     private static final String NBT_JUKEBOX = "jukebox";
     private static final String NBT_CURRENT = "current_song";
+    private static final String NBT_LAST = "last_click";
 
     private DirectFixedItemInv jukebox = new DirectFixedItemInv(9);
     private int currentSong = -1;
+    private long lastClick;
     private int rotation = 0;
 
     @Override
@@ -65,7 +67,7 @@ public class JukeboxModule extends ModuleBase {
     @Override
     @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float ticks, VertexConsumerProvider buffer, int light, int overlay) {
-        if (currentSong > 0 && currentSong < jukebox.getSlotCount()) {
+        if (currentSong >= 0 && currentSong < jukebox.getSlotCount()) {
             renderer.renderInside(jukebox.getInvStack(currentSong), rotation, matrixStack, buffer, light, overlay);
         }
     }
@@ -97,8 +99,15 @@ public class JukeboxModule extends ModuleBase {
 
     @Override
     public void onBlockClicked(World world, BlockPos pos, PlayerEntity player) {
+        if (world.isClient) return;
         if (player.isSneaking()) {
-            playPrevious(world);
+            long time = world.getTime();
+            if (time - lastClick <= 10L) {
+               playPrevious(world);
+            } else if (currentSong >= 0) {
+                play(world, jukebox.getInvStack(currentSong));
+            }
+            lastClick = time;
         } else {
             playNext(world);
         }
@@ -130,7 +139,6 @@ public class JukeboxModule extends ModuleBase {
 
         if (currentSong >= jukebox.getSlotCount()) {
             stop(Objects.requireNonNull(frame.getWorld()));
-            currentSong = -1;
         }
 
         markDirty();
@@ -146,6 +154,7 @@ public class JukeboxModule extends ModuleBase {
         CompoundTag tag = super.toTag();
         tag.put(NBT_JUKEBOX, jukebox.toTag());
         tag.putInt(NBT_CURRENT, currentSong);
+        tag.putLong(NBT_LAST, lastClick);
         return tag;
     }
 
@@ -154,6 +163,7 @@ public class JukeboxModule extends ModuleBase {
         super.fromTag(tag);
         if (tag.contains(NBT_JUKEBOX)) jukebox.fromTag(tag.getCompound(NBT_JUKEBOX));
         if (tag.contains(NBT_CURRENT)) currentSong = tag.getInt(NBT_CURRENT);
+        if (tag.contains(NBT_LAST)) lastClick = tag.getLong(NBT_LAST);
     }
 
     private void stop(World world) {
