@@ -75,16 +75,15 @@ public class FanModule extends ModuleBase {
             if (world.getTime() % 10 == 0) {
                 texIndex = texIndex < frontTex.size() - 1 ? texIndex + 1 : 0;
             }
-        } else {
-            List<Entity> entities = world.getEntitiesByClass(Entity.class, getFanBox(), entity ->
-                    (entity instanceof LivingEntity || entity instanceof ItemEntity) && !entity.isSneaky() && entity.isAlive());
-            if (entities.isEmpty()) return;
-            Direction facing = frame.getFacing();
-            double xVel = facing.getOffsetX() * strengthScaling;
-            double yVel = facing.getOffsetY() * strengthScaling;
-            double zVel = facing.getOffsetZ() * strengthScaling;
-            entities.forEach(livingEntity -> livingEntity.addVelocity(xVel, yVel, zVel));
         }
+        List<Entity> entities = world.getEntitiesByClass(Entity.class, getFanBox(), entity ->
+                (entity instanceof LivingEntity || entity instanceof ItemEntity) && !entity.isSneaky() && entity.isAlive());
+        if (entities.isEmpty()) return;
+        Direction facing = frame.getFacing();
+        double xVel = facing.getOffsetX() * strengthScaling;
+        double yVel = facing.getOffsetY() * strengthScaling;
+        double zVel = facing.getOffsetZ() * strengthScaling;
+        entities.forEach(livingEntity -> livingEntity.addVelocity(xVel, yVel, zVel));
     }
 
     private Box getFanBox() {
