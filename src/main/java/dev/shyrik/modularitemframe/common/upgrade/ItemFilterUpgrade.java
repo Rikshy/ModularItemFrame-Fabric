@@ -5,9 +5,13 @@ import alexiil.mc.lib.attributes.item.filter.ItemFilter;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.UpgradeBase;
 import dev.shyrik.modularitemframe.common.item.ItemFilterUpgradeItem;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -15,6 +19,7 @@ import net.minecraft.world.World;
 
 public class ItemFilterUpgrade extends UpgradeBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "upgrade_filter");
+    private static final Text NAME = new TranslatableText("modularitemframe.upgrade.filter");
 
     private SimpleInventory inv;
     private ItemFilter filter = null;
@@ -28,6 +33,12 @@ public class ItemFilterUpgrade extends UpgradeBase {
     @Override
     public Identifier getId() {
         return ID;
+    }
+
+    @Override
+    @Environment(EnvType.CLIENT)
+    public Text getName() {
+        return NAME;
     }
 
     @Override

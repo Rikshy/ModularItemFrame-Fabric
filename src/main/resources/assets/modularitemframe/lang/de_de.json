@@ -78,7 +78,14 @@
     "modularitemframe.module.xp": "XP",
     "modularitemframe.module.jukebox": "Jukebox",
 
+    "modularitemframe.upgrade.speed": "Geschwindigkeit",
+    "modularitemframe.upgrade.range": "Reichweite",
+    "modularitemframe.upgrade.filter": "Filter",
+    "modularitemframe.upgrade.resistance": "Schutz",
+    "modularitemframe.upgrade.capacity": "Speicher",
+
     "modularitemframe.tooltip.module": "Modul: ",
+    "modularitemframe.tooltip.upgrades": "%s Aufwärtungen",
     "modularitemframe.tooltip.capacity": "%dmb / %dmb",
     "modularitemframe.tooltip.mode": "Modus: %s",
     "modularitemframe.tooltip.tele_valid": "Valides Ziel: %s",

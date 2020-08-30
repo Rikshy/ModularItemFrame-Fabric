@@ -78,7 +78,14 @@
   "modularitemframe.module.xp": "XP",
   "modularitemframe.module.jukebox": "Jukebox",
 
+  "modularitemframe.upgrade.speed": "Speed",
+  "modularitemframe.upgrade.range": "Range",
+  "modularitemframe.upgrade.filter": "Filter",
+  "modularitemframe.upgrade.resistance": "Resistance",
+  "modularitemframe.upgrade.capacity": "Capacity",
+
   "modularitemframe.tooltip.module": "Module: ",
+  "modularitemframe.tooltip.upgrades": "%s Upgrades",
   "modularitemframe.tooltip.capacity": "%dmb / %dmb",
   "modularitemframe.tooltip.mode": "Mode: %s",
   "modularitemframe.tooltip.tele_valid": "Valid location: %s",

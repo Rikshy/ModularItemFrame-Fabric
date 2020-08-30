@@ -1,7 +1,10 @@
 package dev.shyrik.modularitemframe.api;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -16,6 +19,9 @@ public abstract class UpgradeBase {
 
     public abstract int getMaxCount();
     public abstract Identifier getId();
+
+    @Environment(EnvType.CLIENT)
+    public abstract Text getName();
 
     public void onInsert(World world, BlockPos pos, Direction facing, ItemStack upStack) {
     }

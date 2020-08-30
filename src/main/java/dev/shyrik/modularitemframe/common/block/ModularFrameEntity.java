@@ -25,6 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
@@ -32,6 +33,8 @@ import net.minecraft.util.math.Direction;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ModularFrameEntity extends BlockEntity implements BlockEntityClientSerializable, Tickable {
 
@@ -68,6 +71,10 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
 
     public Iterable<UpgradeBase> getUpgrades() {
         return upgrades;
+    }
+
+    public Map<Text, List<UpgradeBase>> getUpgradesByType() {
+        return upgrades.stream().collect(Collectors.groupingBy(UpgradeBase::getName));
     }
 
     public int getUpgradeCount() {
