@@ -94,14 +94,19 @@ public class XPModule extends ModuleBase {
         if (levels >= ExperienceHelper.MAX_LEVEL) return;
         if (world.isClient || frame.isPowered() || !canTick(world,60, 10)) return;
 
+        boolean gotXp = false;
         List<ExperienceOrbEntity> entities = world.getEntitiesByClass(ExperienceOrbEntity.class, getScanBox(), experienceOrbEntity -> true);
         for (ExperienceOrbEntity entity : entities) {
             if (!entity.isAlive()) continue;
 
-            addExperience(entity.getExperienceAmount());
-            entity.kill();
+            int xp = entity.getExperienceAmount();
+            int remain = addExperience(xp);
+            if (remain != xp) {
+                entity.kill();
+                gotXp = true;
+            }
         }
-        if (entities.size() > 0) {
+        if (gotXp) {
             markDirty();
         }
     }
