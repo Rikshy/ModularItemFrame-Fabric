@@ -14,7 +14,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidFillable;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
@@ -31,6 +30,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 import java.util.Collections;
+import java.util.List;
 
 public class TankModule extends ModuleBase {
 
@@ -65,6 +65,13 @@ public class TankModule extends ModuleBase {
     @Environment(EnvType.CLIENT)
     public Text getModuleName() {
         return NAME;
+    }
+
+    @Override
+    public void appendTooltips(List<Text> tooltips) {
+        tooltips.add(new TranslatableText("modularitemframe.tooltip.capacity",
+                tank.getInvFluid(0).amount().asInt(1000),
+                tank.getMaxAmount_F(0).asInt(1000)));
     }
 
     @Override
@@ -171,11 +178,11 @@ public class TankModule extends ModuleBase {
         PUSH(2, "modularitemframe.mode.out");
 
         private final int index;
-        private final String name;
+        private final Text name;
 
         EnumMode(int indexIn, String nameIn) {
             index = indexIn;
-            name = nameIn;
+            name = new TranslatableText(nameIn);
         }
 
         public int getIndex() {
@@ -183,8 +190,8 @@ public class TankModule extends ModuleBase {
         }
 
         @Environment(EnvType.CLIENT)
-        public String getName() {
-            return I18n.translate(this.name);
+        public Text getName() {
+            return this.name;
         }
     }
 }

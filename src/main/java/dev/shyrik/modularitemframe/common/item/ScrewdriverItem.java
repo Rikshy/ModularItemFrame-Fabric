@@ -3,7 +3,6 @@ package dev.shyrik.modularitemframe.common.item;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -29,7 +28,7 @@ public class ScrewdriverItem extends ToolItem {
     @Override
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext ctx) {
         super.appendTooltip(stack, world, tooltip, ctx);
-        tooltip.add(new TranslatableText("Mode: " + readModeFromTag(stack).getName()));
+        tooltip.add(new TranslatableText("modularitemframe.tooltip.mode").append(readModeFromTag(stack).getName()));
     }
 
     @Override
@@ -73,11 +72,11 @@ public class ScrewdriverItem extends ToolItem {
         //ROTATE(2, "modularitemframe.mode.rot");
 
         private final int index;
-        private final String name;
+        private final Text name;
 
         EnumMode(int indexIn, String nameIn) {
             index = indexIn;
-            name = nameIn;
+            name = new TranslatableText(nameIn);
         }
 
         public int getIndex() {
@@ -85,8 +84,8 @@ public class ScrewdriverItem extends ToolItem {
         }
 
         @Environment(EnvType.CLIENT)
-        public String getName() {
-            return I18n.translate(this.name);
+        public Text getName() {
+            return this.name;
         }
     }
 }

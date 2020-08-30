@@ -12,7 +12,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,7 +29,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -87,6 +85,11 @@ public class ItemTeleportModule extends ModuleBase {
     }
 
     @Override
+    public void appendTooltips(List<Text> tooltips) {
+        tooltips.add(new TranslatableText("modularitemframe.tooltip.mode").append(direction.getName()));
+    }
+
+    @Override
     @Environment(EnvType.CLIENT)
     public void specialRendering(FrameRenderer renderer, MatrixStack matrixStack, float ticks, VertexConsumerProvider buffer, int light, int overlay) {
         if(direction != EnumMode.NONE) {
@@ -111,7 +114,7 @@ public class ItemTeleportModule extends ModuleBase {
             nbt.putLong(NBT_LINK, frame.getPos().asLong());
             nbt.putString(NBT_DIM, world.getRegistryKey().getValue().toString());
             driver.setTag(nbt);
-            player.sendMessage(new TranslatableText("modularitemframe.message.loc_saved"), false);
+            player.sendMessage(new TranslatableText("modularitemframe.message.teleport.loc_saved"), false);
         } else {
             if (nbt != null && nbt.contains(NBT_LINK)) {
                 Identifier dim = new Identifier(nbt.getString(NBT_DIM));
@@ -121,11 +124,10 @@ public class ItemTeleportModule extends ModuleBase {
                 }
                 BlockPos tmp = BlockPos.fromLong(nbt.getLong(NBT_LINK));
                 BlockEntity targetBlockEntity = world.getBlockEntity(tmp);
-                int countRange = frame.getRangeUpCount();
                 if (!(targetBlockEntity instanceof ModularFrameEntity) || !((((ModularFrameEntity) targetBlockEntity).getModule() instanceof ItemTeleportModule)))
-                    player.sendMessage(new TranslatableText("modularitemframe.message.invalid_target"), false);
-                else if (!frame.getPos().isWithinDistance(tmp, ModularItemFrame.getConfig().teleportRange + (countRange * 10))) {
-                    player.sendMessage(new TranslatableText("modularitemframe.message.too_far", ModularItemFrame.getConfig().teleportRange + (countRange * 10)), false);
+                    player.sendMessage(new TranslatableText("modularitemframe.message.teleport.invalid_target"), false);
+                else if (!frame.getPos().isWithinDistance(tmp, ModularItemFrame.getConfig().teleportRange + (frame.getRangeUpCount() * 10))) {
+                    player.sendMessage(new TranslatableText("modularitemframe.message.teleport.too_far"), false);
                 } else {
                     breakLink(world);
                     linkedLoc = tmp;
@@ -136,11 +138,11 @@ public class ItemTeleportModule extends ModuleBase {
                     targetModule.linkedLoc = frame.getPos();
                     targetModule.direction = EnumMode.VACUUM;
 
-                    player.sendMessage(new TranslatableText("modularitemframe.message.link_established"), false);
+                    player.sendMessage(new TranslatableText("modularitemframe.message.teleport.link_established"), false);
                     nbt.remove(NBT_LINK);
                     driver.setTag(nbt);
 
-                    targetBlockEntity.markDirty();
+                    targetModule.markDirty();
                     markDirty();
                 }
             }
@@ -236,16 +238,16 @@ public class ItemTeleportModule extends ModuleBase {
         NONE(2, "modularitemframe.mode.no");
 
         private final int index;
-        private final String name;
+        private final Text name;
 
         EnumMode(int indexIn, String nameIn) {
             index = indexIn;
-            name = nameIn;
+            name = new TranslatableText(nameIn);
         }
 
         @Environment(EnvType.CLIENT)
-        public String getName() {
-            return I18n.translate(this.name);
+        public Text getName() {
+            return this.name;
         }
     }
 

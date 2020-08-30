@@ -6,7 +6,6 @@ import dev.shyrik.modularitemframe.common.screenhandler.filter.FilterUpgradeScre
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
@@ -37,7 +36,7 @@ public class ItemFilterUpgradeItem extends UpgradeItem {
     public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
         super.appendTooltip(stack, world, tooltip, context);
         EnumMode mode = readModeTag(stack.getOrCreateTag());
-        tooltip.add(new TranslatableText("modularitemframe.tooltip.mode", mode.getName()));
+        tooltip.add(new TranslatableText("modularitemframe.tooltip.mode").append(mode.getName()));
     }
 
     @Override
@@ -110,11 +109,11 @@ public class ItemFilterUpgradeItem extends UpgradeItem {
         BLACKLIST(1, "modularitemframe.mode.blacklist");
 
         private final int index;
-        private final String name;
+        private final Text name;
 
         EnumMode(int indexIn, String nameIn) {
             index = indexIn;
-            name = nameIn;
+            name = new TranslatableText(nameIn);
         }
 
         public int getIndex() {
@@ -122,8 +121,8 @@ public class ItemFilterUpgradeItem extends UpgradeItem {
         }
 
         @Environment(EnvType.CLIENT)
-        public String getName() {
-            return I18n.translate(this.name);
+        public Text getName() {
+            return this.name;
         }
     }
 }

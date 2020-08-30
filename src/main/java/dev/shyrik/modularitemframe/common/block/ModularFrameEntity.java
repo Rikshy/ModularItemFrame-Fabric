@@ -221,7 +221,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         Direction facing = getFacing();
         FixedFluidInv inv = null;
         for (int i = 0; i <= range; i++) {
-            inv = FluidAttributes.FIXED_INV.getFirstOrNull(world, getAttachedPos().offset(facing, i), SearchOptions.inDirection(facing));
+            inv = FluidAttributes.FIXED_INV.getFirstOrNull(world, getAttachedPos().offset(facing.getOpposite(), i), SearchOptions.inDirection(facing));
             if (inv != null)
                 break;
         }

@@ -17,7 +17,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -40,6 +39,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 public class CraftingModule extends ModuleBase implements IScreenHandlerCallback {
@@ -63,12 +63,6 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
 
     @Override
     @Environment(EnvType.CLIENT)
-    public Text getModuleName() {
-        return NAME;
-    }
-
-    @Override
-    @Environment(EnvType.CLIENT)
     public Identifier frontTexture() {
         return BG;
     }
@@ -77,6 +71,17 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
     @Environment(EnvType.CLIENT)
     public Identifier innerTexture() {
         return ModularFrameBlock.INNER_HARD;
+    }
+
+    @Override
+    @Environment(EnvType.CLIENT)
+    public Text getModuleName() {
+        return NAME;
+    }
+
+    @Override
+    public void appendTooltips(List<Text> tooltips) {
+        tooltips.add(new TranslatableText("modularitemframe.tooltip.mode").append(mode.getName()));
     }
 
     @Override
@@ -92,7 +97,7 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
                 int modeIdx = mode.getIndex() + 1;
                 if (modeIdx == EnumMode.values().length) modeIdx = 0;
                 mode = EnumMode.values()[modeIdx];
-                player.sendMessage(new TranslatableText(mode.getName()), false);
+                player.sendMessage(new TranslatableText("modularitemframe.message.mode_change", mode.getName()), false);
             } else {
                 player.openHandledScreen(getScreenHandler(frame.getCachedState(), world, pos));
             }
@@ -216,11 +221,11 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
         PLAYER(2, "modularitemframe.mode.player_inv");
 
         private final int index;
-        private final String name;
+        private final Text name;
 
         EnumMode(int indexIn, String nameIn) {
             index = indexIn;
-            name = nameIn;
+            name = new TranslatableText(nameIn);
         }
 
         public int getIndex() {
@@ -228,8 +233,8 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
         }
 
         @Environment(EnvType.CLIENT)
-        public String getName() {
-            return I18n.translate(this.name);
+        public Text getName() {
+            return this.name;
         }
     }
 }

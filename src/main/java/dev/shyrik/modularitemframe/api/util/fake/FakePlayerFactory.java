@@ -4,9 +4,10 @@ import com.mojang.authlib.GameProfile;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 
-
 import java.lang.ref.WeakReference;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 public class FakePlayerFactory {
     private static final Map<World, Map<GameProfile, WeakReference<FakePlayer>>> PLAYERS = new WeakHashMap<>();
