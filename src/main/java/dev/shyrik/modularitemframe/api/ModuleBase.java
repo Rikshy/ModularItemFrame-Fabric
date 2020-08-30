@@ -120,7 +120,7 @@ public abstract class ModuleBase {
     /**
      * Called when the frames upgrades change.
      */
-    public void onFrameUpgradesChanged() {
+    public void onFrameUpgradesChanged(World world, BlockPos pos, Direction facing) {
     }
 
     /**

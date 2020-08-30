@@ -97,11 +97,10 @@ public class ItemTeleportModule extends ModuleBase {
     }
 
     @Override
-    public void onFrameUpgradesChanged() {
-        super.onFrameUpgradesChanged();
-
+    public void onFrameUpgradesChanged(World world, BlockPos pos, Direction facing) {
         if (linkedLoc != null) {
             if (!frame.getPos().isWithinDistance(linkedLoc, ModularItemFrame.getConfig().teleportRange + (frame.getRangeUpCount() * 10))) {
+
                 linkedLoc = null;
                 direction = EnumMode.NONE;
             }

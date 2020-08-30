@@ -30,7 +30,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 import java.util.List;
-import java.util.Objects;
 
 public class JukeboxModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t3_jukebox");
@@ -141,19 +140,19 @@ public class JukeboxModule extends ModuleBase {
     }
 
     @Override
-    public void onFrameUpgradesChanged() {
+    public void onFrameUpgradesChanged(World world, BlockPos pos, Direction facing) {
         int newCapacity = 9 * (frame.getCapacityUpCount() + 1);
         DirectFixedItemInv tmp = new DirectFixedItemInv(newCapacity);
         for (int slot = 0; slot < jukebox.getSlotCount(); slot++) {
             if (slot < tmp.getSlotCount())
                 tmp.setInvStack(slot, jukebox.getInvStack(slot), Simulation.ACTION);
             else
-                ItemHelper.ejectStack(frame.getWorld(), frame.getPos(), frame.getFacing(), jukebox.getInvStack(slot));
+                ItemHelper.ejectStack(world, pos, facing, jukebox.getInvStack(slot));
         }
         jukebox = tmp;
 
         if (currentSong >= jukebox.getSlotCount()) {
-            stop(Objects.requireNonNull(frame.getWorld()));
+            stop(world);
         }
 
         markDirty();

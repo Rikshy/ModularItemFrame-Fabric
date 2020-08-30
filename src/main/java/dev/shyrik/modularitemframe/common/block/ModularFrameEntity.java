@@ -57,8 +57,9 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         if (up != null && countUpgradeOfType(up.getClass()) < up.getMaxCount()) {
             upgrades.add(up);
             if (!upStack.isEmpty()) {
-                up.onInsert(world, pos, getFacing(), upStack);
-                module.onFrameUpgradesChanged();
+                Direction facing = getFacing();
+                up.onInsert(world, pos, facing, upStack);
+                module.onFrameUpgradesChanged(world, pos, facing);
             }
             return true;
         }
@@ -96,7 +97,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         }
         upgrades.clear();
 
-        module.onFrameUpgradesChanged();
+        module.onFrameUpgradesChanged(world, pos, facing);
         markDirty();
     }
 

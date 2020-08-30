@@ -107,14 +107,14 @@ public class StorageModule extends ModuleBase {
     }
 
     @Override
-    public void onFrameUpgradesChanged() {
+    public void onFrameUpgradesChanged(World world, BlockPos pos, Direction facing) {
         int newCapacity = (int)Math.pow(2, frame.getCapacityUpCount());
         DirectFixedItemInv tmp = new DirectFixedItemInv(newCapacity);
         for (int slot = 0; slot < inventory.getSlotCount(); slot++) {
             if (slot < tmp.getSlotCount())
                 tmp.setInvStack(slot, inventory.getInvStack(slot), Simulation.ACTION);
             else
-                ItemHelper.ejectStack(frame.getWorld(), frame.getPos(), frame.getFacing(), inventory.getInvStack(slot));
+                ItemHelper.ejectStack(world, pos, facing, inventory.getInvStack(slot));
         }
         inventory = tmp;
         markDirty();
