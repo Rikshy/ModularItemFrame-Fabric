@@ -34,6 +34,9 @@ public class InventoryHelper {
     public static boolean canCraft(FixedItemInv inventory, CraftingRecipe recipe) {
         FixedItemInv copy = copyItemHandler(inventory);
         for (Ingredient ingredient : recipe.getPreviewInputs()) {
+            if (ingredient.isEmpty())
+                continue;
+
             int slot = findSlotOfIngredient(copy, ingredient);
             if (slot >= 0)
                 copy.getInvStack(slot).decrement(1);
@@ -48,9 +51,14 @@ public class InventoryHelper {
         int count = 0, slot = 0;
         while (slot >= 0) {
             for (Ingredient ingredient : recipe.getPreviewInputs()) {
+                if (ingredient.isEmpty())
+                    continue;
+
                 slot = findSlotOfIngredient(copy, ingredient);
-                if (slot >= 0)
-                    copy.getInvStack(slot).decrement(1);
+                if (slot < 0)
+                    break;
+
+                copy.getInvStack(slot).decrement(1);
             }
             count++;
         }
