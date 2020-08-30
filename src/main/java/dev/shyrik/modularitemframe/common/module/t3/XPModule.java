@@ -121,7 +121,7 @@ public class XPModule extends ModuleBase {
         }
         drainXP = addExperience(drainXP);
         if (drainXP > 0) {
-            player.addExperience(-drainXP); // EXP Handler wurde zT in PlayerEntity eingebaut, aber ich habe keine tabelle gefunden für die absoluten Zahlen pro lvl
+            player.addExperience(-drainXP);
         }
     }
 

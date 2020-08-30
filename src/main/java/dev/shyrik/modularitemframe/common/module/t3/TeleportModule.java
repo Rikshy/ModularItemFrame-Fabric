@@ -88,7 +88,7 @@ public class TeleportModule extends ModuleBase {
 
         if (!world.isClient) {
             if (hasValidConnection(world, player)) {
-                BlockPos target = getTargetLocation(world, player);
+                BlockPos target = getTargetLocation(world);
                 if (target == null) {
                     player.sendMessage(new TranslatableText("modularitemframe.message.location_blocked"), false);
                     return ActionResult.FAIL;
@@ -174,7 +174,7 @@ public class TeleportModule extends ModuleBase {
         else linkedLoc = null;
     }
 
-    private BlockPos getTargetLocation(World world, PlayerEntity player) {
+    private BlockPos getTargetLocation(World world) {
 
         if (world.getBlockState(linkedLoc).get(ModularFrameBlock.FACING) == Direction.DOWN) {
             BlockPos pos2 = linkedLoc.offset(Direction.DOWN);

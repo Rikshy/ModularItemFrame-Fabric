@@ -5,7 +5,6 @@ import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
 import dev.shyrik.modularitemframe.api.ModuleItem;
 import dev.shyrik.modularitemframe.api.UpgradeBase;
-import dev.shyrik.modularitemframe.api.util.RegistryHelper;
 import dev.shyrik.modularitemframe.common.block.ModularFrameEntity;
 import dev.shyrik.modularitemframe.common.module.EmptyModule;
 import dev.shyrik.modularitemframe.init.Registrar;
@@ -25,6 +24,7 @@ import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.*;
+import net.minecraft.util.registry.Registry;
 
 import java.util.HashMap;
 import java.util.List;
@@ -53,6 +53,8 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
         UnbakedModel unbakedFrame = modelLoader.getOrLoadModel(new Identifier(ModularItemFrame.MOD_ID, "block/modular_frame"));
         BakedModelManager bmMan = MinecraftClient.getInstance().getBakedModelManager();
 
+        Identifier modelId = Registry.BLOCK.getId(Registrar.MODULAR_FRAME);
+
         ModuleItem.getModuleIds().forEach(id -> {
             ModuleBase module = ModuleItem.createModule(id);
             assert module != null;
@@ -65,7 +67,7 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
                     if (mat.getTextureId().toString().contains("default_inner"))
                         return bmMan.method_24153(mat.getAtlasId()).getSprite(module.innerTexture());
                     return bmMan.method_24153(mat.getAtlasId()).getSprite(mat.getTextureId());
-                }, ModelRotation.X0_Y0, RegistryHelper.getId(Registrar.MODULAR_FRAME));
+                }, ModelRotation.X0_Y0, modelId);
 
                 models.put(front, bakedFrame);
             }
@@ -73,9 +75,9 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
 
         models.put(EmptyModule.FG,
                 unbakedFrame.bake(modelLoader, mat ->
-                                bmMan.method_24153(mat.getAtlasId()).getSprite(mat.getTextureId()),
-                                ModelRotation.X0_Y0,
-                                RegistryHelper.getId(Registrar.MODULAR_FRAME)));
+                        bmMan.method_24153(mat.getAtlasId()).getSprite(mat.getTextureId()),
+                        ModelRotation.X0_Y0,
+                        modelId));
     }
 
     private BakedModel getBakedModel(ModuleBase module) {
