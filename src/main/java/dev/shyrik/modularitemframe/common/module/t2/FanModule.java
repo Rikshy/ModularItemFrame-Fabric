@@ -79,7 +79,8 @@ public class FanModule extends ModuleBase {
             }
         }
         List<Entity> entities = world.getEntitiesByClass(Entity.class, getFanBox(), entity ->
-                (entity instanceof LivingEntity || entity instanceof ItemEntity) && !entity.isSneaky() && entity.isAlive());
+                (entity instanceof LivingEntity || entity instanceof ItemEntity)
+                        && !entity.isSneaky() && entity.isAlive() && !entity.isSpectator());
         if (entities.isEmpty()) return;
         Direction facing = frame.getFacing();
         double xVel = facing.getOffsetX() * strengthScaling;
