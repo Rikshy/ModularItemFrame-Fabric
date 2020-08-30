@@ -34,9 +34,7 @@ public class TeleportModule extends ModuleBase {
     private static final Text NAME = new TranslatableText("modularitemframe.module.tele");
 
     private static final String NBT_LINK = "linked_pos";
-    private static final String NBT_LINK_X = "linked_posX";
-    private static final String NBT_LINK_Y = "linked_posY";
-    private static final String NBT_LINK_Z = "linked_posZ";
+    private static final String NBT_DIM = "item_linked_dim";
 
     private BlockPos linkedLoc = null;
 
@@ -75,7 +73,7 @@ public class TeleportModule extends ModuleBase {
     public void onFrameUpgradesChanged(World world, BlockPos pos, Direction facing) {
         if (linkedLoc != null) {
             if (!frame.getPos().isWithinDistance(linkedLoc, ModularItemFrame.getConfig().teleportRange + (frame.getRangeUpCount() * 10))) {
-                linkedLoc = null;
+                breakLink(world);
             }
         }
     }
@@ -85,27 +83,25 @@ public class TeleportModule extends ModuleBase {
         if (player instanceof FakePlayer) return ActionResult.FAIL;
 
         if (!world.isClient) {
-            if (hasValidConnection(world, player)) {
-                BlockPos target = getTargetLocation(world);
-                if (target == null) {
-                    player.sendMessage(new TranslatableText("modularitemframe.message.location_blocked"), false);
-                    return ActionResult.FAIL;
-                }
-
-                if (player.hasPassengers()) {
-                    player.removeAllPassengers();
-                }
-
-                if (player.hasVehicle()) {
-                    player.stopRiding();
-                }
-
-                double offset = world.getBlockState(linkedLoc).get(ModularFrameBlock.FACING) == Direction.UP ? 0.15 : 0;
-
-                player.requestTeleport(target.getX() + 0.5D, target.getY() + offset, target.getZ() + 0.5D);
-                player.fallDistance = 0.0F;
-                world.playSound(null, target, SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 1F, 1F);
+            BlockPos target = getTargetLocation(world);
+            if (target == null) {
+                player.sendMessage(new TranslatableText("modularitemframe.message.location_blocked"), false);
+                return ActionResult.FAIL;
             }
+
+            if (player.hasPassengers()) {
+                player.removeAllPassengers();
+            }
+
+            if (player.hasVehicle()) {
+                player.stopRiding();
+            }
+
+            double offset = world.getBlockState(linkedLoc).get(ModularFrameBlock.FACING) == Direction.UP ? 0.15 : 0;
+
+            player.requestTeleport(target.getX() + 0.5D, target.getY() + offset, target.getZ() + 0.5D);
+            player.fallDistance = 0.0F;
+            world.playSound(null, target, SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 1F, 1F);
         }
         return ActionResult.SUCCESS;
     }
@@ -116,12 +112,17 @@ public class TeleportModule extends ModuleBase {
         if (player.isSneaking()) {
             if (nbt == null) nbt = new CompoundTag();
             nbt.putLong(NBT_LINK, frame.getPos().asLong());
+            nbt.putString(NBT_DIM, world.getRegistryKey().getValue().toString());
             driver.setTag(nbt);
             player.sendMessage(new TranslatableText("modularitemframe.message.loc_saved"), false);
         } else {
             if (nbt != null && nbt.contains(NBT_LINK)) {
+                Identifier dim = new Identifier(nbt.getString(NBT_DIM));
+                if (dim.compareTo(world.getRegistryKey().getValue()) != 0) {
+                    player.sendMessage(new TranslatableText("modularitemframe.message.teleport.wrong_dim"), false);
+                    return;
+                }
                 BlockPos tmp = BlockPos.fromLong(nbt.getLong(NBT_LINK));
-                if (frame.getPos().isWithinDistance(tmp, 1)) return;
                 BlockEntity targetTile = world.getBlockEntity(tmp);
                 int countRange = frame.getRangeUpCount();
                 if (!(targetTile instanceof ModularFrameEntity) || !((((ModularFrameEntity) targetTile).getModule() instanceof TeleportModule)))
@@ -129,12 +130,19 @@ public class TeleportModule extends ModuleBase {
                 else if (!frame.getPos().isWithinDistance(tmp, ModularItemFrame.getConfig().teleportRange + (countRange * 10))) {
                     player.sendMessage(new TranslatableText("modularitemframe.message.too_far", ModularItemFrame.getConfig().teleportRange + (countRange * 10)), true);
                 } else {
+                    breakLink(world);
                     linkedLoc = tmp;
-                    ((TeleportModule) ((ModularFrameEntity) targetTile).getModule()).linkedLoc = frame.getPos();
+
+                    TeleportModule targetModule = (TeleportModule) ((ModularFrameEntity) targetTile).getModule();
+                    targetModule.breakLink(world);
+                    targetModule.linkedLoc = frame.getPos();
                     targetTile.markDirty();
+
                     player.sendMessage(new TranslatableText("modularitemframe.message.link_established"), false);
                     nbt.remove(NBT_LINK);
                     driver.setTag(nbt);
+
+                    markDirty();
                 }
             }
         }
@@ -142,24 +150,16 @@ public class TeleportModule extends ModuleBase {
 
     @Override
     public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack moduleStack) {
-        if (linkedLoc != null) {
-            BlockEntity targetTile = world.getBlockEntity(linkedLoc);
-            if (targetTile instanceof ModularFrameEntity && ((ModularFrameEntity) targetTile).getModule() instanceof TeleportModule) {
-                TeleportModule farMod = ((TeleportModule)((ModularFrameEntity) targetTile).getModule());
-                farMod.linkedLoc = null;
-                farMod.markDirty();
-            }
+        if (!world.isClient) {
+            breakLink(world);
         }
-        super.onRemove(world, pos, facing, player, moduleStack);
     }
 
     @Override
     public CompoundTag toTag() {
         CompoundTag tag = super.toTag();
         if (linkedLoc != null) {
-            tag.putInt(NBT_LINK_X, linkedLoc.getX());
-            tag.putInt(NBT_LINK_Y, linkedLoc.getY());
-            tag.putInt(NBT_LINK_Z, linkedLoc.getZ());
+            tag.putLong(NBT_LINK, linkedLoc.asLong());
         }
         return tag;
     }
@@ -167,9 +167,7 @@ public class TeleportModule extends ModuleBase {
     @Override
     public void fromTag(CompoundTag tag) {
         super.fromTag(tag);
-        if (tag.contains(NBT_LINK_X))
-            linkedLoc = new BlockPos(tag.getInt(NBT_LINK_X), tag.getInt(NBT_LINK_Y), tag.getInt(NBT_LINK_Z));
-        else linkedLoc = null;
+        linkedLoc = tag.contains(NBT_LINK) ? BlockPos.fromLong(tag.getLong(NBT_LINK)) : null;
     }
 
     private BlockPos getTargetLocation(World world) {
@@ -190,17 +188,17 @@ public class TeleportModule extends ModuleBase {
         return null;
     }
 
-    private boolean hasValidConnection(World world, PlayerEntity player) {
-        if (linkedLoc == null) {
-            if (player != null) player.sendMessage(new TranslatableText("modularitemframe.message.no_target"), false);
-            return false;
+    private void breakLink(World world) {
+        if (linkedLoc != null) {
+            BlockEntity be = world.getBlockEntity(linkedLoc);
+            if (be instanceof ModularFrameEntity && ((ModularFrameEntity) be).getModule() instanceof TeleportModule) {
+                TeleportModule targetModule = (TeleportModule) ((ModularFrameEntity) be).getModule();
+                targetModule.linkedLoc = null;
+                targetModule.markDirty();
+            }
+
+            linkedLoc = null;
+            markDirty();
         }
-        BlockEntity targetTile = world.getBlockEntity(linkedLoc);
-        if (!(targetTile instanceof ModularFrameEntity) || !(((ModularFrameEntity) targetTile).getModule() instanceof TeleportModule)) {
-            if (player != null)
-                player.sendMessage(new TranslatableText("modularitemframe.message.invalid_target"), false);
-            return false;
-        }
-        return true;
     }
 }
