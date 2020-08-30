@@ -101,13 +101,12 @@ public class XPModule extends ModuleBase {
         for (ExperienceOrbEntity entity : entities) {
             if (!entity.isAlive()) continue;
 
-            int xp = entity.getExperienceAmount();
             int prevLvl = levels;
-            int remain = addExperience(xp);
+            int added = addExperience(entity.getExperienceAmount());
             if (prevLvl != levels) {
                 world.playSound(null, pos, SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.BLOCKS, 1F, 1F);
             }
-            if (remain != xp) {
+            if (added > 0) {
                 entity.kill();
                 gotXp = true;
             }
