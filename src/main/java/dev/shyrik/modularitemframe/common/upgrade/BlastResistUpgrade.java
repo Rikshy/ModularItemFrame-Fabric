@@ -6,6 +6,7 @@ import dev.shyrik.modularitemframe.api.mixin.BlockResistanceAccessor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -36,7 +37,7 @@ public class BlastResistUpgrade extends UpgradeBase {
         return NAME;
     }
 
-    public void onInsert(World world, BlockPos pos, Direction facing, ItemStack upStack) {
+    public void onInsert(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack upStack) {
         Block attached = world.getBlockState(pos.offset(facing.getOpposite())).getBlock();
         Block me = world.getBlockState(pos).getBlock();
 

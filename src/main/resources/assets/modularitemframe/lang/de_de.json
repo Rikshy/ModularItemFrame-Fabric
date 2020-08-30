@@ -84,6 +84,7 @@
     "modularitemframe.upgrade.resistance": "Schutz",
     "modularitemframe.upgrade.infinity": "Unendlichekeit",
     "modularitemframe.upgrade.capacity": "Speicher",
+    "modularitemframe.upgrade.security": "Sicherheit",
 
     "modularitemframe.tooltip.module": "Modul: ",
     "modularitemframe.tooltip.upgrades": "%s Aufwärtungen",

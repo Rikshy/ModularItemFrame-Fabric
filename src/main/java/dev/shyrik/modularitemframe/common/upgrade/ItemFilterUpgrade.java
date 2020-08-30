@@ -7,6 +7,7 @@ import dev.shyrik.modularitemframe.api.UpgradeBase;
 import dev.shyrik.modularitemframe.common.item.ItemFilterUpgradeItem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
@@ -42,7 +43,7 @@ public class ItemFilterUpgrade extends UpgradeBase {
     }
 
     @Override
-    public void onInsert(World world, BlockPos pos, Direction facing, ItemStack upStack) {
+    public void onInsert(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack upStack) {
         fromTag(upStack.getOrCreateTag());
     }
 

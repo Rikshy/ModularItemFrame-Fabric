@@ -84,6 +84,7 @@
   "modularitemframe.upgrade.resistance": "Resistance",
   "modularitemframe.upgrade.infinity": "Infinity",
   "modularitemframe.upgrade.capacity": "Capacity",
+  "modularitemframe.upgrade.security": "Security",
 
   "modularitemframe.tooltip.module": "Module: ",
   "modularitemframe.tooltip.upgrades": "%s Upgrades",

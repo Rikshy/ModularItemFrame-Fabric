@@ -2,6 +2,7 @@ package dev.shyrik.modularitemframe.api;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.text.Text;
@@ -23,7 +24,7 @@ public abstract class UpgradeBase {
     @Environment(EnvType.CLIENT)
     public abstract Text getName();
 
-    public void onInsert(World world, BlockPos pos, Direction facing, ItemStack upStack) {
+    public void onInsert(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack upStack) {
     }
 
     public void onRemove(World world, BlockPos pos, Direction facing, ItemStack upStack) {

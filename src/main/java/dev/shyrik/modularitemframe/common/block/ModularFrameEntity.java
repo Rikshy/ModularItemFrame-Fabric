@@ -34,6 +34,7 @@ import net.minecraft.util.math.Direction;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ModularFrameEntity extends BlockEntity implements BlockEntityClientSerializable, Tickable {
@@ -53,12 +54,12 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     }
 
     //region <upgrade>
-    public boolean tryAddUpgrade(UpgradeBase up, ItemStack upStack) {
+    public boolean tryAddUpgrade(UpgradeBase up, PlayerEntity player, ItemStack upStack) {
         if (up != null && countUpgradeOfType(up.getClass()) < up.getMaxCount()) {
             upgrades.add(up);
-            if (!upStack.isEmpty()) {
+            if (!upStack.isEmpty() && player != null) {
                 Direction facing = getFacing();
-                up.onInsert(world, pos, facing, upStack);
+                up.onInsert(world, pos, facing, player, upStack);
                 module.onFrameUpgradesChanged(world, pos, facing);
             }
             return true;
@@ -67,7 +68,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     }
 
     private void tryAddUpgrade(UpgradeBase up) {
-        tryAddUpgrade(up, ItemStack.EMPTY);
+        tryAddUpgrade(up, null, ItemStack.EMPTY);
     }
 
     public Iterable<UpgradeBase> getUpgrades() {
@@ -134,6 +135,16 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
      */
     public boolean hasInfinity() {
         return countUpgradeOfType(InfinityUpgrade.class) >= 1;
+    }
+
+    /**
+     * @return true if there is the has access to the frame.
+     */
+    public boolean hasAccess(PlayerEntity player) {
+        if (player.isCreative() || countUpgradeOfType(SecurityUpgrade.class) < 1)
+            return true;
+
+        return upgrades.stream().anyMatch(up -> up instanceof SecurityUpgrade && ((SecurityUpgrade) up).hasAccess(player));
     }
 
     /**

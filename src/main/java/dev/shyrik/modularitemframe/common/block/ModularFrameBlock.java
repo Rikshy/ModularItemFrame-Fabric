@@ -100,7 +100,9 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
     @Override
     @SuppressWarnings("deprecation")
     public void onBlockBreakStart(BlockState state, World world, BlockPos pos, PlayerEntity player) {
-        getBE(world, pos).module.onBlockClicked(world, pos, player);
+        ModularFrameEntity frame = getBE(world, pos);
+        if (frame.hasAccess(player))
+            frame.module.onBlockClicked(world, pos, player);
     }
 
     @Override
@@ -108,6 +110,9 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         ActionResult result;
         ModularFrameEntity blockEntity = getBE(world, pos);
+        if (!blockEntity.hasAccess(player))
+            return ActionResult.FAIL;
+
         ItemStack handStack = player.getStackInHand(hand);
         Item handItem = handStack.getItem();
         Direction side = hit.getSide();
@@ -141,7 +146,7 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
             result = ActionResult.SUCCESS;
         } else if (handItem instanceof UpgradeItem && blockEntity.acceptsUpgrade()) {
             if (!world.isClient) {
-                if (blockEntity.tryAddUpgrade(((UpgradeItem) handItem).createUpgrade(), handStack)) {
+                if (blockEntity.tryAddUpgrade(((UpgradeItem) handItem).createUpgrade(), player, handStack)) {
                     if (!player.isCreative()) player.getStackInHand(hand).decrement(1);
                     blockEntity.markDirty();
                 }
