@@ -58,6 +58,11 @@ public class XPModule extends ModuleBase {
     }
 
     @Override
+    public void appendTooltips(List<Text> tooltips) {
+        tooltips.add(new TranslatableText("modularitemframe.tooltip.xp.level", levels));
+    }
+
+    @Override
     public void onBlockClicked(World world, BlockPos pos, PlayerEntity player) {
         if (!world.isClient) {
             if (player.isSneaking()) drainContainerXpToReachPlayerLevel(player, 0);

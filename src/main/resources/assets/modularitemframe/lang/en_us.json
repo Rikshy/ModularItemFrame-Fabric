@@ -82,7 +82,7 @@
   "modularitemframe.tooltip.capacity": "%dmb / %dmb",
   "modularitemframe.tooltip.mode": "Mode: %s",
   "modularitemframe.tooltip.tele_valid": "Valid location: %s",
-  "modularitemframe.tooltip.xp_level": "%d Level",
+  "modularitemframe.tooltip.xp.level": "%d Level",
   "modularitemframe.tooltip.jukebox.playing": "Currently playing: ",
 
   "gui.modularitemframe.crafting.name": "",
