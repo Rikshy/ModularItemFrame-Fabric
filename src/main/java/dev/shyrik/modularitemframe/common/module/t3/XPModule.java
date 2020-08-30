@@ -101,6 +101,9 @@ public class XPModule extends ModuleBase {
             addExperience(entity.getExperienceAmount());
             entity.kill();
         }
+        if (entities.size() > 0) {
+            markDirty();
+        }
     }
 
     @Override
