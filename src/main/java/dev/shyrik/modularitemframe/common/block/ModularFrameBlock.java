@@ -139,7 +139,7 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
             result = ActionResult.SUCCESS;
         } else if (handItem instanceof ModuleItem && blockEntity.acceptsModule()) {
             if (!world.isClient) {
-                blockEntity.setModule(((ModuleItem) handItem).createModule(), handStack);
+                blockEntity.setModule(((ModuleItem) handItem).createModule(), player, handStack);
                 if (!player.isCreative()) player.getStackInHand(hand).decrement(1);
                 blockEntity.markDirty();
             }
@@ -234,15 +234,16 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
 
         ModularFrameEntity tile = (ModularFrameEntity)builder.get(LootContextParameters.BLOCK_ENTITY);
         if (tile != null) {
+            PlayerEntity player = builder.get(LootContextParameters.THIS_ENTITY) instanceof PlayerEntity ? (PlayerEntity)builder.get(LootContextParameters.THIS_ENTITY) : null;
             if (!(tile.module instanceof EmptyModule)) {
                 ItemStack modStack = new ItemStack(tile.module.getItem());
                 drops.add(modStack);
-                tile.module.onRemove(builder.getWorld(), tile.getPos(), state.get(FACING), null, modStack);
+                tile.module.onRemove(builder.getWorld(), tile.getPos(), state.get(FACING), player, modStack);
             }
             for (UpgradeBase upgrade : tile.upgrades) {
                 ItemStack upStack = new ItemStack(upgrade.getItem());
                 drops.add(upStack);
-                upgrade.onRemove(builder.getWorld(), tile.getPos(), state.get(FACING), upStack);
+                upgrade.onRemove(builder.getWorld(), tile.getPos(), state.get(FACING), player, upStack);
             }
         }
         return drops;

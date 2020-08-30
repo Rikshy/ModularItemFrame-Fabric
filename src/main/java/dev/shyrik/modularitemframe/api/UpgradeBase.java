@@ -27,7 +27,7 @@ public abstract class UpgradeBase {
     public void onInsert(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack upStack) {
     }
 
-    public void onRemove(World world, BlockPos pos, Direction facing, ItemStack upStack) {
+    public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack upStack) {
     }
 
     public CompoundTag toTag() {

@@ -34,7 +34,6 @@ import net.minecraft.util.math.Direction;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ModularFrameEntity extends BlockEntity implements BlockEntityClientSerializable, Tickable {
@@ -50,7 +49,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     
     public ModularFrameEntity() {
         super(Registrar.MODULAR_FRAME_ENTITY);
-        setModule(new EmptyModule(), ItemStack.EMPTY);
+        setModule(new EmptyModule(), null, ItemStack.EMPTY);
     }
 
     //region <upgrade>
@@ -91,7 +90,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         for (UpgradeBase up : upgrades) {
             ItemStack remain = new ItemStack(up.getItem());
 
-            up.onRemove(world, pos, facing, remain);
+            up.onRemove(world, pos, facing, player, remain);
 
             if (player != null) remain = InventoryHelper.givePlayer(player, remain);
             if (!remain.isEmpty()) ItemHelper.ejectStack(world, pos, facing, remain);
@@ -268,11 +267,11 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     //endregion
 
     //region <module>
-    public void setModule(ModuleBase mod, ItemStack moduleStack) {
+    public void setModule(ModuleBase mod, PlayerEntity player, ItemStack moduleStack) {
         module = mod == null ? new EmptyModule() : mod;
         module.setTile(this);
-        if (!moduleStack.isEmpty())
-            module.onInsert(world, pos, getFacing(), moduleStack);
+        if (!moduleStack.isEmpty() && player != null)
+            module.onInsert(world, pos, getFacing(), player, moduleStack);
     }
 
     public ModuleBase getModule() {
@@ -290,7 +289,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         if (!remain.isEmpty()) ItemHelper.ejectStack(world, pos, facing, remain);
 
         module.onRemove(world, pos, facing, player, remain);
-        setModule(new EmptyModule(), ItemStack.EMPTY);
+        setModule(new EmptyModule(), null, ItemStack.EMPTY);
         markDirty();
     }
     //endregion
@@ -344,7 +343,7 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         if (module.getId().toString().equals(cmp.getString(NBT_MODULE))) {
             module.fromTag(cmp.getCompound(NBT_MODULE_DATA));
         } else {
-            setModule(ModuleItem.createModule(new Identifier(cmp.getString(NBT_MODULE))), ItemStack.EMPTY);
+            setModule(ModuleItem.createModule(new Identifier(cmp.getString(NBT_MODULE))), null, ItemStack.EMPTY);
             module.fromTag(cmp.getCompound(NBT_MODULE_DATA));
             cmp.remove(NBT_MODULE_DATA);
         }

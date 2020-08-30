@@ -48,7 +48,7 @@ public class ItemFilterUpgrade extends UpgradeBase {
     }
 
     @Override
-    public void onRemove(World world, BlockPos pos, Direction facing, ItemStack upStack) {
+    public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack upStack) {
         ItemFilterUpgradeItem.writeTags(upStack.getOrCreateTag(), inv, mode);
     }
 

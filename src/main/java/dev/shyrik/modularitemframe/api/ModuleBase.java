@@ -144,7 +144,7 @@ public abstract class ModuleBase {
     /**
      * Called when module is added to a frame.
      */
-    public void onInsert(World world, BlockPos pos, Direction facing, ItemStack moduleStack) {
+    public void onInsert(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack moduleStack) {
     }
 
     /**

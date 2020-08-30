@@ -48,7 +48,7 @@ public class BlastResistUpgrade extends UpgradeBase {
         ((BlockResistanceAccessor)attached).setModItFrResistance(99999);
     }
 
-    public void onRemove(World world, BlockPos pos, Direction facing, ItemStack upStack) {
+    public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack upStack) {
         Block attached = world.getBlockState(pos.offset(facing.getOpposite())).getBlock();
         Block me = world.getBlockState(pos).getBlock();
 
