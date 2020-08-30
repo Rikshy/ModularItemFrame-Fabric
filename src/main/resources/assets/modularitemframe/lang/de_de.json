@@ -33,6 +33,7 @@
     "item.modularitemframe.upgrade_security": "Sicherheits Aufwertung",
 
 
+    "modularitemframe.message.teleport.wrong_dim": "[ModularItemFrame] Dimension übergreifendes Reisen verboten.",
     "modularitemframe.message.no_target": "[ModularItemFrame] Keine Zielposition gesetzt - benutze dafür den Schraubenzieher",
     "modularitemframe.message.invalid_target": "[ModularItemFrame] Kein Ender Rahmen an der Zielposition",
     "modularitemframe.message.location_blocked": "[ModularItemFrame] Zielposition ist blockiert",

@@ -30,6 +30,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -43,6 +44,7 @@ public class ItemTeleportModule extends ModuleBase {
     private static final Text NAME = new TranslatableText("modularitemframe.module.itemtele");
 
     private static final String NBT_LINK = "item_linked_pos";
+    private static final String NBT_DIM = "item_linked_dim";
     private static final String NBT_DIR = "direction";
 
     private BlockPos linkedLoc = null;
@@ -107,10 +109,16 @@ public class ItemTeleportModule extends ModuleBase {
         if (player.isSneaking()) {
             if (nbt == null) nbt = new CompoundTag();
             nbt.putLong(NBT_LINK, frame.getPos().asLong());
+            nbt.putString(NBT_DIM, world.getRegistryKey().getValue().toString());
             driver.setTag(nbt);
             player.sendMessage(new TranslatableText("modularitemframe.message.loc_saved"), false);
         } else {
             if (nbt != null && nbt.contains(NBT_LINK)) {
+                Identifier dim = new Identifier(nbt.getString(NBT_DIM));
+                if (dim.compareTo(world.getRegistryKey().getValue()) != 0) {
+                    player.sendMessage(new TranslatableText("modularitemframe.message.teleport.wrong_dim"), false);
+                    return;
+                }
                 BlockPos tmp = BlockPos.fromLong(nbt.getLong(NBT_LINK));
                 BlockEntity targetBlockEntity = world.getBlockEntity(tmp);
                 int countRange = frame.getRangeUpCount();

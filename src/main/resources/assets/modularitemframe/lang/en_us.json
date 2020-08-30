@@ -33,6 +33,7 @@
   "item.modularitemframe.upgrade_security": "Security Upgrade",
 
 
+  "modularitemframe.message.teleport.wrong_dim": "[ModularItemFrame] Cross dimension transport not allowed",
   "modularitemframe.message.no_target": "[ModularItemFrame] No target location set - use the screwdriver",
   "modularitemframe.message.invalid_target": "[ModularItemFrame] No Ender Frame at target location",
   "modularitemframe.message.location_blocked": "[ModularItemFrame] Target location is blocked",
