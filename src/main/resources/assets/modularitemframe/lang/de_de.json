@@ -39,8 +39,6 @@
     "modularitemframe.message.too_far": "[ModularItemFrame] Zielort ist zu weit entfernt (Max %s)",
     "modularitemframe.message.link_established": "[ModularItemFrame] Verbindung hergestellt",
     "modularitemframe.message.loc_saved": "[ModularItemFrame] Position gespeichert",
-    "modularitemframe.message.crafting_plus.player": "[ModularItemFrame] Rahmen durchsucht nun auf das Spielerinventar",
-    "modularitemframe.message.crafting_plus.no_player": "[ModularItemFrame] Rahmen sucht nun nur im angehefteten Inventar",
     "modularitemframe.message.mode_change": "[ModularItemFrame] Modus verändert zu %s",
     "modularitemframe.message.screw_mode_change": "[ModularItemFrame] Schraubendreher Modus verändert zu %s",
 
@@ -62,7 +60,6 @@
     "modularitemframe.module.item": "Item",
     "modularitemframe.module.crafting": "Crafting",
     "modularitemframe.module.tank": "Tank",
-    "modularitemframe.module.null": "Nullify",
     "modularitemframe.module.storage": "Behälter",
 
     "modularitemframe.module.block_breaker": "Block Brecher",
