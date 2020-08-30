@@ -25,6 +25,7 @@ public class FakePlayer extends ServerPlayerEntity {
 
     public FakePlayer(ServerWorld world, GameProfile name) {
         super(world.getServer(), world, name, new ServerPlayerInteractionManager(world));
+        onGround = true;
     }
     @Override
     public float getEyeHeight(EntityPose pose) {

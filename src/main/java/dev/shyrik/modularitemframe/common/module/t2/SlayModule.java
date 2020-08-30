@@ -16,6 +16,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -135,14 +136,10 @@ public class SlayModule extends ModuleBase {
 
     private void hitIt(World world) {
         FakePlayer player = FakePlayerFactory.get(world, DEFAULT_CLICKER);
+        player.setStackInHand(Hand.MAIN_HAND, weapon);
+        player.getAttributes().addTemporaryModifiers(weapon.getAttributeModifiers(EquipmentSlot.MAINHAND));
 
-        for(MobEntity entity : world.getEntitiesByClass(MobEntity.class, getScanBox(), mobEntity -> true)) {
-            player.setStackInHand(Hand.MAIN_HAND, weapon);
-            player.attack(entity);
-            //displayItem.damage(1, player, p -> {});
-
-            //TODO item damage handling?
-        }
+        world.getEntitiesByClass(MobEntity.class, getScanBox(), mobEntity -> true).forEach(player::attack);
     }
 
     private ItemStack getNextStack() {
