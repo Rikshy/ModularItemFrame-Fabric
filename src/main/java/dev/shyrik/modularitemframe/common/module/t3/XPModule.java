@@ -11,6 +11,8 @@ import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
@@ -100,7 +102,11 @@ public class XPModule extends ModuleBase {
             if (!entity.isAlive()) continue;
 
             int xp = entity.getExperienceAmount();
+            int prevLvl = levels;
             int remain = addExperience(xp);
+            if (prevLvl != levels) {
+                world.playSound(null, pos, SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.BLOCKS, 1F, 1F);
+            }
             if (remain != xp) {
                 entity.kill();
                 gotXp = true;
@@ -108,6 +114,7 @@ public class XPModule extends ModuleBase {
         }
         if (gotXp) {
             markDirty();
+            world.playSound(null, pos, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.BLOCKS, 1F, 1F);
         }
     }
 
