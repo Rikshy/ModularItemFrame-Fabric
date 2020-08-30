@@ -10,12 +10,13 @@ import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -31,6 +32,7 @@ public class TrashCanModule extends ModuleBase {
     public static final Identifier BG1 = new Identifier(ModularItemFrame.MOD_ID, "module/module_t2_trashcan_1");
     public static final Identifier BG2 = new Identifier(ModularItemFrame.MOD_ID, "module/module_t2_trashcan_2");
     public static final Identifier BG3 = new Identifier(ModularItemFrame.MOD_ID, "module/module_t2_trashcan_3");
+    private static final Text NAME = new TranslatableText("modularitemframe.module.trash_can");
 
     private final List<Identifier> frontTex = ImmutableList.of(
             BG1,
@@ -67,8 +69,8 @@ public class TrashCanModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public String getModuleName() {
-        return I18n.translate("modularitemframe.module.trash_can");
+    public Text getModuleName() {
+        return NAME;
     }
 
     @Override

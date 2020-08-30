@@ -29,5 +29,12 @@
     "fabric": "*",
     "libblockattributes": "0.8.x",
     "nbtcrafting": "*"
+  },
+  "custom": {
+    "modmenu:clientsideOnly": false,
+    "waila:plugins": {
+      "id": "modularitemframe:hwyla",
+      "initializer": "dev.shyrik.modularitemframe.integration.waila.WailaPlugin"
+    }
   }
 }

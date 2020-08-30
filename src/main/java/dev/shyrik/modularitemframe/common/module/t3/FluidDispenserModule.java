@@ -12,9 +12,10 @@ import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidFillable;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -26,6 +27,7 @@ import net.minecraft.world.World;
 public class FluidDispenserModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t3_fluid_dispenser");
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_t3_fluid_dispenser");
+    private static final Text NAME = new TranslatableText("modularitemframe.module.fluid_dispenser");
 
     @Override
     public Identifier getId() {
@@ -46,8 +48,8 @@ public class FluidDispenserModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public String getModuleName() {
-        return I18n.translate("modularitemframe.module.fluid_dispenser");
+    public Text getModuleName() {
+        return NAME;
     }
 
     @Override

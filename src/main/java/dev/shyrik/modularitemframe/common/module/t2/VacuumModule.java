@@ -9,12 +9,13 @@ import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -29,6 +30,7 @@ public class VacuumModule extends ModuleBase {
 
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_vacuum");
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_t2_vacuum");
+    private static final Text NAME = new TranslatableText("modularitemframe.module.vacuum");
 
     @Override
     public Identifier getId() {
@@ -49,8 +51,8 @@ public class VacuumModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public String getModuleName() {
-        return I18n.translate("modularitemframe.module.vacuum");
+    public Text getModuleName() {
+        return NAME;
     }
 
     @Override

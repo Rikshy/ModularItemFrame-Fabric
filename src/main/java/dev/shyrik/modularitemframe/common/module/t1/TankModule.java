@@ -20,6 +20,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -35,6 +36,7 @@ public class TankModule extends ModuleBase {
 
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t1_tank");
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_t1_tank");
+    private static final Text NAME = new TranslatableText("modularitemframe.module.tank");
 
     private static final String NBT_MODE = "tank_mode";
     private static final String NBT_TANK = "tank";
@@ -61,8 +63,8 @@ public class TankModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public String getModuleName() {
-        return I18n.translate("modularitemframe.module.tank");
+    public Text getModuleName() {
+        return NAME;
     }
 
     @Override

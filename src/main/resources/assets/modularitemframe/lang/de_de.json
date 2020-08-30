@@ -81,11 +81,12 @@
     "modularitemframe.module.xp": "XP",
     "modularitemframe.module.jukebox": "Jukebox",
 
-    "modularitemframe.tooltip.module": "Modul: %s",
+    "modularitemframe.tooltip.module": "Modul: ",
     "modularitemframe.tooltip.capacity": "%dmb / %dmb",
     "modularitemframe.tooltip.mode": "Modus: %s",
     "modularitemframe.tooltip.tele_valid": "Valides Ziel: %s",
     "modularitemframe.tooltip.xp_level": "%d Level",
+    "modularitemframe.tooltip.jukebox.playing": "Derzeit spielt: ",
 
     "gui.modularitemframe.crafting.name": "",
     "gui.modularitemframe.filter.name": "",

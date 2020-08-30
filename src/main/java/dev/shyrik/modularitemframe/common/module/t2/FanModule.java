@@ -7,11 +7,12 @@ import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -28,6 +29,7 @@ public class FanModule extends ModuleBase {
     public static final Identifier BG1 = new Identifier(ModularItemFrame.MOD_ID, "module/module_t2_fan1");
     public static final Identifier BG2 = new Identifier(ModularItemFrame.MOD_ID, "module/module_t2_fan2");
     public static final Identifier BG3 = new Identifier(ModularItemFrame.MOD_ID, "module/module_t2_fan3");
+    private static final Text NAME = new TranslatableText("modularitemframe.module.fan");
 
     private static final List<Identifier> frontTex = ImmutableList.of(
             BG1, BG2, BG3
@@ -59,8 +61,8 @@ public class FanModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public String getModuleName() {
-        return I18n.translate("modularitemframe.module.fan");
+    public Text getModuleName() {
+        return NAME;
     }
 
     @Override

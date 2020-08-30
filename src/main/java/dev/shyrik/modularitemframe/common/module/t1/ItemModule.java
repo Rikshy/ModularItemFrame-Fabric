@@ -7,11 +7,12 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -23,6 +24,7 @@ import net.minecraft.world.World;
 public class ItemModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t1_item");
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_t1_item");
+    private static final Text NAME = new TranslatableText("modularitemframe.module.item");
 
     private static final String NBT_DISPLAY = "display";
     private static final String NBT_ROTATION = "rotation";
@@ -43,8 +45,8 @@ public class ItemModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public String getModuleName() {
-        return I18n.translate("modularitemframe.module.item");
+    public Text getModuleName() {
+        return NAME;
     }
 
     @Override

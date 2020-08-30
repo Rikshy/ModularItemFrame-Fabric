@@ -8,11 +8,12 @@ import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.module.t2.CraftingModule;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -21,6 +22,7 @@ public class AutoCraftingModule extends CraftingModule {
 
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t3_auto_crafting");
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_t3_auto_crafting");
+    private static final Text NAME = new TranslatableText("modularitemframe.module.crafting_plus");
 
     @Override
     public Identifier getId() {
@@ -41,8 +43,8 @@ public class AutoCraftingModule extends CraftingModule {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public String getModuleName() {
-        return I18n.translate("modularitemframe.module.crafting_plus");
+    public Text getModuleName() {
+        return NAME;
     }
 
     @Override

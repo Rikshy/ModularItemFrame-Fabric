@@ -22,6 +22,7 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -40,6 +41,7 @@ public class ItemTeleportModule extends ModuleBase {
     public static final Identifier BG_IN = new Identifier(ModularItemFrame.MOD_ID, "module/module_t3_itemtelein");
     public static final Identifier BG_OUT = new Identifier(ModularItemFrame.MOD_ID, "module/module_t3_itemteleout");
     public static final Identifier BG_NONE = new Identifier(ModularItemFrame.MOD_ID, "module/module_t3_itemtelenone");
+    private static final Text NAME = new TranslatableText("modularitemframe.module.itemtele");
 
     private static final String NBT_LINK = "item_linked_pos";
     private static final String NBT_LINK_X = "linked_posX";
@@ -82,8 +84,8 @@ public class ItemTeleportModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public String getModuleName() {
-        return I18n.translate("modularitemframe.module.itemtele");
+    public Text getModuleName() {
+        return NAME;
     }
 
     @Override

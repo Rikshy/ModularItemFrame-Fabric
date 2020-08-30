@@ -11,13 +11,13 @@ import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -31,6 +31,7 @@ public class TeleportModule extends ModuleBase {
 
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t3_tele");
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_t3_tele");
+    private static final Text NAME = new TranslatableText("modularitemframe.module.tele");
 
     private static final String NBT_LINK = "linked_pos";
     private static final String NBT_LINK_X = "linked_posX";
@@ -58,8 +59,8 @@ public class TeleportModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public String getModuleName() {
-        return I18n.translate("modularitemframe.module.tele");
+    public Text getModuleName() {
+        return NAME;
     }
 
     @Override

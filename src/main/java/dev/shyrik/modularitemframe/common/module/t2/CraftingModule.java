@@ -29,6 +29,7 @@ import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -44,6 +45,7 @@ import java.util.Optional;
 public class CraftingModule extends ModuleBase implements IScreenHandlerCallback {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_crafting");
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_t2_crafting");
+    private static final Text NAME = new TranslatableText("modularitemframe.module.crafting");
 
     private static final String NBT_GHOST_INVENTORY = "ghost_inventory";
     private static final String NBT_DISPLAY = "display";
@@ -61,8 +63,8 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
 
     @Override
     @Environment(EnvType.CLIENT)
-    public String getModuleName() {
-        return I18n.translate("modularitemframe.module.crafting");
+    public Text getModuleName() {
+        return NAME;
     }
 
     @Override

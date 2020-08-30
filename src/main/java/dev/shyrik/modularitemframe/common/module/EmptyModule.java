@@ -5,8 +5,9 @@ import dev.shyrik.modularitemframe.api.ModuleBase;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -19,6 +20,7 @@ public class EmptyModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_empty");
     public static final Identifier FG = new Identifier(ModularItemFrame.MOD_ID, "block/default_front");
     private static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "block/default_back");
+    private static final Text NAME = new TranslatableText("modularitemframe.module.empty");
 
     @Override
     public Identifier getId() {
@@ -39,8 +41,8 @@ public class EmptyModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public String getModuleName() {
-        return I18n.translate("modularitemframe.module.empty");
+    public Text getModuleName() {
+        return NAME;
     }
 
     @Override

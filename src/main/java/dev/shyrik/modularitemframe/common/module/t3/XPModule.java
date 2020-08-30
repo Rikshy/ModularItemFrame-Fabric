@@ -7,11 +7,12 @@ import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -25,6 +26,7 @@ import java.util.List;
 public class XPModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID,"module_t3_xp");
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID,"module/module_t3_xp");
+    private static final Text NAME = new TranslatableText("modularitemframe.module.xp");
 
     private static final String NBT_XP = "xp";
     private static final String NBT_LEVEL = "level";
@@ -51,8 +53,8 @@ public class XPModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public String getModuleName() {
-        return I18n.translate("modularitemframe.module.xp");
+    public Text getModuleName() {
+        return NAME;
     }
 
     @Override

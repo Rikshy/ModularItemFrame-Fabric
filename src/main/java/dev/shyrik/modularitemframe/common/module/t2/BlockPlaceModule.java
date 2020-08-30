@@ -9,11 +9,12 @@ import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -26,6 +27,7 @@ import net.minecraft.world.World;
 public class BlockPlaceModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_place");
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_t2_place");
+    private static final Text NAME = new TranslatableText("modularitemframe.module.block_placer");
 
     public static class FrameItemPlacementContext extends ItemPlacementContext {
         public FrameItemPlacementContext(World world, ItemStack itemStack, BlockPos placePos, Direction direction) {
@@ -59,8 +61,8 @@ public class BlockPlaceModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public String getModuleName() {
-        return I18n.translate("modularitemframe.module.block_placer");
+    public Text getModuleName() {
+        return NAME;
     }
 
     @Override

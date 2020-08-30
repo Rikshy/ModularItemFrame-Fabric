@@ -14,6 +14,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -69,13 +70,17 @@ public abstract class ModuleBase {
     }
 
     /**
-     * TOP and WAILA are using this for display
-     * Please use translation holders - raw strings are bad!
-     *
      * @return the name of the module :O
      */
     @Environment(EnvType.CLIENT)
-    public abstract String getModuleName();
+    public abstract Text getModuleName();
+
+    /**
+     * Append tooltip information for waila
+     */
+    @Environment(EnvType.CLIENT)
+    public void appendTooltips(List<Text> tooltips) {
+    }
 
     /**
      * Override this if you want to register multiple backgrounds for the module.

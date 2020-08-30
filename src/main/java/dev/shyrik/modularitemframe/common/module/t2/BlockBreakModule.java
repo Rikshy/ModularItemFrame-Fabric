@@ -13,13 +13,14 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -33,6 +34,7 @@ import java.util.List;
 public class BlockBreakModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t2_break");
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_t2_break");
+    private static final Text NAME = new TranslatableText("modularitemframe.module.block_breaker");
 
     private static final String NBT_PROGRESS = "progress";
 
@@ -76,8 +78,8 @@ public class BlockBreakModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public String getModuleName() {
-        return I18n.translate("modularitemframe.module.block_breaker");
+    public Text getModuleName() {
+        return NAME;
     }
 
     @Override

@@ -13,11 +13,12 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -30,6 +31,7 @@ public class IOModule extends ModuleBase {
 
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t1_io");
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_t1_io");
+    private static final Text NAME = new TranslatableText("modularitemframe.module.io");
 
     private static final String NBT_LAST = "last_click";
     private static final String NBT_LAST_STACK = "last_stack";
@@ -58,8 +60,8 @@ public class IOModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public String getModuleName() {
-        return I18n.translate("modularitemframe.module.io");
+    public Text getModuleName() {
+        return NAME;
     }
 
     @Override

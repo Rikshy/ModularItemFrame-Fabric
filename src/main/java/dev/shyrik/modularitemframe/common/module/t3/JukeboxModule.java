@@ -11,14 +11,18 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.MusicDiscItem;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
@@ -26,11 +30,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
+import java.util.List;
 import java.util.Objects;
 
 public class JukeboxModule extends ModuleBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "module_t3_jukebox");
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_t3_jukebox");
+    private static final Text NAME = new TranslatableText("modularitemframe.module.jukebox");
 
     private static final String NBT_JUKEBOX = "jukebox";
     private static final String NBT_CURRENT = "current_song";
@@ -60,8 +66,18 @@ public class JukeboxModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public String getModuleName() {
-        return I18n.translate("modularitemframe.module.jukebox");
+    public Text getModuleName() {
+        return NAME;
+    }
+
+    @Override
+    public void appendTooltips(List<Text> tooltips) {
+        MutableText playing = new TranslatableText("modularitemframe.tooltip.jukebox.playing");
+        if (currentSong >= 0)
+            playing = playing.append(((MusicDiscItem) jukebox.getInvStack(currentSong).getItem()).getDescription());
+        else
+            playing = playing.append("[]");
+        tooltips.add(playing.formatted(Formatting.LIGHT_PURPLE));
     }
 
     @Override
