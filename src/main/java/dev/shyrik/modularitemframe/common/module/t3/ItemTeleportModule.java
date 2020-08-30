@@ -33,7 +33,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 import java.util.List;
-import java.util.Objects;
 
 public class ItemTeleportModule extends ModuleBase {
 
@@ -44,9 +43,6 @@ public class ItemTeleportModule extends ModuleBase {
     private static final Text NAME = new TranslatableText("modularitemframe.module.itemtele");
 
     private static final String NBT_LINK = "item_linked_pos";
-    private static final String NBT_LINK_X = "linked_posX";
-    private static final String NBT_LINK_Y = "linked_posY";
-    private static final String NBT_LINK_Z = "linked_posZ";
     private static final String NBT_DIR = "direction";
 
     private BlockPos linkedLoc = null;
@@ -100,9 +96,7 @@ public class ItemTeleportModule extends ModuleBase {
     public void onFrameUpgradesChanged(World world, BlockPos pos, Direction facing) {
         if (linkedLoc != null) {
             if (!frame.getPos().isWithinDistance(linkedLoc, ModularItemFrame.getConfig().teleportRange + (frame.getRangeUpCount() * 10))) {
-
-                linkedLoc = null;
-                direction = EnumMode.NONE;
+                breakLink(world);
             }
         }
     }
@@ -125,10 +119,12 @@ public class ItemTeleportModule extends ModuleBase {
                 else if (!frame.getPos().isWithinDistance(tmp, ModularItemFrame.getConfig().teleportRange + (countRange * 10))) {
                     player.sendMessage(new TranslatableText("modularitemframe.message.too_far", ModularItemFrame.getConfig().teleportRange + (countRange * 10)), false);
                 } else {
+                    breakLink(world);
                     linkedLoc = tmp;
                     direction = EnumMode.DISPENSE;
 
                     ItemTeleportModule targetModule = (ItemTeleportModule) ((ModularFrameEntity) targetBlockEntity).getModule();
+                    targetModule.breakLink(world);
                     targetModule.linkedLoc = frame.getPos();
                     targetModule.direction = EnumMode.VACUUM;
 
@@ -161,11 +157,8 @@ public class ItemTeleportModule extends ModuleBase {
 
     @Override
     public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack moduleStack) {
-        if (!world.isClient && hasValidConnection(world)) {
-            ItemTeleportModule targetModule = (ItemTeleportModule) ((ModularFrameEntity) Objects.requireNonNull(world.getBlockEntity(linkedLoc))).getModule();
-            targetModule.linkedLoc = null;
-            targetModule.direction = EnumMode.NONE;
-            targetModule.markDirty();
+        if (!world.isClient) {
+            breakLink(world);
         }
     }
 
@@ -192,9 +185,7 @@ public class ItemTeleportModule extends ModuleBase {
     public CompoundTag toTag() {
         CompoundTag tag = super.toTag();
         if (linkedLoc != null) {
-            tag.putInt(NBT_LINK_X, linkedLoc.getX());
-            tag.putInt(NBT_LINK_Y, linkedLoc.getY());
-            tag.putInt(NBT_LINK_Z, linkedLoc.getZ());
+            tag.putLong(NBT_LINK, linkedLoc.asLong());
         }
         tag.putInt(NBT_DIR, direction.index);
         return tag;
@@ -203,10 +194,24 @@ public class ItemTeleportModule extends ModuleBase {
     @Override
     public void fromTag(CompoundTag tag) {
         super.fromTag(tag);
-        if (tag.contains(NBT_LINK_X))
-            linkedLoc = new BlockPos(tag.getInt(NBT_LINK_X), tag.getInt(NBT_LINK_Y), tag.getInt(NBT_LINK_Z));
-        else linkedLoc = null;
+        linkedLoc = tag.contains(NBT_LINK) ? BlockPos.fromLong(tag.getLong(NBT_LINK)) : null;
         if (tag.contains(NBT_DIR)) direction = EnumMode.values()[tag.getInt(NBT_DIR)];
+    }
+
+    private void breakLink(World world) {
+        if (linkedLoc != null) {
+            BlockEntity be = world.getBlockEntity(linkedLoc);
+            if (be instanceof ModularFrameEntity && ((ModularFrameEntity) be).getModule() instanceof ItemTeleportModule) {
+                ItemTeleportModule targetModule = (ItemTeleportModule) ((ModularFrameEntity) be).getModule();
+                targetModule.linkedLoc = null;
+                targetModule.direction = EnumMode.NONE;
+                targetModule.markDirty();
+            }
+
+            linkedLoc = null;
+            direction = EnumMode.NONE;
+            markDirty();
+        }
     }
 
     private boolean hasValidConnection(World world) {
