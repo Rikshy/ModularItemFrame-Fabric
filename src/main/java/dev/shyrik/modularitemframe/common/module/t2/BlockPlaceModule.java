@@ -90,7 +90,7 @@ public class BlockPlaceModule extends ModuleBase {
                 );
 
                 if (placeResult.isAccepted()) {
-                    inventory.getExtractable().extract(1);
+                    inventory.getExtractable().extract(new ItemClassFilter(BlockItem.class),1);
                     break;
                 }
             }
