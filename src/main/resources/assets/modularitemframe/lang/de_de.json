@@ -30,10 +30,10 @@
     "item.modularitemframe.upgrade_filter": "Filter Aufwertung",
     "item.modularitemframe.upgrade_capacity": "Speicher Aufwertung",
     "item.modularitemframe.upgrade_resist": "Schutz Aufwertung",
+    "item.modularitemframe.upgrade_infinity": "Unendliche Aufwertung",
     "item.modularitemframe.upgrade_security": "Sicherheits Aufwertung",
 
 
-    "modularitemframe.message.teleport.wrong_dim": "[ModularItemFrame] Dimension übergreifendes Reisen verboten.",
     "modularitemframe.message.teleport.too_far": "[ModularItemFrame] Zielort ist zu weit entfernt",
     "modularitemframe.message.teleport.invalid_target": "[ModularItemFrame] Kein Ender Rahmen an der Zielposition",
     "modularitemframe.message.teleport.location_blocked": "[ModularItemFrame] Zielposition ist blockiert",
@@ -82,6 +82,7 @@
     "modularitemframe.upgrade.range": "Reichweite",
     "modularitemframe.upgrade.filter": "Filter",
     "modularitemframe.upgrade.resistance": "Schutz",
+    "modularitemframe.upgrade.infinity": "Unendlichekeit",
     "modularitemframe.upgrade.capacity": "Speicher",
 
     "modularitemframe.tooltip.module": "Modul: ",

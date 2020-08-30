@@ -130,6 +130,13 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
     }
 
     /**
+     * @return true if there is an infinity upgrade installed.
+     */
+    public boolean hasInfinity() {
+        return countUpgradeOfType(InfinityUpgrade.class) >= 1;
+    }
+
+    /**
      * @return An {@link alexiil.mc.lib.attributes.item.filter.AggregateItemFilter} of all filter upgrades installed (or combined)
      */
     public ItemFilter getItemFilter() {

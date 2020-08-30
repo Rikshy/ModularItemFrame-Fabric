@@ -69,6 +69,7 @@ public class Registrar {
     public static final UpgradeItem SPEED_UPGRADE = createUp(SpeedUpgrade.ID, SpeedUpgrade.class);
     public static final UpgradeItem RANGE_UPGRADE = createUp(RangeUpgrade.ID, RangeUpgrade.class);
     public static final UpgradeItem CAP_UPGRADE = createUp(CapacityUpgrade.ID, CapacityUpgrade.class);
+    public static final UpgradeItem INFINITY_UPGRADE = createUp(InfinityUpgrade.ID, InfinityUpgrade.class);
     public static final UpgradeItem BLAST_RESIST_UPGRADE = createUp(BlastResistUpgrade.ID, BlastResistUpgrade.class);
     public static final UpgradeItem ITEM_FILTER_UPGRADE =  create(ItemFilterUpgrade.ID.getPath(),
             new ItemFilterUpgradeItem(new Item.Settings().group(ModularItemFrame.GROUP), ItemFilterUpgrade.class, ItemFilterUpgrade.ID));

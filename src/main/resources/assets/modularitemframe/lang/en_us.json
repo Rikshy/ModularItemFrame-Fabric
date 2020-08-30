@@ -30,10 +30,10 @@
   "item.modularitemframe.upgrade_filter": "Filter Upgrade",
   "item.modularitemframe.upgrade_capacity": "Capacity Upgrade",
   "item.modularitemframe.upgrade_resist": "Resistance Upgrade",
+  "item.modularitemframe.upgrade_infinity": "Infinity Upgrade",
   "item.modularitemframe.upgrade_security": "Security Upgrade",
 
 
-  "modularitemframe.message.teleport.wrong_dim": "[ModularItemFrame] Cross dimension transport not allowed",
   "modularitemframe.message.teleport.too_far": "[ModularItemFrame] Target destination is too far away",
   "modularitemframe.message.teleport.invalid_target": "[ModularItemFrame] No Ender Frame at target location",
   "modularitemframe.message.teleport.location_blocked": "[ModularItemFrame] Target location is blocked",
@@ -82,6 +82,7 @@
   "modularitemframe.upgrade.range": "Range",
   "modularitemframe.upgrade.filter": "Filter",
   "modularitemframe.upgrade.resistance": "Resistance",
+  "modularitemframe.upgrade.infinity": "Infinity",
   "modularitemframe.upgrade.capacity": "Capacity",
 
   "modularitemframe.tooltip.module": "Module: ",
