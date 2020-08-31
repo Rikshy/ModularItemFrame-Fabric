@@ -1,2 +1,0 @@
-takes an item out of the attached inventory and tries to apply left/right click actions (depending on mode)
-the item is swinging in front of it

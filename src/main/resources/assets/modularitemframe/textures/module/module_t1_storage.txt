@@ -1,1 +1,0 @@
-a storage drawer like frame (the item inside is rendered in the center (size adjustable))

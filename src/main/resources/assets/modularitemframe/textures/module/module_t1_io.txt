@@ -1,2 +1,0 @@
-allows "click access" (like storage drawer or barrel) to the attached inventories side
-(the item inside is rendered in the center (size adjustable))
