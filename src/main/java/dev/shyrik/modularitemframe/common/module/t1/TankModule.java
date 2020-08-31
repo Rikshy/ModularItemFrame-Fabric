@@ -63,7 +63,7 @@ public class TankModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public Text getModuleName() {
+    public Text getName() {
         return NAME;
     }
 
@@ -119,6 +119,7 @@ public class TankModule extends ModuleBase {
                 FluidVolumeUtil.move((FluidExtractable) neighbor, tank, FluidAmount.of1620(ModularItemFrame.getConfig().tankTransferRate));
             else
                 FluidVolumeUtil.move(tank, (FluidInsertable) neighbor, FluidAmount.of1620(ModularItemFrame.getConfig().tankTransferRate));
+            markDirty();
         }
     }
 
@@ -133,7 +134,6 @@ public class TankModule extends ModuleBase {
 
     @Override
     public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack moduleStack) {
-        super.onRemove(world, pos, facing, player, moduleStack);
         if (!ModularItemFrame.getConfig().dropFluidOnTankRemove || tank.getInvFluid(0).amount().isZero())
             return;
         Fluid fluid = tank.getInvFluid(0).getRawFluid();

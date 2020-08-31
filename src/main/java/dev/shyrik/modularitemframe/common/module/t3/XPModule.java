@@ -55,7 +55,7 @@ public class XPModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public Text getModuleName() {
+    public Text getName() {
         return NAME;
     }
 
@@ -85,7 +85,6 @@ public class XPModule extends ModuleBase {
 
     @Override
     public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack moduleStack) {
-        super.onRemove(world, pos, facing, player, moduleStack);
         if (player == null)
             world.spawnEntity(new ExperienceOrbEntity(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, experience));
         else player.addExperience(experience);

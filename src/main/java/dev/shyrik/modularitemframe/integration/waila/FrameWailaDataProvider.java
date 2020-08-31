@@ -26,7 +26,7 @@ public class FrameWailaDataProvider implements IComponentProvider {
             ModularFrameEntity frame = (ModularFrameEntity)tile;
             ModuleBase module = frame.getModule();
 
-            tooltip.add(moduleText.copy().append(module.getModuleName()));
+            tooltip.add(moduleText.copy().append(module.getName()));
             module.appendTooltips(tooltip);
             if (frame.getUpgradeCount() > 0) {
                 tooltip.add(new TranslatableText("modularitemframe.tooltip.upgrades", frame.getUpgradeCount()));

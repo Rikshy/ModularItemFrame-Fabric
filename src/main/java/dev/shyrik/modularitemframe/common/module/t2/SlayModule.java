@@ -39,7 +39,7 @@ public class SlayModule extends ModuleBase {
     public static final Identifier BG = new Identifier(ModularItemFrame.MOD_ID, "module/module_t2_slay");
     private static final Text NAME = new TranslatableText("modularitemframe.module.slay");
 
-    private static final GameProfile DEFAULT_CLICKER = new GameProfile(UUID.nameUUIDFromBytes("modularitemframe".getBytes()), "[Frame Clicker]");
+    private static final GameProfile DEFAULT_CLICKER = new GameProfile(UUID.nameUUIDFromBytes("modularitemframe".getBytes()), "[Frame Slayer]");
 
     private static final String NBT_WEAPON = "weapon";
     private static final String NBT_ROTATION = "rotation";
@@ -66,7 +66,7 @@ public class SlayModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public Text getModuleName() {
+    public Text getName() {
         return NAME;
     }
 
@@ -78,7 +78,6 @@ public class SlayModule extends ModuleBase {
 
     @Override
     public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack moduleStack) {
-        super.onRemove(world, pos, facing, player, moduleStack);
         ItemHelper.ejectStack(world, pos, facing, weapon);
     }
 

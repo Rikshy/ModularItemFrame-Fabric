@@ -75,7 +75,7 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
 
     @Override
     @Environment(EnvType.CLIENT)
-    public Text getModuleName() {
+    public Text getName() {
         return NAME;
     }
 

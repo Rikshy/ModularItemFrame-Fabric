@@ -54,7 +54,7 @@ public class StorageModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public Text getModuleName() {
+    public Text getName() {
         return NAME;
     }
 
@@ -122,7 +122,6 @@ public class StorageModule extends ModuleBase {
 
     @Override
     public void onRemove(World world, BlockPos pos, Direction facing, PlayerEntity player, ItemStack moduleStack) {
-        super.onRemove(world, pos, facing, player, moduleStack);
         for( int slot = 0; slot < inventory.getSlotCount(); slot++) {
             ItemHelper.ejectStack(world, pos, frame.getFacing(), inventory.getInvStack(slot));
         }

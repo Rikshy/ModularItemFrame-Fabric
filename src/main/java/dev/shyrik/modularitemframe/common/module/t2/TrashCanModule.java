@@ -35,9 +35,7 @@ public class TrashCanModule extends ModuleBase {
     private static final Text NAME = new TranslatableText("modularitemframe.module.trash_can");
 
     private final List<Identifier> frontTex = ImmutableList.of(
-            BG1,
-            BG2,
-            BG3
+            BG1, BG2, BG3
     );
 
     private static final String NBT_LAST_STACK = "last_stack";
@@ -69,7 +67,7 @@ public class TrashCanModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public Text getModuleName() {
+    public Text getName() {
         return NAME;
     }
 

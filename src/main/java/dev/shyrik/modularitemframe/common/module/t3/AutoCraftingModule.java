@@ -43,7 +43,7 @@ public class AutoCraftingModule extends CraftingModule {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public Text getModuleName() {
+    public Text getName() {
         return NAME;
     }
 

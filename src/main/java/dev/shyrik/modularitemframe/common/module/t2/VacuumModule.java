@@ -9,6 +9,7 @@ import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -51,7 +52,7 @@ public class VacuumModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public Text getModuleName() {
+    public Text getName() {
         return NAME;
     }
 
@@ -66,12 +67,11 @@ public class VacuumModule extends ModuleBase {
 
         FixedItemInv handler = frame.getAttachedInventory();
         if (handler != null) {
-            List<ItemEntity> entities = world.getEntitiesByClass(ItemEntity.class, getScanBox(), itemEntity -> true);
+            List<ItemEntity> entities = world.getEntitiesByClass(ItemEntity.class, getScanBox(), Entity::isAlive);
             for (ItemEntity entity : entities) {
                 ItemStack entityStack = entity.getStack();
                 ItemInsertable inserter = handler.getInsertable().filtered(frame.getItemFilter());
-                if (!entity.isAlive() ||
-                        entityStack.isEmpty() ||
+                if (entityStack.isEmpty() ||
                         inserter.attemptInsertion(entityStack, Simulation.SIMULATE).getCount() == entityStack.getCount())
                     continue;
 

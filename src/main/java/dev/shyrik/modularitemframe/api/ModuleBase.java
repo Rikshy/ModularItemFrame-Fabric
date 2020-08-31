@@ -73,7 +73,7 @@ public abstract class ModuleBase {
      * @return the name of the module :O
      */
     @Environment(EnvType.CLIENT)
-    public abstract Text getModuleName();
+    public abstract Text getName();
 
     /**
      * Append tooltip information for waila

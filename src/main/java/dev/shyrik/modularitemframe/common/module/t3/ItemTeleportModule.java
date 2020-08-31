@@ -43,6 +43,10 @@ public class ItemTeleportModule extends ModuleBase {
     public static final Identifier BG_NONE = new Identifier(ModularItemFrame.MOD_ID, "module/module_t3_itemtelenone");
     private static final Text NAME = new TranslatableText("modularitemframe.module.itemtele");
 
+    private final List<Identifier> frontTex = ImmutableList.of(
+            BG_NONE, BG_IN, BG_OUT
+    );
+
     private static final String NBT_LINK = "item_linked_pos";
     private static final String NBT_DIM = "item_linked_dim";
     private static final String NBT_DIR = "direction";
@@ -72,7 +76,7 @@ public class ItemTeleportModule extends ModuleBase {
 
     @Override
     public List<Identifier> getVariantFronts() {
-        return ImmutableList.of(BG_NONE, BG_IN, BG_OUT);
+        return frontTex;
     }
 
     @Override
@@ -83,7 +87,7 @@ public class ItemTeleportModule extends ModuleBase {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public Text getModuleName() {
+    public Text getName() {
         return NAME;
     }
 
