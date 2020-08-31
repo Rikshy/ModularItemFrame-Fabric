@@ -234,7 +234,7 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
 
         ModularFrameEntity tile = (ModularFrameEntity)builder.get(LootContextParameters.BLOCK_ENTITY);
         if (tile != null) {
-            PlayerEntity player = builder.get(LootContextParameters.THIS_ENTITY) instanceof PlayerEntity ? (PlayerEntity)builder.get(LootContextParameters.THIS_ENTITY) : null;
+            PlayerEntity player = builder.getNullable(LootContextParameters.THIS_ENTITY) instanceof PlayerEntity ? (PlayerEntity)builder.get(LootContextParameters.THIS_ENTITY) : null;
             if (!(tile.module instanceof EmptyModule)) {
                 ItemStack modStack = new ItemStack(tile.module.getItem());
                 drops.add(modStack);
