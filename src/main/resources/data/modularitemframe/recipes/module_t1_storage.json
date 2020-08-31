@@ -4,9 +4,7 @@
     "item": "modularitemframe:module_t1_storage"
   },
   "pattern": [
-    " C ",
-    "C#C",
-    " C "
+    "C#C"
   ],
   "key": {
     "#": {

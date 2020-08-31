@@ -10,10 +10,10 @@
   ],
   "key": {
     "#": {
-      "item": "minecraft:crafting_table"
+      "item": "modularitemframe:module_t1_io",
     },
     "A": {
-      "item": "modularitemframe:module_t1_io"
+      "item": "minecraft:crafting_table"
     },
     "C": {
       "item": "modularitemframe:canvas"

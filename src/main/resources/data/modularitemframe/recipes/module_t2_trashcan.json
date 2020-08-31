@@ -10,10 +10,10 @@
   ],
   "key": {
     "#": {
-      "item": "minecraft:lava_bucket"
+      "item": "modularitemframe:module_t1_io",
     },
     "A": {
-      "item": "modularitemframe:module_t1_io"
+      "item": "minecraft:lava_bucket"
     },
     "C": {
       "item": "modularitemframe:canvas"

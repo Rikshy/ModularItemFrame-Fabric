@@ -4,13 +4,11 @@
     "item": "modularitemframe:module_t1_io"
   },
   "pattern": [
-    "SCS",
-    "C C",
-    "SCS"
+    "CGC"
   ],
   "key": {
     "S": {
-      "item": "minecraft:stone"
+      "item": "minecraft:glass"
     },
     "C": {
       "item": "modularitemframe:canvas"

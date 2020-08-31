@@ -12,11 +12,11 @@
     "#": {
       "item": "modularitemframe:module_t2_dispense"
     },
-    "C": {
-      "item": "modularitemframe:canvas"
-    },
     "T": {
       "item": "modularitemframe:module_t1_tank"
+    },
+    "C": {
+      "item": "modularitemframe:canvas"
     },
     "O": {
       "item": "minecraft:obsidian"

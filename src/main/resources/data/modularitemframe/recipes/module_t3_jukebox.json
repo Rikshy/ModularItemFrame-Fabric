@@ -1,19 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
   "result": {
-    "item": "modularitemframe:module_t3_tele"
+    "item": "modularitemframe:module_t3_jukebox"
   },
   "pattern": [
     "OCO",
-    "E#E",
+    "J#J",
     "OCO"
   ],
   "key": {
     "#": {
-      "item": "minecraft:player_head"
+      "item": "modularitemframe:module_t1_item"
     },
-    "E": {
-      "item": "minecraft:ender_eye"
+    "J": {
+      "item": "minecraft:jukebox"
     },
     "C": {
       "item": "modularitemframe:canvas"

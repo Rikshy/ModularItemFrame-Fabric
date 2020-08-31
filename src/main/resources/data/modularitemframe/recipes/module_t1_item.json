@@ -4,9 +4,7 @@
     "item": "modularitemframe:module_t1_item"
   },
   "pattern": [
-    "S S",
-    " C ",
-    "S S"
+    "SCS"
   ],
   "key": {
     "C": {

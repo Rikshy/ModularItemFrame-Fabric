@@ -5,18 +5,18 @@
   },
   "pattern": [
     "ICI",
-    "O#O",
+    "D#D",
     "ICI"
   ],
   "key": {
     "#": {
-      "item": "minecraft:dispenser"
+      "item": "modularitemframe:module_t1_io",
     },
     "C": {
       "item": "modularitemframe:canvas"
     },
-    "O": {
-      "item": "modularitemframe:module_t1_io"
+    "D": {
+      "item": "minecraft:dispenser"
     },
     "I": {
       "item": "minecraft:iron_ingot"
