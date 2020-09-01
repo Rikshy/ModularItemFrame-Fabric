@@ -5,10 +5,12 @@
   "name": "Modular Item Frame",
   "description": "One frame to rule them all",
   "authors": [
-    "shyrik",
+    "shyrik"
+  ],
+  "contributors": [
+    "Siphalor",
     "karzealos"
   ],
-  "contributors": [],
   "contact": {},
   "license": "GPL-3.0",
   "icon": "assets/modularitemframe/textures/item/module_t1_item.png",
