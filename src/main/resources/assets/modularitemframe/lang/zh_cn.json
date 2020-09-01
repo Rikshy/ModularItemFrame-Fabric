@@ -96,5 +96,5 @@
   "gui.modularitemframe.crafting.name": "",
   "gui.modularitemframe.filter.name": "",
 
-  "itemGroup.modularitemframe": "模块化框架 §6(ModularItemFrame)"
+  "itemGroup.modularitemframe.all": "模块化框架 §6(ModularItemFrame)"
 }
