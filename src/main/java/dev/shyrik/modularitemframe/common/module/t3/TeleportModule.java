@@ -104,9 +104,10 @@ public class TeleportModule extends ModuleBase {
 
             World targetWorld = getDimWorld(world);
             double offset = targetWorld.getBlockState(linkedLoc).get(ModularFrameBlock.FACING) == Direction.UP ? 0.15 : 0;
-            player.moveToWorld((ServerWorld) targetWorld);
-            player.requestTeleport(target.getX() + 0.5D, target.getY() + offset, target.getZ() + 0.5D);
-            player.fallDistance = 0.0F;
+            if (!world.getRegistryKey().getValue().equals(targetWorld.getRegistryKey().getValue())){
+                player.moveToWorld((ServerWorld) targetWorld);
+            }
+            player.teleport(target.getX() + 0.5D, target.getY() + offset, target.getZ() + 0.5D);
             world.playSound(null, target, SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT, SoundCategory.PLAYERS, 1F, 1F);
         }
         return ActionResult.SUCCESS;
