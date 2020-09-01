@@ -142,20 +142,22 @@ public class JukeboxModule extends ModuleBase {
     @Override
     public void onFrameUpgradesChanged(World world, BlockPos pos, Direction facing) {
         int newCapacity = 9 * (frame.getCapacityUpCount() + 1);
-        DirectFixedItemInv tmp = new DirectFixedItemInv(newCapacity);
-        for (int slot = 0; slot < jukebox.getSlotCount(); slot++) {
-            if (slot < tmp.getSlotCount())
-                tmp.setInvStack(slot, jukebox.getInvStack(slot), Simulation.ACTION);
-            else
-                ItemHelper.ejectStack(world, pos, facing, jukebox.getInvStack(slot));
-        }
-        jukebox = tmp;
+        if (newCapacity != jukebox.getSlotCount()) {
+            DirectFixedItemInv tmp = new DirectFixedItemInv(newCapacity);
+            for (int slot = 0; slot < jukebox.getSlotCount(); slot++) {
+                if (slot < tmp.getSlotCount())
+                    tmp.setInvStack(slot, jukebox.getInvStack(slot), Simulation.ACTION);
+                else
+                    ItemHelper.ejectStack(world, pos, facing, jukebox.getInvStack(slot));
+            }
+            jukebox = tmp;
 
-        if (currentSong >= jukebox.getSlotCount()) {
-            stop(world);
-        }
+            if (currentSong >= jukebox.getSlotCount()) {
+                stop(world);
+            }
 
-        markDirty();
+            markDirty();
+        }
     }
 
     @Override
@@ -175,6 +177,11 @@ public class JukeboxModule extends ModuleBase {
     @Override
     public void fromTag(CompoundTag tag) {
         super.fromTag(tag);
+        int newCapacity = 9 * (frame.getCapacityUpCount() + 1);
+        if (newCapacity != jukebox.getSlotCount()) {
+            jukebox = new DirectFixedItemInv(newCapacity);
+        }
+
         if (tag.contains(NBT_JUKEBOX)) jukebox.fromTag(tag.getCompound(NBT_JUKEBOX));
         if (tag.contains(NBT_CURRENT)) currentSong = tag.getInt(NBT_CURRENT);
         if (tag.contains(NBT_LAST)) lastClick = tag.getLong(NBT_LAST);

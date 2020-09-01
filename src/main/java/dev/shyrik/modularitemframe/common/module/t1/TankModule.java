@@ -126,10 +126,11 @@ public class TankModule extends ModuleBase {
     @Override
     public void onFrameUpgradesChanged(World world, BlockPos pos, Direction facing) {
         int newCapacity = (int) Math.pow(ModularItemFrame.getConfig().tankFrameCapacity, frame.getCapacityUpCount() + 1);
-        SimpleFixedFluidInv tmp = new SimpleFixedFluidInv(1, FluidAmount.of1620(newCapacity));
-        tmp.insert(tank.extract(tmp.getMaxAmount_F(0).min(tank.getMaxAmount_F(0))));
-        tank = tmp;
-        markDirty();
+        if (newCapacity != tank.getMaxAmount_F(0).whole) {
+            SimpleFixedFluidInv tmp = new SimpleFixedFluidInv(1, FluidAmount.ofWhole(newCapacity));
+            tmp.insert(tank.extract(tmp.getMaxAmount_F(0).min(tank.getMaxAmount_F(0))));
+            tank = tmp;
+        }
     }
 
     @Override
@@ -167,6 +168,11 @@ public class TankModule extends ModuleBase {
     @Override
     public void fromTag(CompoundTag tag) {
         super.fromTag(tag);
+        int newCapacity = (int) Math.pow(ModularItemFrame.getConfig().tankFrameCapacity, frame.getCapacityUpCount() + 1);
+        if (newCapacity != tank.getMaxAmount_F(0).whole) {
+            tank = new SimpleFixedFluidInv(1, FluidAmount.ofWhole(newCapacity));
+        }
+
         if (tag.contains(NBT_TANK)) tank.fromTag(tag.getCompound(NBT_TANK));
         if (tag.contains(NBT_MODE))
             mode = ModularItemFrame.getConfig().tankTransferRate > 0 ? EnumMode.values()[tag.getInt(NBT_MODE)] : EnumMode.NONE;

@@ -109,15 +109,16 @@ public class StorageModule extends ModuleBase {
     @Override
     public void onFrameUpgradesChanged(World world, BlockPos pos, Direction facing) {
         int newCapacity = (int)Math.pow(2, frame.getCapacityUpCount());
-        DirectFixedItemInv tmp = new DirectFixedItemInv(newCapacity);
-        for (int slot = 0; slot < inventory.getSlotCount(); slot++) {
-            if (slot < tmp.getSlotCount())
-                tmp.setInvStack(slot, inventory.getInvStack(slot), Simulation.ACTION);
-            else
-                ItemHelper.ejectStack(world, pos, facing, inventory.getInvStack(slot));
+        if (newCapacity != inventory.getSlotCount()) {
+            DirectFixedItemInv tmp = new DirectFixedItemInv(newCapacity);
+            for (int slot = 0; slot < inventory.getSlotCount(); slot++) {
+                if (slot < tmp.getSlotCount())
+                    tmp.setInvStack(slot, inventory.getInvStack(slot), Simulation.ACTION);
+                else if (world != null)
+                    ItemHelper.ejectStack(world, frame.getPos(), frame.getFacing(), inventory.getInvStack(slot));
+            }
+            markDirty();
         }
-        inventory = tmp;
-        markDirty();
     }
 
     @Override
@@ -139,6 +140,11 @@ public class StorageModule extends ModuleBase {
     @Override
     public void fromTag(CompoundTag tag) {
         super.fromTag(tag);
+        int newCapacity = (int)Math.pow(2, frame.getCapacityUpCount());
+        if (newCapacity != inventory.getSlotCount()) {
+            inventory = new DirectFixedItemInv(newCapacity);
+        }
+
         if (tag.contains(NBT_INVENTORY)) inventory.fromTag(tag.getCompound(NBT_INVENTORY));
         if (tag.contains(NBT_LAST)) lastClick = tag.getLong(NBT_LAST);
         if (tag.contains(NBT_LAST_STACK)) lastStack = ItemStack.fromTag(tag.getCompound(NBT_LAST_STACK));

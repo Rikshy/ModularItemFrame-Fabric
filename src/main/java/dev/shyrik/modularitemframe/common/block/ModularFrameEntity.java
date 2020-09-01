@@ -326,7 +326,6 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
         compound.putString(NBT_MODULE, module.getId().toString());
         compound.put(NBT_MODULE_DATA, module.toTag());
 
-
         ListTag upgradeList = new ListTag();
         for (UpgradeBase up : upgrades) {
             CompoundTag upTag = new CompoundTag();
@@ -340,19 +339,19 @@ public class ModularFrameEntity extends BlockEntity implements BlockEntityClient
 
     @Override
     public void fromClientTag(CompoundTag cmp) {
-        if (module.getId().toString().equals(cmp.getString(NBT_MODULE))) {
-            module.fromTag(cmp.getCompound(NBT_MODULE_DATA));
-        } else {
-            setModule(ModuleItem.createModule(new Identifier(cmp.getString(NBT_MODULE))), null, ItemStack.EMPTY);
-            module.fromTag(cmp.getCompound(NBT_MODULE_DATA));
-            cmp.remove(NBT_MODULE_DATA);
-        }
         upgrades = new ArrayList<>();
         for (Tag sub : cmp.getList(NBT_UPGRADES, 10)) {
             UpgradeBase up = UpgradeItem.createUpgrade(new Identifier(((CompoundTag)sub).getString(NBT_UPGRADE_ID)));
             assert up != null;
             up.fromTag(((CompoundTag)sub).getCompound(NBT_UPGRADE_DATA));
             tryAddUpgrade(up);
+        }
+        if (module.getId().toString().equals(cmp.getString(NBT_MODULE))) {
+            module.fromTag(cmp.getCompound(NBT_MODULE_DATA));
+        } else {
+            setModule(ModuleItem.createModule(new Identifier(cmp.getString(NBT_MODULE))), null, ItemStack.EMPTY);
+            module.fromTag(cmp.getCompound(NBT_MODULE_DATA));
+            cmp.remove(NBT_MODULE_DATA);
         }
     }
     //endregion
