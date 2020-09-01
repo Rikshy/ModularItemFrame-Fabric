@@ -30,7 +30,9 @@ dependencies {
     modApi "alexiil.mc.lib:libblockattributes-all:${project.libattributes}"
     include "alexiil.mc.lib:libblockattributes-all:${project.libattributes}"
 
-    modApi "me.sargunvohra.mcmods:autoconfig1u:${project.autoconfig_version}"
+    modApi("me.sargunvohra.mcmods:autoconfig1u:${project.autoconfig_version}") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
     include "me.sargunvohra.mcmods:autoconfig1u:${project.autoconfig_version}"
 
     modApi "de.siphalor:nbtcrafting-${project.nbtcrafting_version}"
