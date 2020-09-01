@@ -16,6 +16,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
@@ -25,6 +26,8 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class StorageModule extends ModuleBase {
 
@@ -56,6 +59,11 @@ public class StorageModule extends ModuleBase {
     @Environment(EnvType.CLIENT)
     public Text getName() {
         return NAME;
+    }
+
+    @Override
+    public void appendTooltips(List<Text> tooltips) {
+        tooltips.add(new LiteralText(inventory.getAmount(lastStack) + " / " + inventory.getTotalCapacity()));
     }
 
     @Override

@@ -17,6 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.MusicDiscItem;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -76,6 +77,7 @@ public class JukeboxModule extends ModuleBase {
         else
             playing = playing.append("[]");
         tooltips.add(playing.formatted(Formatting.LIGHT_PURPLE));
+        tooltips.add(new LiteralText(jukebox.getStoredStacks().size() + " / " + jukebox.getTotalCapacity()));
     }
 
     @Override
