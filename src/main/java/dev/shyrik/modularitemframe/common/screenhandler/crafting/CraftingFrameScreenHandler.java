@@ -69,14 +69,14 @@ public class CraftingFrameScreenHandler extends GhostInventoryScreenHandler {
 
     @Override
     public ItemStack onSlotClick(int slotId, int dragType_or_button, SlotActionType clickType, PlayerEntity player) {
-        if (slotId == 10)
+        if (slotId == 9)
             return ItemStack.EMPTY;
         return super.onSlotClick(slotId, dragType_or_button, clickType, player);
     }
 
     @Override
     public ItemStack transferSlot(PlayerEntity player, int slotIndex) {
-        if (slotIndex == 10)
+        if (slotIndex == 9)
             return ItemStack.EMPTY;
         return super.transferSlot(player, slotIndex);
     }

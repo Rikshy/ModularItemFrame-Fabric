@@ -37,7 +37,7 @@ public abstract class GhostInventoryScreenHandler extends ScreenHandler {
 
         if (slot instanceof GhostSlot) {
             //return SlotHelper.ghostSlotClick(slot, dragType_or_button, clickType, player);
-            if (clickType == SlotActionType.PICKUP || clickType == SlotActionType.PICKUP_ALL || clickType == SlotActionType.SWAP) {
+            if (clickType == SlotActionType.PICKUP || clickType == SlotActionType.SWAP) {
                 ItemStack dropping = player.inventory.getCursorStack();
 
                 if (dropping.getCount() > 0) {
@@ -52,7 +52,10 @@ public abstract class GhostInventoryScreenHandler extends ScreenHandler {
             }
 
             return ItemStack.EMPTY;
+        } else if (clickType == SlotActionType.QUICK_MOVE) {
+            return slot == null ? ItemStack.EMPTY : slot.getStack();
         }
+
         return super.onSlotClick(slotId, dragType_or_button, clickType, player);
     }
 
