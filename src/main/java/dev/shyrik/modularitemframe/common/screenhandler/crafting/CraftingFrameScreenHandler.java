@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.CraftingResultSlot;
+import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 public class CraftingFrameScreenHandler extends GhostInventoryScreenHandler {
@@ -36,6 +37,11 @@ public class CraftingFrameScreenHandler extends GhostInventoryScreenHandler {
             public boolean canTakeItems(PlayerEntity player) {
                 return false;
             }
+
+            @Override
+            public ItemStack onTakeItem(PlayerEntity player, ItemStack stack) {
+                return ItemStack.EMPTY;
+            }
         });
 
         for (int row = 0; row < FRAME_SLOTS_PER_ROW; ++row) {
@@ -59,5 +65,19 @@ public class CraftingFrameScreenHandler extends GhostInventoryScreenHandler {
         ((ServerPlayerEntity)player).networkHandler.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(this.syncId, 0, stack));
 
         super.sendContentUpdates();
+    }
+
+    @Override
+    public ItemStack onSlotClick(int slotId, int dragType_or_button, SlotActionType clickType, PlayerEntity player) {
+        if (slotId == 10)
+            return ItemStack.EMPTY;
+        return super.onSlotClick(slotId, dragType_or_button, clickType, player);
+    }
+
+    @Override
+    public ItemStack transferSlot(PlayerEntity player, int slotIndex) {
+        if (slotIndex == 10)
+            return ItemStack.EMPTY;
+        return super.transferSlot(player, slotIndex);
     }
 }

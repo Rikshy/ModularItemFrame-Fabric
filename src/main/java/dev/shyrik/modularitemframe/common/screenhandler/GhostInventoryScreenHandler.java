@@ -1,6 +1,7 @@
 package dev.shyrik.modularitemframe.common.screenhandler;
 
 import dev.shyrik.modularitemframe.api.util.GhostSlot;
+import dev.shyrik.modularitemframe.api.util.SlotHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -33,29 +34,31 @@ public abstract class GhostInventoryScreenHandler extends ScreenHandler {
     @Override
     public ItemStack onSlotClick(int slotId, int dragType_or_button, SlotActionType clickType, PlayerEntity player) {
         Slot slot = slotId < 0 ? null : getSlot(slotId);
+
         if (slot instanceof GhostSlot) {
-            //if (clickType == SlotActionType.PICKUP || clickType == SlotActionType.PICKUP_ALL || clickType == SlotActionType.SWAP)
-            {
+            //return SlotHelper.ghostSlotClick(slot, dragType_or_button, clickType, player);
+            if (clickType == SlotActionType.PICKUP || clickType == SlotActionType.PICKUP_ALL || clickType == SlotActionType.SWAP) {
                 ItemStack dropping = player.inventory.getCursorStack();
 
                 if (dropping.getCount() > 0) {
-                    ItemStack copy = dropping.copy();
-                    copy.setCount(1);
-                    slot.setStack(copy);
+                    slot.setStack(dropping);
                 } else if (slot.getStack().getCount() > 0) {
                     slot.setStack(ItemStack.EMPTY);
                 }
 
+                slot.markDirty();
+
                 return slot.getStack().copy();
             }
 
-            //return ItemStack.EMPTY;
+            return ItemStack.EMPTY;
         }
         return super.onSlotClick(slotId, dragType_or_button, clickType, player);
     }
 
     @Override
-    public final ItemStack transferSlot(PlayerEntity player, int slotIndex) {
+    public ItemStack transferSlot(PlayerEntity player, int slotIndex) {
+        //return SlotHelper.transferStackInSlot(slots, player, slotIndex);
         Slot slot = getSlot(slotIndex);
         if (slot == null || !slot.hasStack() || slot instanceof GhostSlot) {
             return ItemStack.EMPTY;
@@ -64,20 +67,7 @@ public abstract class GhostInventoryScreenHandler extends ScreenHandler {
         ItemStack stack = slot.getStack();
         ItemStack stackCopy = stack.copy();
 
-        int startIndex;
-        int endIndex;
-
-        if (slotIndex < 9) {
-            return ItemStack.EMPTY;
-        } else if (slotIndex < 18) {
-            startIndex = 18;
-            endIndex = 18 + 27 + 9;
-        } else {
-            startIndex = 9;
-            endIndex = 18;
-        }
-
-        if (!insertItem(stack, startIndex, endIndex, false)) {
+        if (!insertItem(stack, slots.size() - 36, slots.size(), false)) {
             return ItemStack.EMPTY;
         }
 

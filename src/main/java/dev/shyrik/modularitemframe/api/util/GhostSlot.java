@@ -34,4 +34,12 @@ public class GhostSlot  extends Slot {
     public boolean canTakeItems(PlayerEntity player) {
         return false;
     }
+
+    @Override
+    public void setStack(ItemStack stack) {
+        ItemStack stack2 = stack.copy();
+        if (!stack2.isEmpty())
+            stack2.setCount(1);
+        super.setStack(stack2);
+    }
 }
