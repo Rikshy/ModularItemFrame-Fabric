@@ -1,5 +1,6 @@
 package dev.shyrik.modularitemframe.common.item;
 
+import alexiil.mc.lib.attributes.item.impl.DirectFixedItemInv;
 import dev.shyrik.modularitemframe.api.UpgradeBase;
 import dev.shyrik.modularitemframe.api.UpgradeItem;
 import dev.shyrik.modularitemframe.common.screenhandler.filter.FilterUpgradeScreenHandler;
@@ -7,10 +8,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.text.Text;
@@ -18,7 +17,6 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -63,23 +61,15 @@ public class ItemFilterUpgradeItem extends UpgradeItem {
 
     public static TagReadResult readTags(CompoundTag tag) {
         TagReadResult result = new TagReadResult();
-        result.stacks = readInvTag(tag);
+        result.inv = readInvTag(tag);
         result.mode = readModeTag(tag);
         return result;
     }
 
-    public static DefaultedList<ItemStack> readInvTag(CompoundTag tag) {
-        DefaultedList<ItemStack> lst = DefaultedList.ofSize(9, ItemStack.EMPTY);
-        if (tag.contains(NBT_FILTER)) {
-            ListTag tags = tag.getList(NBT_FILTER, 10);
-            for(int i = 0; i < tags.size(); ++i) {
-                ItemStack itemStack = ItemStack.fromTag(tags.getCompound(i));
-                if (!itemStack.isEmpty()) {
-                    lst.set(i, itemStack);
-                }
-            }
-        }
-        return lst;
+    public static DirectFixedItemInv readInvTag(CompoundTag tag) {
+        DirectFixedItemInv inv = new DirectFixedItemInv(9);
+        inv.fromTag(tag.getCompound(NBT_FILTER));
+        return inv;
     }
 
     public static EnumMode readModeTag(CompoundTag tag) {
@@ -90,17 +80,17 @@ public class ItemFilterUpgradeItem extends UpgradeItem {
         return mode;
     }
 
-    public static void writeTags(CompoundTag tag, SimpleInventory inv, EnumMode mode) {
+    public static void writeTags(CompoundTag tag, DirectFixedItemInv inv, EnumMode mode) {
         writeInvTag(tag, inv);
         tag.putInt(NBT_MODE, mode.getIndex());
     }
 
-    public static void writeInvTag(CompoundTag tag, SimpleInventory inv) {
-        tag.put(NBT_FILTER, inv.getTags());
+    public static void writeInvTag(CompoundTag tag, DirectFixedItemInv inv) {
+        tag.put(NBT_FILTER, inv.toTag());
     }
 
     public static class TagReadResult {
-        public DefaultedList<ItemStack> stacks;
+        public DirectFixedItemInv inv;
         public EnumMode mode = EnumMode.WHITELIST;
     }
 

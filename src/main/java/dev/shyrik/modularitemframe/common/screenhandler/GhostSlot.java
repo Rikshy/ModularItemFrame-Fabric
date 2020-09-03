@@ -1,13 +1,12 @@
 package dev.shyrik.modularitemframe.common.screenhandler;
 
+import alexiil.mc.lib.attributes.item.FixedItemInv;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.screen.slot.Slot;
 
-public class GhostSlot  extends Slot {
-    public GhostSlot(Inventory inventoryIn, int index, int xPosition, int yPosition) {
-        super(inventoryIn, index, xPosition, yPosition);
+public class GhostSlot  extends FixedSlot {
+    public GhostSlot(BaseScreenHandler handler, FixedItemInv inventoryIn, int slot, int xPosition, int yPosition) {
+        super(handler, inventoryIn, slot, xPosition, yPosition);
     }
 
     @Override
@@ -17,7 +16,7 @@ public class GhostSlot  extends Slot {
 
     @Override
     public ItemStack onTakeItem(PlayerEntity player, ItemStack stack) {
-        return ItemStack.EMPTY;
+        return stack;
     }
 
     @Override
@@ -37,9 +36,9 @@ public class GhostSlot  extends Slot {
 
     @Override
     public void setStack(ItemStack stack) {
-        ItemStack stack2 = stack.copy();
-        if (!stack2.isEmpty())
-            stack2.setCount(1);
-        super.setStack(stack2);
+        ItemStack copy = stack.copy();
+        if (!copy.isEmpty())
+            copy.setCount(1);
+        super.setStack(copy);
     }
 }

@@ -2,13 +2,13 @@ package dev.shyrik.modularitemframe.common.upgrade;
 
 import alexiil.mc.lib.attributes.item.filter.AggregateItemFilter;
 import alexiil.mc.lib.attributes.item.filter.ItemFilter;
+import alexiil.mc.lib.attributes.item.impl.DirectFixedItemInv;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.UpgradeBase;
 import dev.shyrik.modularitemframe.common.item.ItemFilterUpgradeItem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.text.Text;
@@ -22,7 +22,7 @@ public class ItemFilterUpgrade extends UpgradeBase {
     public static final Identifier ID = new Identifier(ModularItemFrame.MOD_ID, "upgrade_filter");
     private static final Text NAME = new TranslatableText("modularitemframe.upgrade.filter");
 
-    private SimpleInventory inv;
+    private DirectFixedItemInv inv;
     private ItemFilter filter = null;
     public ItemFilterUpgradeItem.EnumMode mode;
 
@@ -63,9 +63,9 @@ public class ItemFilterUpgrade extends UpgradeBase {
     public void fromTag(CompoundTag tag) {
         super.fromTag(tag);
         ItemFilterUpgradeItem.TagReadResult result = ItemFilterUpgradeItem.readTags(tag);
-        inv = new SimpleInventory(result.stacks.toArray(new ItemStack[0]));
+        inv = result.inv;
         filter = AggregateItemFilter.anyOf(
-                result.stacks
+                result.inv.getStoredStacks()
                         .stream().filter(stack -> !stack.isEmpty())
                         .toArray(ItemStack[]::new));
         mode = result.mode;

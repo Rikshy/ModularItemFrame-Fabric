@@ -11,7 +11,6 @@ import dev.shyrik.modularitemframe.util.ItemHelper;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.screenhandler.crafting.CraftingFrameScreenHandler;
-import dev.shyrik.modularitemframe.common.screenhandler.crafting.FrameCrafting;
 import dev.shyrik.modularitemframe.common.screenhandler.crafting.IScreenHandlerCallback;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -194,25 +193,10 @@ public class CraftingModule extends ModuleBase implements IScreenHandlerCallback
     }
 
     @Override
-    public boolean isUsableByPlayer(PlayerEntity player) {
-        return frame.getPos().isWithinDistance(player.getPos(), 64);
-    }
-
-    @Override
-    public ItemStack onScreenHandlerMatrixChanged(FrameCrafting matrix) {
-        World world = frame.getWorld();
-        displayItem = ItemStack.EMPTY;
-        if (world != null) {
-            recipe = null;
-            Optional<CraftingRecipe> optional = world.getRecipeManager().getFirstMatch(RecipeType.CRAFTING, matrix, world);
-            if (optional.isPresent()) {
-                recipe = optional.get();
-                displayItem = recipe.getOutput();
-            }
-
-            markDirty();
-        }
-        return displayItem;
+    public void setRecipe(CraftingRecipe recipe) {
+        this.recipe = recipe;
+        displayItem = recipe == null ? ItemStack.EMPTY : recipe.getOutput();
+        markDirty();
     }
 
     public enum EnumMode {
