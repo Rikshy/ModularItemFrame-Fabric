@@ -1,4 +1,4 @@
-package dev.shyrik.modularitemframe.api.util.fake;
+package dev.shyrik.modularitemframe.util.fake;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.server.world.ServerWorld;

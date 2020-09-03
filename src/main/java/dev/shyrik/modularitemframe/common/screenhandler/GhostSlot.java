@@ -1,4 +1,4 @@
-package dev.shyrik.modularitemframe.api.util;
+package dev.shyrik.modularitemframe.common.screenhandler;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;

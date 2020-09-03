@@ -1,6 +1,6 @@
 package dev.shyrik.modularitemframe.mixin;
 
-import dev.shyrik.modularitemframe.api.mixin.ApplyModelLoaderCallback;
+import dev.shyrik.modularitemframe.mixin.interfaces.ApplyModelLoaderCallback;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.model.BakedModelManager;

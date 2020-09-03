@@ -2,7 +2,7 @@ package dev.shyrik.modularitemframe.common.module.t3;
 
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
-import dev.shyrik.modularitemframe.api.util.fake.FakePlayer;
+import dev.shyrik.modularitemframe.util.fake.FakePlayer;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.block.ModularFrameEntity;

@@ -2,8 +2,8 @@ package dev.shyrik.modularitemframe.common.module.t3;
 
 import alexiil.mc.lib.attributes.item.FixedItemInv;
 import dev.shyrik.modularitemframe.ModularItemFrame;
-import dev.shyrik.modularitemframe.api.util.InventoryHelper;
-import dev.shyrik.modularitemframe.api.util.ItemHelper;
+import dev.shyrik.modularitemframe.util.InventoryHelper;
+import dev.shyrik.modularitemframe.util.ItemHelper;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.module.t2.CraftingModule;
 import net.fabricmc.api.EnvType;

@@ -1,6 +1,6 @@
 package dev.shyrik.modularitemframe.mixin;
 
-import dev.shyrik.modularitemframe.api.mixin.BlockResistanceAccessor;
+import dev.shyrik.modularitemframe.mixin.interfaces.BlockResistanceAccessor;
 import net.minecraft.block.AbstractBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;

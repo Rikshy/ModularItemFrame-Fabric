@@ -1,4 +1,4 @@
-package dev.shyrik.modularitemframe.api.mixin;
+package dev.shyrik.modularitemframe.mixin.interfaces;
 
 public interface BlockResistanceAccessor {
 

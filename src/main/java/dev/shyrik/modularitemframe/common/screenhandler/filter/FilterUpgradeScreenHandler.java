@@ -1,6 +1,6 @@
 package dev.shyrik.modularitemframe.common.screenhandler.filter;
 
-import dev.shyrik.modularitemframe.api.util.GhostSlot;
+import dev.shyrik.modularitemframe.common.screenhandler.GhostSlot;
 import dev.shyrik.modularitemframe.common.item.ItemFilterUpgradeItem;
 import dev.shyrik.modularitemframe.common.screenhandler.GhostInventoryScreenHandler;
 import net.minecraft.entity.player.PlayerEntity;

@@ -1,6 +1,6 @@
 package dev.shyrik.modularitemframe;
 
-import dev.shyrik.modularitemframe.api.mixin.ApplyModelLoaderCallback;
+import dev.shyrik.modularitemframe.mixin.interfaces.ApplyModelLoaderCallback;
 import dev.shyrik.modularitemframe.client.FrameRenderer;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import dev.shyrik.modularitemframe.common.module.t1.IOModule;

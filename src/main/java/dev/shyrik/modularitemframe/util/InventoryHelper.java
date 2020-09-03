@@ -1,4 +1,4 @@
-package dev.shyrik.modularitemframe.api.util;
+package dev.shyrik.modularitemframe.util;
 
 import alexiil.mc.lib.attributes.Simulation;
 import alexiil.mc.lib.attributes.item.FixedItemInv;

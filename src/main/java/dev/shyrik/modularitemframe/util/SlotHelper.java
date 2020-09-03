@@ -1,5 +1,6 @@
-package dev.shyrik.modularitemframe.api.util;
+package dev.shyrik.modularitemframe.util;
 
+import dev.shyrik.modularitemframe.common.screenhandler.GhostSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.CraftingResultSlot;

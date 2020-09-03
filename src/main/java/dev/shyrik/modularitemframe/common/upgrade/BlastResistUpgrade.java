@@ -2,7 +2,7 @@ package dev.shyrik.modularitemframe.common.upgrade;
 
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.UpgradeBase;
-import dev.shyrik.modularitemframe.api.mixin.BlockResistanceAccessor;
+import dev.shyrik.modularitemframe.mixin.interfaces.BlockResistanceAccessor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;

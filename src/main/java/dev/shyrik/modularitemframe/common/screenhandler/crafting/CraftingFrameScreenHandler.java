@@ -1,7 +1,7 @@
 package dev.shyrik.modularitemframe.common.screenhandler.crafting;
 
 import alexiil.mc.lib.attributes.item.FixedItemInv;
-import dev.shyrik.modularitemframe.api.util.GhostSlot;
+import dev.shyrik.modularitemframe.common.screenhandler.GhostSlot;
 import dev.shyrik.modularitemframe.common.screenhandler.GhostInventoryScreenHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.CraftingResultInventory;

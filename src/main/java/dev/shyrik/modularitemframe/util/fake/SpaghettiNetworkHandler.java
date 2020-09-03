@@ -1,4 +1,4 @@
-package dev.shyrik.modularitemframe.api.util.fake;
+package dev.shyrik.modularitemframe.util.fake;
 
 
 import io.netty.util.concurrent.Future;

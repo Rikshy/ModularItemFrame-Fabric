@@ -3,7 +3,7 @@ package dev.shyrik.modularitemframe.common.module.t2;
 import alexiil.mc.lib.attributes.item.FixedItemInv;
 import dev.shyrik.modularitemframe.ModularItemFrame;
 import dev.shyrik.modularitemframe.api.ModuleBase;
-import dev.shyrik.modularitemframe.api.util.ItemHelper;
+import dev.shyrik.modularitemframe.util.ItemHelper;
 import dev.shyrik.modularitemframe.common.block.ModularFrameBlock;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
