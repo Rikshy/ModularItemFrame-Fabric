@@ -77,7 +77,7 @@ public class JukeboxModule extends ModuleBase {
         else
             playing = playing.append("[]");
         tooltips.add(playing.formatted(Formatting.LIGHT_PURPLE));
-        tooltips.add(new LiteralText(jukebox.getStoredStacks().size() + " / " + jukebox.getTotalCapacity()));
+        tooltips.add(new LiteralText(jukebox.getStoredStacks().size() + " / " + jukebox.getSlotCount()));
     }
 
     @Override
