@@ -3,7 +3,7 @@
   "package": "dev.shyrik.modularitemframe.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "BlockResistanceAccessorMixin"
+    "ExplosionBehaviorMixin"
   ],
   "client": [
     "BakedModelManagerMixin"

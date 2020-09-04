@@ -6,9 +6,11 @@ import dev.shyrik.modularitemframe.api.UpgradeBase;
 import dev.shyrik.modularitemframe.api.UpgradeItem;
 import dev.shyrik.modularitemframe.common.item.ScrewdriverItem;
 import dev.shyrik.modularitemframe.common.module.EmptyModule;
+import dev.shyrik.modularitemframe.util.event.ExplosionEvent;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
@@ -29,10 +31,12 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
+import net.minecraft.world.explosion.Explosion;
 
 import java.util.List;
+import java.util.Optional;
 
-public class ModularFrameBlock extends Block implements BlockEntityProvider  {
+public class ModularFrameBlock extends Block implements BlockEntityProvider, ExplosionEvent.Full  {
 
     public static final DirectionProperty FACING = DirectionProperty.of("facing", Direction.values());
     public static final AbstractBlock.Settings DEFAULT_SETTINGS = AbstractBlock.Settings
@@ -56,6 +60,8 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
     public ModularFrameBlock(AbstractBlock.Settings props) {
         super(props);
         setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH));
+
+        ExplosionEvent.register(this);
     }
 
     @Override
@@ -91,7 +97,7 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
         return new ModularFrameEntity();
     }
 
-    private ModularFrameEntity getBE(World world, BlockPos pos) {
+    private ModularFrameEntity getBE(BlockView world, BlockPos pos) {
         return (ModularFrameEntity) world.getBlockEntity(pos);
     }
     //endregion
@@ -255,5 +261,34 @@ public class ModularFrameBlock extends Block implements BlockEntityProvider  {
     public boolean canMobSpawnInside() {
         return false;
     }
+
+    @Override
+    public Optional<Boolean> onCanDestroyBlock(Explosion explosion, BlockView world, BlockPos pos, BlockState blockState, float power) {
+        return isBlastProtected(world, pos, blockState) ? Optional.of(false) : Optional.empty();
+    }
+
+    @Override
+    public Optional<Float> onGetBlastResistance(Explosion explosion, BlockView world, BlockPos pos, BlockState blockState, FluidState fluidState) {
+        return isBlastProtected(world, pos, blockState) ? Optional.of(99999F) : Optional.empty();
+    }
     //endregion
+
+
+    private boolean isBlastProtected(BlockView world, BlockPos pos, BlockState blockState) {
+        if (!blockState.isAir()) {
+            ModularFrameEntity frame = getBE(world, pos);
+
+            if (frame != null && frame.isBlastResist())
+                return true;
+
+            for (Direction dir : Direction.values()) {
+                BlockEntity be = world.getBlockEntity(pos.offset(dir));
+                frame = be instanceof ModularFrameEntity ? (ModularFrameEntity) be : null;
+                if (frame != null && frame.getFacing() == dir && frame.isBlastResist())
+                    return true;
+            }
+        }
+
+        return false;
+    }
 }
