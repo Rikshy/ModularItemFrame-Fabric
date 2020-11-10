@@ -71,10 +71,10 @@ public class SpaghettiNetworkHandler extends ServerPlayNetworkHandler {
     public void onClientStatus(ClientStatusC2SPacket packet) {}
 
     @Override
-    public void onGuiClose(GuiCloseC2SPacket packet) {}
+    public void onCloseHandledScreen(CloseHandledScreenC2SPacket packet) { }
 
     @Override
-    public void onClickWindow(ClickWindowC2SPacket packet) {}
+    public void onRecipeCategoryOptions(RecipeCategoryOptionsC2SPacket packet) {}
 
     @Override
     public void onCraftRequest(CraftRequestC2SPacket packet) {}
@@ -86,7 +86,7 @@ public class SpaghettiNetworkHandler extends ServerPlayNetworkHandler {
     public void onCreativeInventoryAction(CreativeInventoryActionC2SPacket packet) {}
 
     @Override
-    public void onConfirmTransaction(ConfirmGuiActionC2SPacket packet) {}
+    public void onConfirmScreenAction(ConfirmScreenActionC2SPacket packet) {}
 
     @Override
     public void onSignUpdate(UpdateSignC2SPacket packet) {}
@@ -119,7 +119,7 @@ public class SpaghettiNetworkHandler extends ServerPlayNetworkHandler {
     public void onBookUpdate(BookUpdateC2SPacket packet) {}
 
     @Override
-    public void onVillagerTradeSelect(SelectVillagerTradeC2SPacket packet) {}
+    public void onMerchantTradeSelect(SelectMerchantTradeC2SPacket packet) {}
 
     @Override
     public void onJigsawUpdate(UpdateJigsawC2SPacket packet) {}
@@ -159,6 +159,9 @@ public class SpaghettiNetworkHandler extends ServerPlayNetworkHandler {
 
     @Override
     public void onPlayerInput(PlayerInputC2SPacket packet) {}
+
+    @Override
+    public void onClickSlot(ClickSlotC2SPacket packet) {}
 
     @Override
     public void sendPacket(Packet<?> packet, GenericFutureListener<? extends Future<? super Void>> listener) {}

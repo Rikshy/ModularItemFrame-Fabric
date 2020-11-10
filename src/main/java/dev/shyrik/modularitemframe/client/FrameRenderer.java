@@ -163,7 +163,7 @@ public class FrameRenderer extends BlockEntityRenderer<ModularFrameEntity> {
             }
             matrixStack.scale(0.05F, 0.05F, 0.05F);
 
-            ItemStack renderStack = up.getItem().getStackForRender();
+            ItemStack renderStack = up.getItem().getDefaultStack();
             itemRenderer.renderItem(renderStack, ModelTransformation.Mode.GUI, light, overlay, matrixStack, vertexConsumers);
 
             i++;
